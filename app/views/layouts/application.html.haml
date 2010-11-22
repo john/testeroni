@@ -1,0 +1,99 @@
+!!! 5
+%html
+  %head
+    %meta{:charset => 'utf-8'}/
+    %meta{:name => 'description', :content => 'A platform for casual and fun learning. Make and take tests your own tests. Answers can be multiple choice or true/false, and tests can be shared and embedded.'}/
+    %title= @title ||= 'Testeroni'
+    =stylesheet_link_tag(:flutie, 'testeroni', 'jquery-ui-1.8.6.custom',  :cache => true)
+    =javascript_include_tag('https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
+    =javascript_include_tag('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js')
+    =javascript_include_tag('rails')
+    =csrf_meta_tag
+  %body
+    #header
+      .right
+        .user
+          -if user_signed_in?
+            hello #{link_to current_user.username, people_path(url_escape(current_user.username))}
+            |
+            #{link_to 'logout', destroy_user_session_path}
+          -else
+            = link_to_function('Join Now.', "signupThenGoTo('')")
+            &nbsp; Already a member?
+            = link_to('Log in', new_user_session_path)
+        .search
+          %input{:type => 'text', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'",  :style => 'width:120px; height:10px; color:#ddd'}
+      #logotype
+        -if request.path == '/'
+          Testeroni
+        -else
+          %a{:href => '/'}<
+            Testeroni
+    #container
+      =render(:partial => 'shared/flash', :locals => {:flash => flash})
+      =yield
+    #footer
+      =link_to('about', about_path)
+      &#183;
+      =link_to('contact', contact_path)
+    - if @user
+      #signup.roundborder{:style => 'display:none'}
+        %div.dismiss
+          %a.close [x]
+        .account
+          %h2 Create an account with Facebook or Twitter
+          = render(:partial => 'authentications/services', :locals => {:redirect_to => new_test_path})
+          .clearfix
+          %h3>
+            or
+            %a#use_email{:href =>"#"}use your email
+        .account{:style => 'display:none;'}
+          %h4 Create an account
+          = form_for(@user, :url => registration_path(@user)) do |f|
+            -#= devise_error_messages!
+            %input#redirect_to{:type => 'hidden', :name => 'redirect_to', :value => ''}/
+            %p= f.label :username
+            = f.text_field :username
+            %p= f.label :email
+            = f.text_field :email
+            %p= f.label :password
+            = f.password_field :password
+            -#%p= f.label :password_confirmation, 'Again with the password, please'
+            -#= f.password_field :password_confirmation
+            %p{:style => 'padding-top:8px;'}
+              #{f.check_box :email_list, {}, 'true', 'false'} Get email updates from Testeroni
+            .submit
+              = f.submit "Sign up", :class => 'btn'
+              &nbsp;
+              = link_to_function('Cancel', "$('.account').toggle()")
+
+        -# Is there a way to tell signup where to go next?
+        -# In this case, should go to test#new page.
+        -#= render :partial => "devise/shared/links"
+
+      =javascript_include_tag 'jquery.lightbox_me.js'
+      :javascript
+
+        function signupThenGoTo(url) {
+          $('#redirect_to').val(url);
+          $('#signup').lightbox_me({
+              centered: true,
+              overlaySpeed:200,
+              lightboxSpeed:200,
+              overlayDisappearSpeed:200,
+              onLoad: function() { 
+                $('#user_username').focus()
+              }
+            });
+          return false;
+        }
+
+        $(document).ready(function() {
+          $('#use_email').click(function() {
+            $('.account').toggle();
+            $('#user_username').focus();
+          });
+          $('#signup_link').click(function() {
+            signupThenGoTo('#{new_test_path}');
+          });
+        });

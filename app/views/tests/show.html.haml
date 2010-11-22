@@ -1,0 +1,68 @@
+%h1
+  = @test.name
+  -if @owner
+    <span>#{link_to(' [ edit ]', edit_test_path(@test))}</span>
+-unless @test.description.blank?
+  %p= @test.description
+
+.questions
+  #question_pane
+    -if @owner
+      -if !@test.has_questions?
+        %h2= link_to('Add the first question', new_question_path(:test_id => @test.to_param))
+      -elsif params[:a]
+        #added.notice{:style => 'font-size:1.2em;'}
+          %a{:id => "close-added", :style => 'float:right;'}>
+            [x]
+          %h4{:style => 'padding-bottom:10px;'} Question successfully created!
+          %p{:style => 'padding-bottom:10px;'}
+            You can
+            #{link_to('add another question', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}
+            or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')} when you're done adding questions.
+          %p Once it's published you can let your friends know about it, and people can start taking it.
+
+          :javascript
+            $(document).ready(function(){
+              $('#close-added').bind('click', function() {
+                $('#added').effect('fade');
+              });
+            });
+      -else
+        As the owner of this test you can <a href="#" onclick="$('.questions').toggle();" style="font-weight:bold;">add or edit questions</a>.
+    %p= "This test has #{pluralize(@test.questions.size, 'question')}"
+    -if @test.has_questions? && @test.published?
+      %h2>
+        %a#question_link{:href => "#"}Take the test!
+        :javascript
+          #{render :partial => 'questions/next_question_js'}
+
+-# The questions should be editable on their own page, I think, rather than revealed here
+-# at the least need to be able to dismiss the questions and get back to taking the test
+.questions{:style => 'display:none;'}
+  %h2{:style => 'padding-top:20px;'}>
+    Thee Questions
+    -if @owner
+      %span= link_to('[ Add question ]', new_question_path(:test_id => @test.to_param))
+    -unless @test.questions.blank?
+      %ol#questions
+        -@test.questions.each do |q|
+          %li
+            %h3
+              "#{q.name}"
+              -if @owner
+                %span
+                  [
+                  #{link_to('Edit', edit_question_path(q, :test_id => @test.to_param))} |
+                  #{link_to('Delete', question_path(q, :test_id => @test.to_param), :method => :delete, :confirm => "For sure? That's permanente.")}
+                  ]
+              -unless q.description.blank?
+                %div= q.description
+
+-unless @test.videos.blank?
+  #left_col
+  -@test.videos.each do |v|
+    %div
+      "<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/#{v.provider_id}"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/#{v.provider_id}" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>"
+
+#pusher>
+  &nbsp;

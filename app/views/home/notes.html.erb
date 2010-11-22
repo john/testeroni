@@ -1,0 +1,144 @@
+<style type="text/css">
+ol {font-size:1.2em;}
+li {margin:15px;}
+</style>
+
+<h2>Deployment/Infrastructure</h2>
+<ol>
+	<li>Get codebase in git soon</li>
+	<li>Start writing tests!</li>
+	<li>Set up Google Analytics</li>
+	<li>At first just deploy with git, I think. Then consider... Capistrano?</li>
+	<li>Use Amazon's free EC2 instance to start (32 bit), so long as you confirm it would be easy to move up to a 64 bit instance. If it's just me, use micro. If there's any kind of backing at all, future proof a little with a large.</li>
+	<li>Automate db backups (hourly?), and make sure they can be moved to S3. Do test restorations to verify.</li>
+	<li>Document the shit out of the instance create/deployment process</li>
+	<li><b>Later on...</b></li>
+	<li>Set up Google Apps account, so I can have a john@testeroni.com</li>
+	<li>Set up a blog</li>
+</ol>
+
+
+Kristy notes:
+- if you auth with fb or twitter, have the 'almost there' page verify which account you're using, in case it's the wrong one.
+- when you sign up from 'create test' link, it's no putting you at the create test page when you're done
+<h2>Priority Features</h2>
+
+<ol>
+  <li>Come up with a long-term solution (write a helper) for URI.escape and CGI.escape (http://blog.standalonecode.com/?p=42)</li>
+  <li>When you're not signed in, and you click on a test to take it, you should get the option to log in, as well as to sign up.</li>
+	<li>Make sure you can sign in with either username or email (right now just asks for email)</li>
+	<li>Facebook and Twitter OAuth integration
+		<ul>
+		  <li>sharing of tests through those channels.</li>
+		  <li>See what tests your friends have taken</li>
+		  <li>Should be able to take tests *on facebook*</li>
+			<li>Rather than twitter auth sending you to the regular signup page, it should send you to a special-purpose 'finish signup up' page, without the validation crap</li>
+			<li>put fb/twitter signup icons on signup lightbox</li>
+		</ul></li>
+	
+	<li>Install tracking, use google js api/cdn.</li>
+	<li>Need to be able to end a test, in which case it goes into archive mode: results visible, can't be taken.</li>
+	
+	<li>Add reporting for the responses to each question after its been answered, and make it so you can't answer questions you've already answered</li>
+	<li>Need a results page for every question, with stats, and ideally stats comparing how you did to you fb friends.
+		Look to Scramble and Might Quiz for inspiration with post-answer results.</li>
+	<li>Need a test-wide result page, as well as per-question.</li>
+	<li>Simple test search: MySQL LIKE query, again test name/description/tags</li>
+	
+	
+	
+	<li>Need option to publish in edit panel</li>
+	<li>Present a URL and an embed text input as soon as possible, as soon as the test is published (like youtube).</li>
+	<li>Questions should be reorderable, use acts_as_list or whatever has superceded it.</li>
+	
+	<li>Allow per-question or per-test image uploads (file, or just url? file first.)</li>
+	<li>Needs groups, off the bat, and the ability to email a group of people and invite them to a group.</li>
+	<li>Ideally this will be sending lots of emails. Need to do that asynchronously--queue them for near-term, but not at runtime, sending.</li>
+	<li>Improve user profiles: website, location, description, etc. Standard stuff.</li>
+</ol>
+
+<h1>Notes</h1>
+
+<ol>
+<li>API</li>
+
+<li>Consider short answers--1-4 words, then lowercase, strip punctuation, and match response to answer. Include mechanism to allow alternate responses, and for users to petition for new alternate responses.</li>
+
+<li>From inception need to be able to follow other users (which means it needs activity-stream-like-shit at a pretty atomic level). Github/Tumblr style.</li>
+
+<li>How to handle gaming? Cookie user, only let them take each test once a day? Make that a configurable option?</li>
+
+<li>Put checks for current_user in many controller methods. For instance you shouldn't be able to hit QuestionsController#answer at all if you're not logged in.</li>
+
+<li>For multiple choice questions, maybe Question.correct_result should be nil. Giving it a value is misleading.</li>
+
+<li>Make sure to sort out difference between question.kind and question.correct_result before going too far.</li>
+
+<li>As you add questions, it should show the ones already there--or at least a count</li>
+
+<li>Big css3 button to start it, which reveals the questions (maybe tests are timed, in which case we don't want to show questions beforehand. maybe 'timed test' is an option when creating them?) Or it's not a timed test, questions are visible but greyed out, and form elements are inactive.</li>
+
+<li>Should you be able to review your answers? Maybe it's configurable by the test creator?</li>
+
+<li>Rip off good ideas from Zoho Challenge (and avoid bad ones--Testeroni should be a *lot* simpler).</li>
+
+<li>Eventually you should be able to both vote up tests, and follow people, and then filter
+	the tests you see by the upvotes of the people you follow. Kind of like using your friends
+	votes as slashtags.</li>
+</ol>
+
+
+<h1>Contacts</h1>
+<p>Write these people, implore them to blog/tweet/whatever</p>
+
+<ol>
+	<li>The university contact list for the thesaurus launch</li>
+	<li>Daniel Terdiman</li>
+	<li>Arik</li>
+	<li>Altay</li>
+	<li>Tim</li>
+	<li>Theo</li>
+	<li>Steve (ask him to tell Jono, Catarini)</li>
+	<li>Christian</li>
+	<li>Go over Jschool people, see who's in tech</li>
+	<li>Go over linked in, ditto</li>
+	<li>Tim O'Reilly</li>
+	<li>Alex Tsotsis</li>
+	<li>Kristy's MIT connections</li>
+	
+	<li>http://www.elearningguild.com/</li>
+</ol>
+
+<p>Next NY: I've been working on a side project that I'm about to launch, and am wondering if anyone has any suggestions for simple, free places to announce/promote it. I know this ain't the place, but what is? I'm going to write bloggers in the field (education)... any other suggestions?</p>
+
+<h1>Money</h1>
+<p>Most attractive sources of it</p>
+<ol>
+	<li>Fred Wilson/USV</li>
+	<li>Andreesen Horowitz</li>
+	<li>Ron Conway</li>
+	<li>Y Combinator</li>
+	<li>Techstars</li>
+	<li>Bill Gurley</li>
+	<li>Floodgate/Mike Mapple/Ann Miura-Ko</li>
+	<li>Steve Andersen/Baseline</li>
+	<li><i>Angels</i></li>
+	<li>Chris Dixon/Founder Collective</li>
+	<li>Catarina Fake</li>
+	<li>Lightbandk (http://j.mp/b6T88i)</li>
+</ol>
+
+<h2>Accounts</h2>
+Twitter: besteroni/columbia
+YouTube/Google: besteroni/kristy
+
+http://challenge.zoho.com/login.do
+http://www.zoho.com/challenge/quiz-maker.html
+http://www.proprofs.com/quiz-school/
+http://www.classmarker.com/
+http://www.watermelonexpress.com/
+
+http://quizstar.4teachers.org/
+http://www.quizbox.com/builder/
+http://myquizcreator.com/
+http://www.easytestmaker.com/default.aspx

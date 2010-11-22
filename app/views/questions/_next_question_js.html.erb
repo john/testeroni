@@ -1,0 +1,17 @@
+<%
+if @taking
+	url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :taking_id => @taking.id)
+else
+	url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+end
+%>
+
+$(document).ready(function(){
+	$('#question_link').bind('click', function() {
+		$.get('<%= url %>', function(data) {
+			$('#question_pane').hide();
+			$('#question_pane').html(data);
+			$('#question_pane').show('slide', {direction:'right'}, 600);
+		});
+	});
+});

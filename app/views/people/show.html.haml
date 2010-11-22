@@ -1,0 +1,33 @@
+%h1= @person.username
+%h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
+%p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.username}:
+
+-if @person.tests.blank?
+  %p
+    None, yet.
+    -if user_signed_in? && @person.id == current_user.id
+      Why don't you #{link_to 'create one', new_test_path}?
+-else
+  %ul.bulletless
+    -@person.tests.each do |t|
+      %li
+        =link_to t.name, test_path(t)
+        -if t.user == current_user
+          &nbsp;
+          %span [#{link_to 'edit', edit_test_path(t)} | #{link_to 'delete', test_path(t), :method => :delete, :confirm => 'For real? This can never, ever be undone.'}]
+
+
+
+%p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.username}:
+
+-if @person.takings.blank?
+  %p None, yet. Why don't you take one of the many fascinating tests on the #{link_to('home page', root_path)}
+-else
+  %ul.bulletless
+    -@person.takings.each do |t|
+      -@test = Test.find(t.test_id)
+      %li
+        =link_to @test.name, test_path(@test)
+        -if t.user == current_user
+          &nbsp;
+          %span [#{link_to 'your results', individual_results_path(@test, current_user)} | #{link_to 'overall results', aggregated_results_path(@test)}]

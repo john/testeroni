@@ -1,0 +1,8 @@
+%p Results of the test
+%h1= link_to(@test.name, test_path(@test))
+%p{:style => 'padding-top:20px;'} #{@user.username} took this test:
+
+- if @completions
+  %ul.bulletless
+    -@completions.each do |c|
+      %li #{time_ago_in_words(c.created_at)} ago, and correctly answered tk of #{pluralize(@test.questions.size, 'question')}

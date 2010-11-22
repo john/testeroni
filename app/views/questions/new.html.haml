@@ -1,0 +1,11 @@
+- if @test.questions.size == 0
+  %h1 Now add the first question
+-else
+  %h1 New question
+
+= render 'form'
+
+:javascript
+  $(document).ready(function(){
+    $('#question_name').focus();
+  });

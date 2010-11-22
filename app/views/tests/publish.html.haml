@@ -1,0 +1,16 @@
+%p Just published
+%h1= link_to(@test.name, test_path(@test))
+
+%p{:style => 'padding:10px 0;'} Now invite people to take it
+
+%p{:style => 'padding:10px 0;'} If they're signed in through fb, get their friends:
+
+%ul
+  %li
+    %input{:type => 'checkbox'} Kristy
+    %input{:type => 'checkbox'} Catherine
+    %input{:type => 'checkbox'} Hugh
+    %input{:type => 'checkbox'} etc.
+%input{:type => 'submit', :value => 'Invite your friends to take the test!'}
+
+%p{:style => 'padding:10px 0;'} Invite them to tweet the new test. Make sure they can auth a single account to both Twitter and fb

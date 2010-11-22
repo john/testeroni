@@ -1,0 +1,78 @@
+-if @test
+  %p{:style => "padding:0 0 20px 0;"}
+    For the test
+    %strong= link_to @test.name, test_path(@test.to_param)
+
+=form_for(@question) do |f|
+  =render(:partial => 'shared/errors', :locals => {:errors => @question.errors})
+  -if params[:test_id]
+    %input{:type => "hidden", :name => "test_id", :value => params[:test_id]}
+
+  .actions
+    %p
+      =f.label :name, 'Question'
+      =f.text_field :name
+
+    %p
+      =f.label :description, 'Description (displayed when the question is asked)'
+      = f.text_area :description, :style => 'height:60px;'
+
+    %p{:style => "padding:10px 0; margin:3px 0; vertical-align:middle"}
+      %p The answer to this question is:
+      %p
+        =f.radio_button :correct_response, Choice::TRUE
+        true
+      %p
+        = f.radio_button :correct_response, Choice::FALSE
+        false
+      %p
+        = f.radio_button :correct_response, Choice::MULTIPLE
+        multiple choice
+
+      #multiple_choices{:style => "display:none;"}
+        -1.upto(5) do |i|
+          %div
+            %label{:for => "a#{i}"}#{i.ordinalize} choice
+            %div
+              %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
+              %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
+              correct answer?
+      =f.label :explanation, 'Explanation (displayed after the question is answered)'
+      = f.text_area :explanation, :style => 'height:60px;'
+      
+      =f.submit(:style => 'margin-top:15px;')
+
+:javascript
+  $(document).ready(function(){
+
+    // make sure a correct answer was selected.
+    $('#new_question').submit(function() {
+      if( $('#question_correct_response_2').is(':checked') ) {
+
+        correct_answer_selected = false;
+        $.each( $('.correct_answer'), function() {
+          if( $(this).is(':checked') ) {
+            correct_answer_selected = true;
+          }
+        });
+
+        if( correct_answer_selected == false ) {
+          alert('Please pick one of your answers as correct.');
+          return false;
+        }
+      }
+    });
+
+    $('#question_correct_response_0').click(function() {
+      $('#multiple_choices').hide('900');
+    });
+
+    $('#question_correct_response_1').click(function() {
+      $('#multiple_choices').hide('900');
+    });
+
+    $('#question_correct_response_2').click(function() {
+      $('#multiple_choices').show('900');
+      $('#choice_1').focus();
+    });
+  });

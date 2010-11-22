@@ -1,0 +1,31 @@
+#answer
+  %h4
+    -if @response.correct
+      Correct!
+    - else
+      Wrong :-(
+      
+  %p><
+    = "The answer to the question "
+    %strong<= @question.name
+    is
+    %strong
+      - if @question.correct_response == Choice::TRUE
+        true.
+      - elsif @question.correct_response == Choice::FALSE
+        false.
+      -# handle multiple choice
+      
+    -if @question.explanation
+      %p{:style => 'padding:10px 0;'}= @question.explanation
+    
+%p
+  = "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
+
+-if @more
+  %h2
+    %a#question_link{:href => '#'}Next question
+    :javascript
+      #{render :partial => 'questions/next_question_js'}
+- else
+  %p{:style => 'padding:10px 0;'} Thus endeth the test. Here's how you did:

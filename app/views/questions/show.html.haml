@@ -1,0 +1,56 @@
+%p Question #{@question_number} of #{@test.questions.length}:
+%h1= @question.name
+
+%form#theForm
+  %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
+  %input{:type => 'hidden', :name => 'taking_id', :value => @taking.id}
+  %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
+  %input{:type => 'hidden', :name => 'question_number', :value => @question_number}
+  %div{:style => "padding:15px 0;"}
+    -if @question.kind == Question::TRUEFALSE
+      %div
+        %input#answer_true{:type => "radio", :name => "answer", :value => "true"}
+        %label{:for => "answer_true", :style => "display:inline;"} true
+      %input#answer_false{:type => "radio", :name => "answer", :value => "false"}
+      %label{:for => "answer_false", :style => "display:inline;"} false
+    -else
+      %ul#choices
+        -@question.choices.each do |choice|
+          %li>
+            %input{:type => "radio", :name => "choice_id", :value => choice.id}
+            =choice.name
+  =submit_tag 'Submit answer', :id => 'submit_button'
+  -if @question_number < @test.questions.length
+    (<a href="#" id="skip">skip</a> | <a href="#" id="stop">stop test</a>)
+
+-if @question_number <= @test.questions.length
+
+  :javascript
+    $(document).ready(function(){
+
+      $('#theForm').submit(function() {
+        // validate. if valid...
+        $.ajax({
+          type: 'POST',
+          url: '#{answer_path}',
+          data: $('#theForm').serialize(),
+          success: function(data) {
+            // message, results, move to next question, whatever
+            $('#question_pane').html(data);
+            $('#question_pane').show('slide', {direction:'right'}, 600);
+          },
+          error: function(data) {
+            alert('fail!');
+          }
+        });
+        return false;
+      });
+      
+      $('#skip').click(function() {
+        $.get('#{question_path(@test.questions[@question_number], :test_id => @test.to_param, :qnum => (@question_number+1))}', function(data) {
+          $('#question_pane').hide();
+          $('#question_pane').html(data);
+          $('#question_pane').show('slide', {direction:'right'}, 600);
+        });
+      });
+    });

@@ -1,0 +1,194 @@
+a, a:link {
+  text-decoration: none; }
+
+a:hover {
+  text-decoration: underline; }
+
+ul, ol {
+  list-style-position: outside; }
+
+h1 span, h2 span, h3 span {
+  font-weight: normal;
+  font-size: 13px; }
+
+/**************** Forms *****************/
+label {
+  margin: 0;
+  padding: 10px 0 0 0; }
+
+input[type=radio], input.radio {
+  vertical-align: middle; }
+
+input[type=text], input.text {
+  width: 400px; }
+
+input[type=password], input.password {
+  width: 400px; }
+
+input[type=email], input.email {
+  width: 400px; }
+
+textarea {
+  width: 400px; }
+
+#header {
+  background-image: url("/images/phrenologo6.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 920px;
+  height: 40px;
+  border: 1px solid #ddd;
+  padding: 10px 15px 5px 15px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Palatino Linotype, Book Antiqua, Palatino, serif; }
+
+#header .right {
+  float: right; }
+
+#header .right .user {
+  text-align: right;
+  padding-bottom: 6px; }
+
+#logotype {
+  font-weight: bold;
+  font-size: 1.7em;
+  padding-left: 66px; }
+
+#signup {
+  width: 500px;
+  height: 270px;
+  padding: 20px;
+  background-color: white; }
+
+#signup .dismiss {
+  float: right; }
+
+#signup h2 {
+  padding-bottom: 5px; }
+
+#signup h3 {
+  padding: 25px 0 5px 0; }
+
+#signup h4 {
+  font-size: 1.4em;
+  padding-bottom: 5px; }
+
+#signup .submit {
+  padding-top: 8px;
+  font-size: 1.1em; }
+
+#signup .submit .btn {
+  font: bold;
+  width: 90px;
+  font-size: 1em; }
+
+#container {
+  width: 920px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto; }
+
+.left {
+  float: left; }
+
+#questions {
+  padding: 0;
+  margin: 0 0 0 20px; }
+
+#questions li {
+  margin: 0;
+  padding: 5px 0 5px 0; }
+
+#question_pane {
+  padding: 20px 0; }
+
+#choices {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+
+.bulletless {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+
+.bulletless li a {
+  font-weight: bold; }
+
+.bulletless li span {
+  font-size: .9em; }
+
+.bulletless li span a {
+  font-weight: normal; }
+
+.roundborder {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px; }
+
+.button {
+  /*float:left;*/
+  padding: 8px;
+  margin: 0 5px 0 15px;
+  height: 11px;
+  vertical-align: middle;
+  color: #fff;
+  text-decoration: none;
+  font-family: Arial,sans-serif;
+  font-weight: normal;
+  line-height: .9;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer; }
+
+.green.button, .green.button:visited {
+  background-color: #99cc33;
+  border: 1px solid #99cc33; }
+
+/* replace with clearfix? */
+#pusher {
+  clear: both; }
+
+#footer {
+  width: 920px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-family: Palatino Linotype, Book Antiqua, Palatino, serif; }
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table; }
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0; }
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  margin-bottom: 0px;
+  background-color: #c00;
+  color: #fff; }
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square; }

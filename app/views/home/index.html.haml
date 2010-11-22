@@ -1,0 +1,22 @@
+-if user_signed_in?
+  %h2= link_to 'Create a test right now.', new_test_path
+- else
+  %p{:style => "padding:15px 0; font-size:1.2em;"}
+    %strong< Testeroni
+    lets you challenge yourself and others by making and taking surveys and tests.
+    = link_to_function('JOIN NOW', "signupThenGoTo('')", :class => 'green button')
+  %h2
+    %a#signup_link Create a test right now.
+
+%h3{:style => 'padding-top:20px;'} Recent tests
+-if @tests.size > 0
+  %ul.bulletless
+    -@tests.each do |t|
+      -if user_signed_in?
+        %li= link_to(t.name, test_path(t))
+      - else
+        -# should trigger lighbox signup, then take you to the test.
+        %li= link_to_function(t.name, "signupThenGoTo('#{escape_javascript(test_path(t))}')")
+
+- else
+  %div{:style => 'font-style:italic;'} No tests created yet.
