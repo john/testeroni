@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_many :tests
   has_many :questions
   has_many :responses
-  has_many :takings
+  has_many :takes
   
   validates :username, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /[A-Za-z0-9\-_]+/}
   

@@ -2,6 +2,7 @@ class Question < ActiveRecord::Base
   
   TRUEFALSE = 1
   MULTIPLECHOICE = 2
+  SHORTANSWER = 3
   
   belongs_to :test
   belongs_to :user

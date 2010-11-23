@@ -14,7 +14,8 @@
         true.
       - elsif @question.correct_response == Choice::FALSE
         false.
-      -# handle multiple choice
+      - elsif @question.correct_response == Choice::MULTIPLE
+        = @response.choice.name
       
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
@@ -28,4 +29,6 @@
     :javascript
       #{render :partial => 'questions/next_question_js'}
 - else
-  %p{:style => 'padding:10px 0;'} Thus endeth the test. Here's how you did:
+  %p{:style => 'padding:10px 0;'} Thus endeth the test.
+  
+  %h5= link_to('View your results', individual_test_results_path(@test, current_user, @taking.id))

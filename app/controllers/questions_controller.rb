@@ -26,16 +26,15 @@ class QuestionsController < ApplicationController
     if @question_number == 1
       
       # this is done both here and in TestsController#show. How to dry it up?
-      @taking = Taking.new
-      @taking.test = @test
-      @taking.user = current_user
-      @taking.started_at = Time.now
-      @taking.save
+      @take = Take.new
+      @take.test = @test
+      @take.user = current_user
+      @take.started_at = Time.now
+      @take.save
       
     else
-      @taking = Taking.find(params[:taking_id])
+      @take = Take.find(params[:take_id])
     end
-    logger.debug "TAKING:---------> #{@taking.inspect}"
 
     respond_to do |format|
       format.html do
@@ -49,13 +48,13 @@ class QuestionsController < ApplicationController
     @test = Test.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
-    @taking = Taking.find(params[:taking_id])
+    @take = Take.find(params[:take_id])
     
     @response = Response.new
     if params[:answer]
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
-      @response.taking = @taking
+      @response.take = @take
       @response.correct = (@answer == @question.correct_response) ? true : false
     end
     
@@ -77,8 +76,8 @@ class QuestionsController < ApplicationController
     
     if @test.questions.length == @question_number
       @more = false
-      @taking.finished_at = Time.now
-      @taking.save
+      @take.finished_at = Time.now
+      @take.save
     else
       @more = true
       @question_number = @question_number + 1
@@ -117,6 +116,7 @@ class QuestionsController < ApplicationController
     
     if params[:question][:correct_response].to_i == Choice::MULTIPLE
       @question.kind = Question::MULTIPLECHOICE
+      @question.correct_response = nil
       @saved = @question.save
       
       1.upto(5) do |num|
@@ -124,9 +124,18 @@ class QuestionsController < ApplicationController
         @choice.question = @question
         @choice.name = params["choice_#{num}".to_sym]
         @choice.correct = (params[:correct_answer] == "choice_#{num}") ? true : false
-        
         @choice.save
       end
+    elsif params[:question][:correct_response].to_i == Choice::SHORT
+      @question.kind = Question::SHORTANSWER
+      @question.correct_response = nil
+      @saved = @question.save
+      
+      @choice = Choice.new
+      @choice.question = @question
+      @choice.name = params[:short_answer]
+      @choice.simple_name = params[:short_answer].downcase.strip.gsub('.', '').gsub('/', '')
+      @choice.save
     else
       @question.kind = Question::TRUEFALSE
       @saved = @question.save

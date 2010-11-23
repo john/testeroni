@@ -121,7 +121,8 @@ class TestsController < ApplicationController
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @user = User.find(params[:username])
-    @completions = CompletedTest.where("user_id = ?", @user.id)
+    @take = Take.find(params[:take])
+    
   end
   
   def results

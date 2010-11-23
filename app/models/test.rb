@@ -6,7 +6,7 @@ class Test < ActiveRecord::Base
   has_many :videos
   has_many :questions
   has_many :responses
-  has_many :completions, :class_name => 'CompletedTest'
+  has_many :takes
   
   has_friendly_id :name, :use_slug => true
   acts_as_taggable

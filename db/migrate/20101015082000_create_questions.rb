@@ -7,7 +7,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.string :description
       t.string :explanation
       t.integer :kind            # true/false or multiple choice, holds a constant
-      t.integer :correct_response          # 1 = true, 0 = false, 3 = multiple choice
+      t.integer :correct_response          # 1 = true, 0 = false, 2 = multiple choice
       t.timestamps
     end
     add_index :questions, :test_id

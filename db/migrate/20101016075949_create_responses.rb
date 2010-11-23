@@ -5,7 +5,7 @@ class CreateResponses < ActiveRecord::Migration
       t.integer :test_id
       t.integer :question_id
       t.integer :choice_id
-      t.integer :taking_id
+      t.integer :take_id
       t.boolean :answer
       t.boolean :correct
       t.string :name

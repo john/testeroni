@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20101117044711) do
     t.integer  "test_id"
     t.integer  "question_id"
     t.integer  "choice_id"
-    t.integer  "taking_id"
+    t.integer  "take_id"
     t.boolean  "answer"
     t.boolean  "correct"
     t.string   "name"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(:version => 20101117044711) do
     t.string "name"
   end
 
-  create_table "takings", :force => true do |t|
+  create_table "takes", :force => true do |t|
     t.integer  "test_id"
     t.integer  "user_id"
     t.datetime "started_at"
@@ -107,8 +107,8 @@ ActiveRecord::Schema.define(:version => 20101117044711) do
     t.datetime "updated_at"
   end
 
-  add_index "takings", ["test_id"], :name => "index_takings_on_test_id"
-  add_index "takings", ["user_id"], :name => "index_takings_on_user_id"
+  add_index "takes", ["test_id"], :name => "index_takes_on_test_id"
+  add_index "takes", ["user_id"], :name => "index_takes_on_user_id"
 
   create_table "tests", :force => true do |t|
     t.integer  "user_id"

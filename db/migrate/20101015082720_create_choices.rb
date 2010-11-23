@@ -3,6 +3,7 @@ class CreateChoices < ActiveRecord::Migration
     create_table :choices do |t|
       t.integer :question_id
       t.string :name
+      t.string :simple_name
       t.string :description
       t.string :explanation
       t.boolean :correct

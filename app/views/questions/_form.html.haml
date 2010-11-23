@@ -14,7 +14,7 @@
       =f.text_field :name
 
     %p
-      =f.label :description, 'Description (displayed when the question is asked)'
+      =f.label :description, 'Description (when the question is asked)'
       = f.text_area :description, :style => 'height:60px;'
 
     %p{:style => "padding:10px 0; margin:3px 0; vertical-align:middle"}
@@ -26,9 +26,17 @@
         = f.radio_button :correct_response, Choice::FALSE
         false
       %p
+        = f.radio_button :correct_response, Choice::SHORT
+        short answer
+        
         = f.radio_button :correct_response, Choice::MULTIPLE
         multiple choice
-
+        
+      #short_answers{:style => "display:none;"}
+        %div
+          %label{:for => 'short_answer'}
+          %input{:id => 'short_answer', :type => 'text'}
+          
       #multiple_choices{:style => "display:none;"}
         -1.upto(5) do |i|
           %div
@@ -37,7 +45,7 @@
               %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
               %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
               correct answer?
-      =f.label :explanation, 'Explanation (displayed after the question is answered)'
+      =f.label :explanation, 'Explanation (after the question is answered)'
       = f.text_area :explanation, :style => 'height:60px;display:block;'
       
       =f.submit(:style => 'clear:both;margin-top:5px;')
@@ -72,6 +80,11 @@
     });
 
     $('#question_correct_response_2').click(function() {
+      $('#short_answers').show('900');
+      $('#short_answer').focus();
+    });
+    
+    $('#question_correct_response_3').click(function() {
       $('#multiple_choices').show('900');
       $('#choice_1').focus();
     });
