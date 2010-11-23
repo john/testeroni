@@ -4,6 +4,9 @@ class CreateAuthentications < ActiveRecord::Migration
       t.string :provider
       t.integer :user_id
       t.string :uid
+      
+      t.string :token # added by jmcgrath
+      
       t.timestamps
     end
     add_index :authentications, :user_id

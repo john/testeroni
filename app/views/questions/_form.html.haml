@@ -38,9 +38,9 @@
               %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
               correct answer?
       =f.label :explanation, 'Explanation (displayed after the question is answered)'
-      = f.text_area :explanation, :style => 'height:60px;'
+      = f.text_area :explanation, :style => 'height:60px;display:block;'
       
-      =f.submit(:style => 'margin-top:15px;')
+      =f.submit(:style => 'clear:both;margin-top:5px;')
 
 :javascript
   $(document).ready(function(){

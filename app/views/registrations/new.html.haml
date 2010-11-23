@@ -1,14 +1,25 @@
 -if params[:source]
   %h2{:style => 'padding-bottom:5px;'} One last step
+  
+  %img{:src => @fbpicture, :style => 'float:left; padding-right:15px;'}
+  
   %p
-    = "This will connect the #{params[:source].titleize} account below with Testeroni."
+    = "This will connect the #{params[:source].titleize} account for"
+    %strong= "#{@username}"
+    with Testeroni.
+  %div
+    -#(Wrong account? Please
+    -#= link_to_function('Click here', "FB.logout()", :style => 'font-weight:bold;')
+    -#to log out of Facebook)
     
-    %p{:style => 'border: 1px solid red; padding:10px; margin:10px;'} Your account shit here. Get from omni auth, or use koala for fb stuff if necessary.
+    -#= "You'll be able to sign in using #{params[:source].titleize}."
     
-    = "You'll be able to sign in using #{params[:source].titleize}."
-    Please enter your
-    = " email and choose a " if params[:source] != 'facebook'
-    username to finish creating your account.
+    %div.clearfix
+    
+    -if params[:source] == 'facebook'
+      Please select a username to finish creating your account.
+    -else
+      Please enter your email and select a username to finish creating your account.
 -else
   %h2 Sign up
 

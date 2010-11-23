@@ -14,7 +14,8 @@ class AuthenticationsController < ApplicationController
       # MAKE SURE this can direct to a passed-in value, so you can send them back to whence they came
       sign_in_and_redirect(:user, authentication.user)
     elsif current_user
-      current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
+      # current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'])
+      current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => omniauth['credentials']['token'])
       flash[:notice] = "Authentication successful."
       redirect_to authentications_url
     else
@@ -33,37 +34,12 @@ class AuthenticationsController < ApplicationController
       # if not, put the omniauth shit in the session and redirect to a page where they can add what's missing
       else
         
-        logger.debug "omniauth: #{omniauth.to_json}"
-        
-        # omniauth just deals with oauth. to take the oauth token and make requests to fb, use koala.
-        
         if omniauth['provider'] == 'twitter'
           session[:omniauth] = omniauth.except('extra')
         else
           session[:omniauth] = omniauth
         end
         
-        @token = session[:omniauth]['credentials']['token']
-        @fbuid = session[:omniauth]['uid']
-        
-        logger.debug "@token: #{@token}"
-        logger.debug "@fbuid: #{@fbuid}"
-        
-        if omniauth['provider'] == 'facebook'
-          @graph = Koala::Facebook::GraphAPI.new(@token)
-          
-          logger.debug "koala @graph: #{@graph.inspect}"
-          
-          @fbuser = @graph.get_object(@fbuid)
-          
-          @fbpicture = @graph.get_picture(@fbuid)
-          
-          logger.debug "koala @picture: #{@picture.inspect}"
-        end
-        
-        logger.debug "session[:omniauth]: #{session[:omniauth].to_json}"
-        
-        #session[:email] = 
         redirect_to new_user_registration_url(:source => omniauth['provider'])
         #redirect_to last_step_url
       end

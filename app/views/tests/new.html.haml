@@ -1,2 +1,7 @@
 %h1 Create a test
 = render :partial => 'form'
+
+:javascript
+  $(document).ready(function(){
+    $('#test_name').focus();
+  });

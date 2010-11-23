@@ -1,16 +1,22 @@
-%p Just published
+%p You just published the test
 %h1= link_to(@test.name, test_path(@test))
 
-%p{:style => 'padding:10px 0;'} Now invite people to take it
-
-%p{:style => 'padding:10px 0;'} If they're signed in through fb, get their friends:
-
-%ul
-  %li
-    %input{:type => 'checkbox'} Kristy
-    %input{:type => 'checkbox'} Catherine
-    %input{:type => 'checkbox'} Hugh
-    %input{:type => 'checkbox'} etc.
-%input{:type => 'submit', :value => 'Invite your friends to take the test!'}
-
-%p{:style => 'padding:10px 0;'} Invite them to tweet the new test. Make sure they can auth a single account to both Twitter and fb
+-#
+  / %p{:style => 'padding:10px 0;'} But nobody knows about it yet. Invite your friends to take the test.
+  / 
+  / %div{:style => 'height:320px;'}
+  /   %div{:style => 'float:left; width:38%'}
+  /     = form_tag(invite_test_url(@test)) do
+  /       %ul.bulletless.scrollable
+  /         - @friends.each do |f|
+  /           %li
+  /             %input{:type => 'checkbox', :name => 'invite[]', :value => f['id']}= f['name']
+  /       %input{:type => 'submit', :value => 'Invite your friends to take the test!'}
+  /   
+  /   %div{:style => 'float:right; width:58%;'}
+  /     %textarea{:style => 'width:100%'} Check the box next to the name of each friend you want to message about this test.
+      
+%ul.bulletless{:style => 'padding-top:20px;'}
+  %li= link_to('Create another test', new_test_path)
+  %li= link_to('View the results of this test (needs an rss feed)', test_results_path(@test))
+  %li Ask if they want to tweet it, send invite emails, or post to fb wall (only offer if they're fb connected, ajax a call to the graph api)

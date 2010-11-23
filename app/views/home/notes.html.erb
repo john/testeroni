@@ -5,7 +5,7 @@ li {margin:15px;}
 
 <h2>Deployment/Infrastructure</h2>
 <ol>
-	<li>Get codebase in git soon</li>
+	<li>Get codebase on github soon</li>
 	<li>Start writing tests!</li>
 	<li>Set up Google Analytics</li>
 	<li>At first just deploy with git, I think. Then consider... Capistrano?</li>
@@ -17,13 +17,19 @@ li {margin:15px;}
 	<li>Set up a blog</li>
 </ol>
 
-
-Kristy notes:
-- if you auth with fb or twitter, have the 'almost there' page verify which account you're using, in case it's the wrong one.
-- when you sign up from 'create test' link, it's no putting you at the create test page when you're done
 <h2>Priority Features</h2>
 
 <ol>
+  <li>When creating tests options to get: email notifications when people take it</li>
+  <li>Invites should only be able to be sent out once, so need a way to monitor who has and has not been sent them. Easy way would be to only allow the sending of invites once, at the end of test creation. Could start there, but that'd be limiting. Could also disallow fb invites (that graph api isn't even done yet anyway) and focus on using plain ol' email at first. Could also just post newly created tests once, to your own mini-feed, rather than directly to all your friends.</li>
+  <li>Need validation on /tests/foo/pubish page, so that you have to select people before it lets you invite anyone</li>
+  <li>Use Amazon SQS to send emails/fb messages asynchronously. Look for related gems.</li>
+  <li>Let fbconnected users invite others to take a test after taking it themselves (rather than just after creating one).</li>
+  <li>After (or before?) you take a test, if you're fbconnected, it should check if any of your friends have taken the same test, and display their scores as well.</li>
+  <li>Should fbmessage (or email) back the test creator when someone has taken one of their tests. Might want to make that a daily summary, and turn-offable, so wildly popular tests don't become a total headache.</li>
+  
+  <li>Should also be able to invite people to take test by email.</li>
+  <li>Auth buttons should trigger a spinner</li>
   <li>Come up with a long-term solution (write a helper) for URI.escape and CGI.escape (http://blog.standalonecode.com/?p=42)</li>
   <li>When you're not signed in, and you click on a test to take it, you should get the option to log in, as well as to sign up.</li>
 	<li>Make sure you can sign in with either username or email (right now just asks for email)</li>
@@ -117,15 +123,21 @@ Kristy notes:
 	<li>Fred Wilson/USV</li>
 	<li>Andreesen Horowitz</li>
 	<li>Ron Conway</li>
+	<li>Chris Dixon/Founder Collective (http://foundercollective.com/)</li>
+	<li>Charlie O'Donnell/First Round (http://www.firstround.com/)</li>
+	
+	<li>RRE Ventures (http://www.rre.com/)
 	<li>Y Combinator</li>
 	<li>Techstars</li>
 	<li>Bill Gurley</li>
 	<li>Floodgate/Mike Mapple/Ann Miura-Ko</li>
 	<li>Steve Andersen/Baseline</li>
-	<li><i>Angels</i></li>
-	<li>Chris Dixon/Founder Collective</li>
 	<li>Catarina Fake</li>
 	<li>Lightbandk (http://j.mp/b6T88i)</li>
+	<li>Charles River (old squirl contact, talk to mark if possible)</li>
+	<li><em>harvest:</em><br />
+	  http://techcrunch.com/2010/02/02/top-vc-firm-websites/<br />
+	http://blogs.wsj.com/venturecapital/2010/11/01/the-money-trail-this-years-most-active-venture-firms/</li>
 </ol>
 
 <h2>Accounts</h2>

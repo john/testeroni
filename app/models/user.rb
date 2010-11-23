@@ -19,6 +19,14 @@ class User < ActiveRecord::Base
   
   validates :username, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /[A-Za-z0-9\-_]+/}
   
+  def facebook_token
+    @token = nil
+    authentications.each do |a|
+      @token = a.token if a.provider == 'facebook'
+    end
+    @token
+  end
+  
   # to allow people to log in with either email or username. see:
   # http://stackoverflow.com/questions/2997179/ror-devise-sign-in-with-username-or-email
   def self.find_for_database_authentication(conditions={})
@@ -30,7 +38,8 @@ class User < ActiveRecord::Base
     if email.blank? && omniauth.has_key?('extra') && omniauth['extra'].has_key?('user_hash')
       self.email = omniauth['extra']['user_hash']['email']
     end
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    
+    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => omniauth['credentials']['token'])
   end
   
   def password_required?

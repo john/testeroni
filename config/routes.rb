@@ -27,8 +27,9 @@ Testeroni::Application.routes.draw do
   match 'people', :to => "people#show", :as => 'user_root'
   
   match 'tests/:id/publish', :to => 'tests#publish', :as => 'publish_test'
-  match 'tests/:id/results/:username', :to => 'tests#individual_results', :as => 'individual_results'
-  match 'tests/:id/results', :to => 'tests#aggregated_results', :as => 'aggregated_results'
+  match 'tests/:id/invite', :to => 'tests#invite', :as => 'invite_test'
+  match 'tests/:id/results/:username', :to => 'tests#individual_results', :as => 'individual_test_results'
+  match 'tests/:id/results', :to => 'tests#results', :as => 'test_results'
   
   match 'questions/answer', :to => 'questions#answer', :as => 'answer'
   

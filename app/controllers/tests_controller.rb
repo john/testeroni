@@ -19,26 +19,13 @@ class TestsController < ApplicationController
   # GET /tests/1.xml
   def show
     
-    # should require signin
+    # should require signin?
     
     @test = Test.find(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
     @description = "'#{@test.name}' on Testeroni."
     @question_number = 1
-    
-    # # this is done both here and in QuestionsController#show. How to dry it up?
-    # 
-    # # embarrassing hack. 'a' is only present when we're adding questions, which means we're
-    # # not actually taking the test, and shouldn't be creating takings. come up with a better
-    # # mechanism.
-    # if @test.published? && !params[:a]
-    #   @taking = Taking.new
-    #   @taking.test = @test
-    #   @taking.user = current_user
-    #   @taking.started_at = Time.now
-    #   @taking.save
-    # end
     
     respond_to do |format|
       format.html # show.html.erb
@@ -49,6 +36,8 @@ class TestsController < ApplicationController
   # GET /tests/new
   # GET /tests/new.xml
   def new
+    redirect_to root_path and return unless user_signed_in?
+    
     @test = Test.new
     @title = "Create a new quiz or survey - Testeroni"
     @description = "Create a new quiz or survey on Testeroni."
@@ -62,6 +51,7 @@ class TestsController < ApplicationController
   # GET /tests/1/edit
   def edit
     @test = Test.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
   end
 
   # POST /tests
@@ -69,6 +59,7 @@ class TestsController < ApplicationController
   def create
     @test = Test.new(params[:test])
     @test.user = current_user
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if @test.video_url
       @video = Video.new
@@ -82,7 +73,6 @@ class TestsController < ApplicationController
 
     respond_to do |format|
       if @test.save
-        # format.html { redirect_to(@test, :notice => 'Test was successfully created.') }
         format.html { redirect_to( new_question_path(:test_id => @test.id), :notice => 'Test was successfully created.') }
         format.xml  { render :xml => @test, :status => :created, :location => @test }
       else
@@ -94,18 +84,47 @@ class TestsController < ApplicationController
   
   def publish
     @test = Test.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     @test.published_at = Time.now
     @test.save
+    
+    if @token = current_user.facebook_token
+      logger.debug "@token: #{@token}"
+      @graph = Koala::Facebook::GraphAPI.new(@token)
+      logger.debug "@graph: #{@graph.inspect}"
+      @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
+    end
+  end
+  
+  def invite
+    @test = Test.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
+    if params[:invite].blank?
+      flash[:notice] = "Please select people to invite and resubmit."
+      redirect_to test_path(@test)
+    else
+      if @token = current_user.facebook_token
+        @graph = Koala::Facebook::GraphAPI.new(@token)
+        params[:invite].each do |i|
+          # WANT to send message (email via fb, or internal fb messages, doesn't matter), not post to walls. doesn't look like graph api supports that, though :-(
+          # @graph.put_wall_post("has invited you to take a test:", {:name => @test.name, :link => test_url(@test)}, "me")
+          logger.debug "INVITE:----------> #{i.inspect}"
+        end
+      end
+    end
   end
   
   def individual_results
     @test = Test.find(params[:id])
-    @user = User.find(params[:username])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
+    @user = User.find(params[:username])
     @completions = CompletedTest.where("user_id = ?", @user.id)
   end
   
-  def aggregated_results
+  def results
     @test = Test.find(params[:id])
   end
 
@@ -113,7 +132,8 @@ class TestsController < ApplicationController
   # PUT /tests/1.xml
   def update
     @test = Test.find(params[:id])
-
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     respond_to do |format|
       if @test.update_attributes(params[:test])
         format.html { redirect_to(@test, :notice => 'Test was successfully updated.') }
@@ -129,6 +149,8 @@ class TestsController < ApplicationController
   # DELETE /tests/1.xml
   def destroy
     @test = Test.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     @test.destroy
 
     respond_to do |format|

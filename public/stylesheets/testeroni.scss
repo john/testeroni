@@ -150,6 +150,13 @@ width:400px;
   font-weight:normal;
 }
 
+.scrollable {
+  height:300px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  overflow:scroll;
+}
+
 .roundborder {
 border: 1px solid #ddd;
 border-radius: 8px;
@@ -190,6 +197,7 @@ cursor: pointer;
   margin-right:auto;
   text-align:center;
   font-family:Palatino Linotype, Book Antiqua, Palatino, serif;
+  vertical-align:middle;
 }
 
 .field_with_errors {

@@ -1,0 +1,13 @@
+%h3 Thanks, invites were sent
+
+%p back to
+%h2
+  = link_to(@test.name, test_path(@test))
+
+%p Things to do now:
+
+%ul.bulletless
+  %li= link_to('Create another test', new_test_path)
+  %li= link_to('View the results of this test (needs an rss feed)', test_results_path(@test))
+  %li Ask if they want to tweet it, send invite emails, or post to fb wall
+  
