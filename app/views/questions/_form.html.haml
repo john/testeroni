@@ -14,7 +14,7 @@
       =f.text_field :name
 
     %p
-      =f.label :description, 'Description (when the question is asked)'
+      =f.label :description, 'Description (shown when the question is asked)'
       = f.text_area :description, :style => 'height:60px;'
 
     %p{:style => "padding:10px 0; margin:3px 0; vertical-align:middle"}
@@ -26,18 +26,22 @@
         = f.radio_button :correct_response, Choice::FALSE
         false
       %p
-        = f.radio_button :correct_response, Choice::SHORT
+        = f.radio_button :correct_response, Choice::SHORT, :class => 'short_answer'
         short answer
-        
-        = f.radio_button :correct_response, Choice::MULTIPLE
+      %p
+        = f.radio_button :correct_response, Choice::MULTIPLE, :class => 'multiple_choice'
         multiple choice
         
       #short_answers{:style => "display:none;"}
         %div
-          %label{:for => 'short_answer'}
-          %input{:id => 'short_answer', :type => 'text'}
+          %label{:for => 'short_answer'} Enter a short (less than 10 words) answer
+          %input{:id => 'short_answer', :name => 'short_answer', :type => 'text'}
+          %p{:style => 'font-style:italic; padding:5px 0 0 0; width: 70%;'}
+            If there is more than one possible correct answer (ie, 'Obama' and 'Barack Obama') you can
+            = link_to_function('add alternate correct answers.')
           
       #multiple_choices{:style => "display:none;"}
+        %div Enter two or more possible answers, and make sure to say which one is correct.
         -1.upto(5) do |i|
           %div
             %label{:for => "a#{i}"}#{i.ordinalize} choice
@@ -45,7 +49,7 @@
               %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
               %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
               correct answer?
-      =f.label :explanation, 'Explanation (after the question is answered)'
+      =f.label :explanation, 'Explanation (shown after the question is answered)'
       = f.text_area :explanation, :style => 'height:60px;display:block;'
       
       =f.submit(:style => 'clear:both;margin-top:5px;')
@@ -73,18 +77,22 @@
 
     $('#question_correct_response_0').click(function() {
       $('#multiple_choices').hide('900');
+      $('#short_answers').hide('900');
     });
 
     $('#question_correct_response_1').click(function() {
       $('#multiple_choices').hide('900');
+      $('#short_answers').hide('900');
     });
 
-    $('#question_correct_response_2').click(function() {
+    $('.short_answer').click(function() {
+      $('#multiple_choices').hide();
       $('#short_answers').show('900');
       $('#short_answer').focus();
     });
     
-    $('#question_correct_response_3').click(function() {
+    $('.multiple_choice').click(function() {
+      $('#short_answers').hide();
       $('#multiple_choices').show('900');
       $('#choice_1').focus();
     });

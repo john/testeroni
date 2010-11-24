@@ -9,7 +9,7 @@ class PeopleController < ApplicationController
       redirect_to people_path(url_escape(current_user.username)) and return
     end
     
-    @person = User.find_by_username(current_user.username)
+    @person = User.find_by_username(params[:username])
     @title = "#{@person.username} - Testeroni"
     @description = "#{@person.username}'s homepage on Testeroni."
   end

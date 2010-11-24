@@ -57,6 +57,9 @@
         %div.dismiss
           %a.close [x]
         .account
+          %p{:style => 'padding:0 0 20px 0;'}
+            Already have an account?
+            = link_to('Log in', new_user_session_path)
           %h2 Create an account with Facebook or Twitter
           = render(:partial => 'authentications/services', :locals => {:redirect_to => new_test_path})
           .clearfix
@@ -117,7 +120,6 @@
           
           // this belong on the index page only, and should be put in a content_for
           $('#signup_link').click(function() {
-            alert('signupgoto: #{new_test_path}')
             signupThenGoTo('#{new_test_path}');
           });
           

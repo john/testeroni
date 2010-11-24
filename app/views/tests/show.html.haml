@@ -52,8 +52,9 @@
               -if @owner
                 %span
                   [
-                  #{link_to('Edit', edit_question_path(q, :test_id => @test.to_param))} |
-                  #{link_to('Delete', question_path(q, :test_id => @test.to_param), :method => :delete, :confirm => "For sure? That's permanente.")}
+                  = link_to('Edit', edit_question_path(q, :test_id => @test.to_param))
+                  |
+                  = link_to('Delete', question_path(q, :test_id => @test.to_param), :method => :delete, :confirm => "For sure? That's permanente.")
                   ]
               -unless q.description.blank?
                 %div= q.description

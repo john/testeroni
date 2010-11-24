@@ -25,4 +25,19 @@ class Question < ActiveRecord::Base
   validates :test_id, :presence => true, :numericality => true
   validates :user_id, :presence => true, :numericality => true
   
+  # if it's a multiple choice question, get the correct one
+  def correct_choice
+    choices.each do |c|
+      return c if c.correct?
+    end
+  end
+  
+  def is_multiple_choice
+    (kind == Question::MULTIPLECHOICE) ? true : false
+  end
+  
+  def is_short_answer
+    (kind == Question::SHORTANSWER) ? true : false
+  end
+  
 end

@@ -20,6 +20,9 @@ li {margin:15px;}
 <h2>Priority Features</h2>
 
 <ol>
+  <li>Should be able to take tests without creating an account--especially for embedded tests. If you do, it should store results either in a cookie (might hit space issues), or in the session, and if you create an account, it should then populate your account with your earlier activity.</li>
+  <li>Questions should be directly addressable, maybe? maybe not--how would you score a test that someone entered in the middle? Maybe tests are rolling--if you start on question 5, it goes to the end, then presents you with questions 1-4.</li>
+  <li>Taking your own tests should probably be allowed, but those takes shouldn't count towards any of your stats, or the stats for the test.</li>
   <li>Way to randomize the order of the questions (make 'question_order' an attribute of a Take?), and the order of the choices to multiple-choice questions (do in template).
   <li>When creating tests options to get: email notifications when people take it</li>
   <li>Invites should only be able to be sent out once, so need a way to monitor who has and has not been sent them. Easy way would be to only allow the sending of invites once, at the end of test creation. Could start there, but that'd be limiting. Could also disallow fb invites (that graph api isn't even done yet anyway) and focus on using plain ol' email at first. Could also just post newly created tests once, to your own mini-feed, rather than directly to all your friends.</li>

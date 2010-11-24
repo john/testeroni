@@ -22,14 +22,16 @@
 
 %p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.username}:
 
--if @person.takings.blank?
-  %p None, yet. Why don't you take one of the many fascinating tests on the #{link_to('home page', root_path)}
+-if @person.takes.blank?
+  %p None, yet.
+  -if user_signed_in? && @person.id == current_user.id
+    Why don't you take one of the many fascinating tests on the #{link_to('home page', root_path)}
 -else
   %ul.bulletless
-    -@person.takings.each do |t|
+    -@person.takes.each do |t|
       -@test = Test.find(t.test_id)
       %li
         =link_to @test.name, test_path(@test)
         -if t.user == current_user
           &nbsp;
-          %span [#{link_to 'your results', individual_results_path(@test, current_user)} | #{link_to 'overall results', aggregated_results_path(@test)}]
+          %span [#{link_to 'your results', individual_test_results_path(@test, current_user, t)} | #{link_to 'overall results', test_results_path(@test)}]

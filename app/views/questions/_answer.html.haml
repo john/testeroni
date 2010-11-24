@@ -14,8 +14,9 @@
         true.
       - elsif @question.correct_response == Choice::FALSE
         false.
-      - elsif @question.correct_response == Choice::MULTIPLE
-        = @response.choice.name
+      - elsif @question.is_multiple_choice || @question.is_short_answer
+        = @question.correct_choice.name
+        
       
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
@@ -31,4 +32,4 @@
 - else
   %p{:style => 'padding:10px 0;'} Thus endeth the test.
   
-  %h5= link_to('View your results', individual_test_results_path(@test, current_user, @taking.id))
+  %h5= link_to('View your results', individual_test_results_path(@test, current_user, @take.id))

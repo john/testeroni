@@ -11,4 +11,13 @@ class Choice < ActiveRecord::Base
   validates :name, :presence => true
   validates :question_id, :presence => true, :numericality => true
   
+  def self.simplify(name)
+    if name.nil?
+      nil
+    else
+      # ALSO strip junk words like 'a', 'an', 'the'
+      return name.downcase.strip.gsub('.', '').gsub('/', '')
+    end
+  end
+  
 end

@@ -65,14 +65,44 @@ class QuestionsController < ApplicationController
       @response.correct = @choice.correct
     end
     
+    if params[:short_answer]
+      logger.debug "-------> checking short answer"
+      
+      # UPDATE this when there can be more than one correct choice for short answer questions
+      @response.choice = @question.choices.first
+      @response.take = @take
+      @response.name = params[:short_answer]
+      
+      logger.debug "-------> @question.choices: #{@question.choices.inspect}"
+      logger.debug "-------> choice simple name: #{@question.choices.first.simple_name}"
+      
+      @question.choices.first.simple_name
+      
+      # do we really need to store the simple name, or can we just always generate it when necessary?
+      logger.debug "-------> @response.name: #{@response.name}"
+      
+      # once you can add multiple correct choices, get them all and loop through looking for matches
+      
+      @response.correct = (Choice.simplify(@response.name) == @question.choices.first.simple_name) ? true : false
+      logger.debug "-------> @response.correct: #{@response.correct}"
+      
+    end
+    
     @response.user = current_user
     @response.test = @test
     @response.question = @question
+    @response.take = @take
     @response.save
     
+    @question.responses << @response
+    
     @response_count = @question.responses.size
+    logger.debug "@response_count: #{@response_count}"
     @correct_response_count = @question.number_correct
-    @percentage_correct = (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i
+    
+    logger.debug "@correct_response_count: #{@correct_response_count}"
+    
+    @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
     if @test.questions.length == @question_number
       @more = false
@@ -134,7 +164,8 @@ class QuestionsController < ApplicationController
       @choice = Choice.new
       @choice.question = @question
       @choice.name = params[:short_answer]
-      @choice.simple_name = params[:short_answer].downcase.strip.gsub('.', '').gsub('/', '')
+      @choice.simple_name = Choice.simplify(@choice.name)
+      @choice.correct = true
       @choice.save
     else
       @question.kind = Question::TRUEFALSE

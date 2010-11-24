@@ -1,15 +1,12 @@
-%p Results of the test
 %h1= link_to(@test.name, test_path(@test))
-%p{:style => 'padding-top:20px;'} for: #{@user.username}:
-
-%p= @take.responses.size
+%p{:style => 'padding-bottom:20px;'} Test results for: #{@user.username}:
 
 %ul.bulletless
 
   - if @take
     %ol
       -@take.responses.each do |r|
-        %li
+        %li{:style => 'padding-bottom:10px;'}
           %div
             Question:
             %em= r.question.name
@@ -20,7 +17,7 @@
             -elsif r.answer == false
               false
             -else
-              = "r.answer: #{r.answer}"
+              = r.choice.name
           -if r.correct
             %strong
               CORRECT!
@@ -31,4 +28,4 @@
             -if r.question.kind == Question::TRUEFALSE
               =(r.question.correct_response == 1) ? 'true' : 'false'
             -else
-              =r.choice.name
+              =r.question.correct_choice.name
