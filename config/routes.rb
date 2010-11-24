@@ -33,6 +33,8 @@ Testeroni::Application.routes.draw do
   
   match 'questions/answer', :to => 'questions#answer', :as => 'answer'
   
+  match 'search/:q', :to => 'search#results', :as => 'search'
+  
   match 'about', :to => 'home#about', :as => 'about'
   match 'contact', :to => 'home#contact', :as => 'contact'
   match 'notes', :to => 'home#notes', :as => 'notes'

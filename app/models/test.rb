@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class Test < ActiveRecord::Base
   
   attr_accessor :video_url
@@ -31,6 +33,10 @@ class Test < ActiveRecord::Base
   
   def has_questions?
     (questions.size > 0)
+  end
+  
+  def average_grade
+    
   end
   
 end

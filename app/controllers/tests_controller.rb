@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class TestsController < ApplicationController
   
   before_filter :authenticate_user!, :except => [:index, :show]

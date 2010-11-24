@@ -32,7 +32,8 @@
             &nbsp; Already a member?
             = link_to('Log in', new_user_session_path)
         .search
-          %input{:type => 'text', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'",  :style => 'width:120px; height:10px; color:#ddd'}
+          -#%form{:method => 'post', :action => search_path}
+          %input{:type => 'text', :id => 'q', :name => 'q', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'",  :style => 'width:120px; height:10px; color:#ddd'}
       #logotype
         -if request.path == '/'
           Testeroni
@@ -49,8 +50,6 @@
       &#183;
       %a.twitter-share-button{:href => "http://twitter.com/share", 'data-count' => "none", 'data-via' => "besteroni"} Tweet
       %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-      
-      
       
     - if @user
       #signup.roundborder{:style => 'display:none'}
