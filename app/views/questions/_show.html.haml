@@ -1,9 +1,16 @@
 %p Question #{@question_number} of #{@test.questions.length}:
 %h1= @question.name
 
+-if @question.description
+  %p= @question.description
+-if @question.image_url && !@question.image_url.blank?
+  %div
+    %img{:src => @question.image_url}
+  
 %form#theForm
   %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
-  %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
+  -if @take
+    %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
   %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
   %input{:type => 'hidden', :name => 'question_number', :value => @question_number}
   %div{:style => "padding:15px 0;"}
@@ -29,6 +36,14 @@
 
 -if @question_number <= @test.questions.length
 
+  -#
+    $('#skip').click(function() {
+      $.get('#{question_path(@test.questions[@question_number], :test_id => @test.to_param, :take_id => @take.id, :question_number => (@question_number+1))}', function(data) {
+        $('#question_pane').hide();
+        $('#question_pane').html(data);
+        $('#question_pane').show('slide', {direction:'right'}, 600);
+      });
+    });
   :javascript
     $(document).ready(function(){
 
@@ -50,11 +65,4 @@
         return false;
       });
       
-      $('#skip').click(function() {
-        $.get('#{question_path(@test.questions[@question_number], :test_id => @test.to_param, :qnum => (@question_number+1))}', function(data) {
-          $('#question_pane').hide();
-          $('#question_pane').html(data);
-          $('#question_pane').show('slide', {direction:'right'}, 600);
-        });
-      });
     });

@@ -6,6 +6,9 @@ class Question < ActiveRecord::Base
   MULTIPLECHOICE = 2
   SHORTANSWER = 3
   
+  # https://github.com/elight/acts_as_commentable_with_threading
+  acts_as_commentable
+  
   belongs_to :test
   belongs_to :user
   has_many :choices
@@ -29,8 +32,10 @@ class Question < ActiveRecord::Base
   
   # if it's a multiple choice question, get the correct one
   def correct_choice
-    choices.each do |c|
-      return c if c.correct?
+    @_correct_choice ||= begin
+      choices.each do |c|
+        return c if c.correct?
+      end
     end
   end
   

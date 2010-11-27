@@ -9,31 +9,35 @@ Testeroni::Application.routes.draw do
   root :to => "home#index"
   
   devise_for :users, :controllers => {:registrations => 'registrations'}
-  resources :users
-  resources :questions
-  resources :tests
-  resources :results
-  
-  # match 'auth' => 'authentications#index'
-  # match 'auth' => 'authentications#index', :as => 'sign_in'
-  
-  match 'auth/:provider' => 'authentications#create', :as => 'auth'
-  match 'auth/:provider/callback' => 'authentications#create', :as => 'auth_callback'
-  match 'last_step' => 'registrations#last_step'
   
   #  instead of constraints, allowing . across the board (see top of file)
   # match 'people/:username', :to => 'people#show', :as => 'people', :constraints => {:username => /[^\/]+/}
   match 'people/:username', :to => 'people#show', :as => 'people', :constraints => {:username => /[^\/]+/}
   match 'people', :to => "people#show", :as => 'user_root'
+  resources :users
+  
+  match 'questions/answer', :to => 'questions#answer', :as => 'answer'
+  resources :questions
+  
+  match 'tests/:id/:permalink', :to => 'tests#show', :as => 'test', :via => :get
+  match 'tests/:id/:permalink', :to => 'tests#destroy', :as => 'test', :via => :delete
   
   match 'tests/:id/publish', :to => 'tests#publish', :as => 'publish_test'
   match 'tests/:id/invite', :to => 'tests#invite', :as => 'invite_test'
   match 'tests/:id/results/:username/:take', :to => 'tests#individual_results', :as => 'individual_test_results'
   match 'tests/:id/results', :to => 'tests#results', :as => 'test_results'
+  resources :tests
   
-  match 'questions/answer', :to => 'questions#answer', :as => 'answer'
+  resources :results
   
-  match 'search/:q', :to => 'search#results', :as => 'search'
+  # match 'auth' => 'authentications#index'
+  # match 'auth' => 'authentications#index', :as => 'sign_in'
+  match 'auth/:provider' => 'authentications#create', :as => 'auth'
+  match 'auth/:provider/callback' => 'authentications#create', :as => 'auth_callback'
+  match 'last_step' => 'registrations#last_step'
+  
+  match 'search', :to => 'search#results', :as => 'search'
+  match 'search/:term', :to => 'search#results', :as => 'search_term'
   
   match 'about', :to => 'home#about', :as => 'about'
   match 'contact', :to => 'home#contact', :as => 'contact'

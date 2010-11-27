@@ -1,7 +1,6 @@
 %h1
   = @test.name
-  -if @owner
-    <span>#{link_to(' [ edit ]', edit_test_path(@test))}</span>
+  
 -unless @test.description.blank?
   %p= @test.description
 
@@ -14,12 +13,13 @@
         #added.notice{:style => 'font-size:1.2em;'}
           %a{:id => "close-added", :style => 'float:right;'}>
             [x]
-          %h4{:style => 'padding-bottom:10px;'} Question successfully created!
+          %h4{:style => 'padding-bottom:10px;'} Question successfully added
           %p{:style => 'padding-bottom:10px;'}
-            You can
-            #{link_to('add another question', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}
-            or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')} when you're done adding questions.
-          %p Once it's published you can let your friends know about it, and people can start taking it.
+            #{link_to('Add another question', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}
+            
+            -unless @test.published?
+              or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')} when you're done adding questions.
+              %p Once it's published you can let your friends know about it, and people can start taking it.
 
           :javascript
             $(document).ready(function(){
@@ -27,38 +27,33 @@
                 $('#added').effect('fade');
               });
             });
-      -else
-        As the owner of this test you can <a href="#" onclick="$('.questions').toggle();" style="font-weight:bold;">add or edit questions</a>.
     %p= "This test has #{pluralize(@test.questions.size, 'question')}"
+
+
+
     -if @test.has_questions? && @test.published?
       %h2>
-        %a#question_link{:href => "#"}Take the test!
-        :javascript
-          #{render :partial => 'questions/next_question_js'}
+        -#%a#question_link{:href => "#"}Take the test!
+        -#:javascript
+        -#  #{render :partial => 'questions/next_question_js'}
+        
+        -# ajax the first one in, like all the rest
+        -#= render(:partial => 'questions/show')
 
--# The questions should be editable on their own page, I think, rather than revealed here
--# at the least need to be able to dismiss the questions and get back to taking the test
-.questions{:style => 'display:none;'}
-  %h2{:style => 'padding-top:20px;'}>
-    Thee Questions
-    -if @owner
-      %span= link_to('[ Add question ]', new_question_path(:test_id => @test.to_param))
-    -unless @test.questions.blank?
-      %ol#questions
-        -@test.questions.each do |q|
-          %li
-            %h3
-              "#{q.name}"
-              -if @owner
-                %span
-                  [
-                  = link_to('Edit', edit_question_path(q, :test_id => @test.to_param))
-                  |
-                  = link_to('Delete', question_path(q, :test_id => @test.to_param), :method => :delete, :confirm => "For sure? That's permanente.")
-                  ]
-              -unless q.description.blank?
-                %div= q.description
+:javascript
 
+  // run stuff
+  $(document).ready(function(){
+  
+    Tstrni.load_question = function(q) {
+      $('#question_pane').html([q, or if there is no q, the first question of the test.])
+    }
+    
+    var state = $.bbq.getState();
+    var q = $.bbq.getState( 'q', true ) || '#{ path to display question partial for first question}';
+    Tstrni.load_question(q);
+  });
+  
 -unless @test.videos.blank?
   #left_col
   -@test.videos.each do |v|

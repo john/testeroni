@@ -5,6 +5,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.integer :user_id
       t.string :name
       t.string :description
+      t.string :image_url
       t.string :explanation
       t.integer :kind            # true/false or multiple choice, holds a constant
       t.integer :correct_response          # 1 = true, 0 = false, 2 = multiple choice

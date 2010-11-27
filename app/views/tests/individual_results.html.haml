@@ -5,27 +5,38 @@
 
   - if @take
     %ol
-      -@take.responses.each do |r|
+      -#-@take.responses.each do |r|
+      -@test.questions.each do |question|
         %li{:style => 'padding-bottom:10px;'}
           %div
             Question:
-            %em= r.question.name
-          %div
-            your answer:
-            -if r.answer == true
-              true
-            -elsif r.answer == false
-              false
-            -else
-              = r.choice.name
-          -if r.correct
-            %strong
-              CORRECT!
+            %em= question.name
+          -if question.image_url
+            %div
+              %img{:src => question.image_url}
+          -r = Response.where(['take_id=? AND question_id=?', @take.id, question.id]).first
+          -if r.nil?
+            %div
+              %em No response
           -else
-            %strong
-              Sorry, wrong.
-            The correct answer is: 
-            -if r.question.kind == Question::TRUEFALSE
-              =(r.question.correct_response == 1) ? 'true' : 'false'
+            %div
+              your answer:
+              -if r.answer == true
+                true
+              -elsif r.answer == false
+                false
+              -elsif r.question.kind == Question::SHORTANSWER
+                = r.name
+              -else
+                = r.choice.name
+            -if r.correct
+              %strong
+                CORRECT!
             -else
-              =r.question.correct_choice.name
+              %strong
+                Sorry, wrong.
+              The correct answer is: 
+              -if r.question.kind == Question::TRUEFALSE
+                =(r.question.correct_response == 1) ? 'true' : 'false'
+              -else
+                =r.question.correct_choice.name

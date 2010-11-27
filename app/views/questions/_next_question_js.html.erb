@@ -8,10 +8,15 @@ end
 
 $(document).ready(function(){
 	$('#question_link').bind('click', function() {
+	  
 		$.get('<%= url %>', function(data) {
 			$('#question_pane').hide();
 			$('#question_pane').html(data);
 			$('#question_pane').show('slide', {direction:'right'}, 600);
+			
+			
+			
 		});
+		
 	});
 });

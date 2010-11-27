@@ -30,6 +30,21 @@
 @q = Question.create(:name => "What is the capital of Arkansas?", :kind => Question::SHORTANSWER, :test_id => @test.id, :user_id => @user.id)
 @qc1 = Choice.create(:name => 'Little Rock', :simple_name => 'little rock', :question_id => @q.id, :correct => true)
 
+@q = Question.create(:name => "What is the capital of California?", :kind => Question::MULTIPLECHOICE, :test_id => @test.id, :user_id => @user.id)
+@qc1 = Choice.create(:name => 'San Francisco', :question_id => @q.id, :correct => false)
+@qc2 = Choice.create(:name => 'Los Angeles', :question_id => @q.id, :correct => false)
+@qc3 = Choice.create(:name => 'San Jose', :question_id => @q.id, :correct => false)
+@qc4 = Choice.create(:name => 'Sacremento', :question_id => @q.id, :correct => true)
+
+@q = Question.create(:name => "What is the capital of Colorado?", :kind => Question::SHORTANSWER, :test_id => @test.id, :user_id => @user.id)
+@qc1 = Choice.create(:name => 'Denver', :simple_name => 'denver', :question_id => @q.id, :correct => true)
+
+@q = Question.create(:name => "What is the capital of Connecticut?", :kind => Question::MULTIPLECHOICE, :test_id => @test.id, :user_id => @user.id)
+@qc1 = Choice.create(:name => 'Stamford', :question_id => @q.id, :correct => false)
+@qc2 = Choice.create(:name => 'New Haven', :question_id => @q.id, :correct => false)
+@qc3 = Choice.create(:name => 'Hartford', :question_id => @q.id, :correct => true)
+@qc4 = Choice.create(:name => 'Norwalk', :question_id => @q.id, :correct => false)
+
 @test.published_at = Time.now
 @test.save
 
@@ -44,5 +59,9 @@
                       :user_id => @user.id)
 @qc1 = Choice.create(:name => 'Hamlet', :simple_name => 'hamlet', :question_id => @q.id, :correct => true)
 
+@test.published_at = Time.now
+@test.save
+
+@test = Test.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id)
 @test.published_at = Time.now
 @test.save

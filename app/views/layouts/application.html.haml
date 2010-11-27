@@ -11,12 +11,13 @@
     
     -if @test && @test.id
       %meta{:property => 'og:title', :content => url_escape(@test.name)}
-      %meta{:property => 'og:url', :content => test_url(@test)}
+      %meta{:property => 'og:url', :content => test_url(@test.id, @test.to_param)}
     
     %title= @title ||= 'Testeroni'
     =stylesheet_link_tag(:flutie, 'testeroni', 'jquery-ui-1.8.6.custom',  :cache => true)
     =javascript_include_tag('https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
     =javascript_include_tag('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js')
+    = javascript_include_tag("jquery.ba-bbq.min.js")
     =javascript_include_tag('rails')
     =csrf_meta_tag
   %body
@@ -32,8 +33,8 @@
             &nbsp; Already a member?
             = link_to('Log in', new_user_session_path)
         .search
-          -#%form{:method => 'post', :action => search_path}
-          %input{:type => 'text', :id => 'q', :name => 'q', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'",  :style => 'width:120px; height:10px; color:#ddd'}
+          =form_tag(search_path) do
+            %input{:type => 'text', :id => 'q', :name => 'q', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'",  :style => 'width:120px; height:10px; color:#ddd'}
       #logotype
         -if request.path == '/'
           Testeroni

@@ -15,7 +15,10 @@
 
     %p
       =f.label :description, 'Description (shown when the question is asked)'
-      = f.text_area :description, :style => 'height:60px;'
+      =f.text_area :description, :style => 'height:60px;'
+      
+      =f.label :image_url, 'Image URL (optional)'
+      =f.text_field :image_url
 
     %p{:style => "padding:10px 0; margin:3px 0; vertical-align:middle"}
       %p The answer to this question is:
@@ -23,32 +26,69 @@
         =f.radio_button :correct_response, Choice::TRUE
         true
       %p
-        = f.radio_button :correct_response, Choice::FALSE
+        =f.radio_button :correct_response, Choice::FALSE
         false
       %p
-        = f.radio_button :correct_response, Choice::SHORT, :class => 'short_answer'
+        =f.radio_button :correct_response, Choice::SHORT, :class => 'short_answer', :checked => (@short_answer) ? 'checked' : 'false'
         short answer
       %p
-        = f.radio_button :correct_response, Choice::MULTIPLE, :class => 'multiple_choice'
+        =f.radio_button :correct_response, Choice::MULTIPLE, :class => 'multiple_choice', :checked => (@multiple_choice) ? 'checked' : 'false'
         multiple choice
         
-      #short_answers{:style => "display:none;"}
+      #short_answers{:style => (@short_answer) ? '' : 'display:none;'}
         %div
           %label{:for => 'short_answer'} Enter a short (less than 10 words) answer
-          %input{:id => 'short_answer', :name => 'short_answer', :type => 'text'}
+          %input{:id => 'short_answer', :name => 'short_answer', :type => 'text', :value => (@short_answer) ? @question.choices.first.name : ''}
           %p{:style => 'font-style:italic; padding:5px 0 0 0; width: 70%;'}
             If there is more than one possible correct answer (ie, 'Obama' and 'Barack Obama') you can
             = link_to_function('add alternate correct answers.')
           
-      #multiple_choices{:style => "display:none;"}
+      #multiple_choices{:style => (@multiple_choice) ? '' : 'display:none;'}
+      
+      
         %div Enter two or more possible answers, and make sure to say which one is correct.
-        -1.upto(5) do |i|
-          %div
-            %label{:for => "a#{i}"}#{i.ordinalize} choice
+        
+        
+        
+        -# This shit needs to be DRYed up
+        -if @multiple_choice
+          -@question.choices.each_with_index do |choice, i|
             %div
-              %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
-              %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
-              correct answer?
+            
+              -# rather than using i+1 for the choice id, should probably use the actual choice.id,
+              -# so they can be updated in place.
+            
+              %label{:for => "choiceupdate_#{choice.id}"}#{(i+1).ordinalize} choice
+              %div
+                -# %input{:id => "choice_#{i+1}", :type => "text", :name => "choice_#{i+1}", :value => choice.name}
+                %input{:id => "choiceupdate_#{choice.id}", :type => "text", :name => "choiceupdate_#{choice.id}", :value => choice.name}
+                %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choiceupdate_#{choice.id}", :checked => (@question.correct_choice.id == choice.id)}
+                correct answer?
+          
+          -# 
+            / -if @question.choices.size < Choice::MAX_ALLOWED_CHOICES
+            /   -(@question.choices.size+1).upto(Choice::MAX_ALLOWED_CHOICES) do |i|
+            /     %div
+            /       %label{:for => "choice_#{i}"}#{i.ordinalize} choice
+            /       %div
+            /         %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
+            /         -# @multiple_choice
+            /         %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
+            /         correct answer?
+        -else
+          -1.upto(Choice::MAX_ALLOWED_CHOICES) do |i|
+            %div
+              %label{:for => "choice_#{i}"}#{i.ordinalize} choice
+              %div
+                %input{:id => "choice_#{i}", :type => "text", :name => "choice_#{i}"}
+                -# @multiple_choice
+                %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
+                correct answer?
+
+              
+              
+              
+              
       =f.label :explanation, 'Explanation (shown after the question is answered)'
       = f.text_area :explanation, :style => 'height:60px;display:block;'
       

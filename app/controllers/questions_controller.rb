@@ -20,27 +20,21 @@ class QuestionsController < ApplicationController
   def show
     @test = Test.find(params[:test_id])
     @question = Question.find(params[:id])
-    
-    logger.debug "params[:question_number]: #{params[:question_number]}"
     @question_number = (params[:question_number]) ? params[:question_number].to_i : 1
-    logger.debug "@question_number: #{@question_number}"
-    
+
     if @question_number == 1
-      
-      # this is done both here and in TestsController#show. How to dry it up?
       @take = Take.new
       @take.test = @test
       @take.user = current_user
       @take.started_at = Time.now
       @take.save
-      
     else
       @take = Take.find(params[:take_id])
     end
 
     respond_to do |format|
       format.html do
-        render :layout => false #if params[:layout] && params[:layout] == 'false'
+        render :partial => 'show'
       end
       format.xml  { render :xml => @question }
     end
@@ -50,7 +44,21 @@ class QuestionsController < ApplicationController
     @test = Test.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
-    @take = Take.find(params[:take_id])
+    # @take = Take.find(params[:take_id])
+    
+    if @question_number == 1
+      @take = Take.new
+      @take.test = @test
+      @take.user = current_user
+      @take.started_at = Time.now
+      @take.save
+    else
+      @take = Take.find(params[:take_id])
+    end
+    
+    
+    
+    
     
     @response = Response.new
     if params[:answer]
@@ -68,26 +76,15 @@ class QuestionsController < ApplicationController
     end
     
     if params[:short_answer]
-      logger.debug "-------> checking short answer"
-      
       # UPDATE this when there can be more than one correct choice for short answer questions
       @response.choice = @question.choices.first
       @response.take = @take
       @response.name = params[:short_answer]
-      
-      logger.debug "-------> @question.choices: #{@question.choices.inspect}"
-      logger.debug "-------> choice simple name: #{@question.choices.first.simple_name}"
-      
       @question.choices.first.simple_name
-      
-      # do we really need to store the simple name, or can we just always generate it when necessary?
-      logger.debug "-------> @response.name: #{@response.name}"
-      
+
       # once you can add multiple correct choices, get them all and loop through looking for matches
       
       @response.correct = (Choice.simplify(@response.name) == @question.choices.first.simple_name) ? true : false
-      logger.debug "-------> @response.correct: #{@response.correct}"
-      
     end
     
     @response.user = current_user
@@ -99,11 +96,7 @@ class QuestionsController < ApplicationController
     @question.responses << @response
     
     @response_count = @question.responses.size
-    logger.debug "@response_count: #{@response_count}"
     @correct_response_count = @question.number_correct
-    
-    logger.debug "@correct_response_count: #{@correct_response_count}"
-    
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
     if @test.questions.length == @question_number
@@ -136,6 +129,13 @@ class QuestionsController < ApplicationController
   def edit
     @question = Question.find(params[:id])
     @test = Test.find(params[:test_id]) if params[:test_id]
+    if @question.kind == Question::SHORTANSWER
+      @short_answer = true
+    end
+    
+    if @question.kind == Question::MULTIPLECHOICE
+      @multiple_choice = true
+    end
   end
 
   # POST /questions
@@ -151,7 +151,8 @@ class QuestionsController < ApplicationController
       @question.correct_response = nil
       @saved = @question.save
       
-      1.upto(5) do |num|
+      # TODO: Dry this; it's repeated in 'update'
+      1.upto(Choice::MAX_ALLOWED_CHOICES) do |num|
         @choice = Choice.new
         @choice.question = @question
         @choice.name = params["choice_#{num}".to_sym]
@@ -200,6 +201,25 @@ class QuestionsController < ApplicationController
 
     respond_to do |format|
       if @question.update_attributes(params[:question])
+        
+        # handle short answer
+        if @question.kind == Question::SHORTANSWER
+          @choice = @question.choices.first
+          @choice.name = params[:short_answer]
+          @choice.simple_name = Choice.simplify(params[:short_answer])
+          @choice.save
+        end
+        
+        # handle multiple choice
+        params.each do |param|
+          if param[0].include?('choiceupdate_')
+            choice = Choice.find(param[0].split('_')[1])
+            choice.name = param[1]
+            choice.correct = (params[:correct_answer] == param[0]) ? true : false
+            choice.save
+          end
+        end
+        
         format.html do
           if @test
             redirect_to(@test, :notice => 'Question was successfully updated.')

@@ -4,3 +4,6 @@ Run "rake doc:app" to generate API documentation for your models, controllers, h
 To run SASS:
 cd /path/to/testeroni/public/stylesheets
 sass --watch testeroni.scss:testeroni.css
+
+Note this:
+https://github.com/elight/acts_as_commentable_with_threading/issues#issue/7

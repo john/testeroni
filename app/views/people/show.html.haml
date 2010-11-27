@@ -1,6 +1,9 @@
 -#%h6= current_user.authentications.inspect
 
-%h1= @person.username
+%h1
+  -if @owner
+    Hi,
+  = @person.username
 %h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
 %p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.username}:
 
@@ -13,25 +16,30 @@
   %ul.bulletless
     -@person.tests.each do |t|
       %li
-        =link_to t.name, test_path(t)
+        =link_to t.name, test_path(t.id, t.to_param)
         -if t.user == current_user
           &nbsp;
-          %span [#{link_to 'edit', edit_test_path(t)} | #{link_to 'delete', test_path(t), :method => :delete, :confirm => 'For real? This can never, ever be undone.'}]
-
-
+          %span
+            [
+            =link_to 'results', test_results_path(t)
+            |
+            =link_to 'edit', edit_test_path(t)
+            |
+            =link_to 'delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.'
+            ]
 
 %p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.username}:
 
 -if @person.takes.blank?
   %p None, yet.
-  -if user_signed_in? && @person.id == current_user.id
-    Why don't you take one of the many fascinating tests on the #{link_to('home page', root_path)}
+  -if @owner
+    There are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
 -else
   %ul.bulletless
     -@person.takes.each do |t|
       -@test = Test.find(t.test_id)
       %li
-        =link_to @test.name, test_path(@test)
+        =link_to @test.name, test_path(@test.id, @test.to_param)
         -if t.user == current_user
           &nbsp;
           %span [#{link_to 'your results', individual_test_results_path(@test, current_user, t)} | #{link_to 'overall results', test_results_path(@test)}]

@@ -1,11 +1,61 @@
 GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: ed30114bd8700c7e5c44b80ceeed39e4977d13e5
+  revision: 268eae1013229fde1928eb3bdd9719253515e45e
   specs:
     devise (1.2.rc)
       bcrypt-ruby (~> 2.1.2)
       orm_adapter (~> 0.0.2)
       warden (~> 1.0.2)
+
+GIT
+  remote: http://github.com/elight/acts_as_commentable_with_threading.git
+  revision: 31983bdc23bc62199777c8d940ad2ba17d1c1cf4
+  specs:
+    acts_as_commentable_with_threading (0.2.0)
+      activerecord (~> 3.0)
+      activesupport (~> 3.0)
+      moretea-awesome_nested_set
+
+GIT
+  remote: https://github.com/collectiveidea/awesome_nested_set.git
+  revision: b9aba888f5f28e7ce47af4a36c2ae1df17640b38
+  specs:
+    awesome_nested_set (1.4.3)
+      activerecord (>= 1.1)
+
+GIT
+  remote: https://github.com/intridea/omniauth.git
+  revision: 347a66e3d4f173257e387f5f0e4d75969058d1b4
+  specs:
+    oa-basic (0.2.0)
+      multi_json (~> 0.0.2)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0)
+      rest-client (~> 1.6.0)
+    oa-core (0.2.0)
+      rack (~> 1.1)
+    oa-enterprise (0.2.0)
+      net-ldap (~> 0.1.1)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0)
+      pyu-ruby-sasl (~> 0.0.3.1)
+      rubyntlm (~> 0.1.1)
+    oa-oauth (0.2.0)
+      multi_json (~> 0.0.2)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0)
+      oauth (~> 0.4.0)
+      oauth2 (~> 0.1.0)
+    oa-openid (0.2.0)
+      oa-core (= 0.2.0)
+      rack-openid (~> 1.2.0)
+      ruby-openid-apps-discovery
+    omniauth (0.2.0)
+      oa-basic (= 0.2.0)
+      oa-core (= 0.2.0)
+      oa-enterprise (= 0.2.0)
+      oa-oauth (= 0.2.0)
+      oa-openid (= 0.2.0)
 
 GEM
   remote: http://rubygems.org/
@@ -68,43 +118,16 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    moretea-awesome_nested_set (1.4.3.1)
+      activerecord (~> 3.0.0)
     multi_json (0.0.5)
     multipart-post (1.0.1)
     net-ldap (0.1.1)
     nokogiri (1.4.4)
-    oa-basic (0.1.6)
-      multi_json (~> 0.0.2)
-      nokogiri (~> 1.4.2)
-      oa-core (= 0.1.6)
-      rest-client (~> 1.6.0)
-    oa-core (0.1.6)
-      rack (~> 1.1)
-    oa-enterprise (0.1.6)
-      net-ldap (~> 0.1.1)
-      nokogiri (~> 1.4.2)
-      oa-core (= 0.1.6)
-      pyu-ruby-sasl (~> 0.0.3.1)
-      rubyntlm (~> 0.1.1)
-    oa-oauth (0.1.6)
-      multi_json (~> 0.0.2)
-      nokogiri (~> 1.4.2)
-      oa-core (= 0.1.6)
-      oauth (~> 0.4.0)
-      oauth2 (~> 0.1.0)
-    oa-openid (0.1.6)
-      oa-core (= 0.1.6)
-      rack-openid (~> 1.2.0)
-      ruby-openid-apps-discovery
     oauth (0.4.4)
     oauth2 (0.1.0)
       faraday (~> 0.5.0)
       multi_json (~> 0.0.4)
-    omniauth (0.1.6)
-      oa-basic (= 0.1.6)
-      oa-core (= 0.1.6)
-      oa-enterprise (= 0.1.6)
-      oa-oauth (= 0.1.6)
-      oa-openid (= 0.1.6)
     orm_adapter (0.0.3)
     polyglot (0.3.1)
     pyu-ruby-sasl (0.0.3.2)
@@ -156,6 +179,8 @@ PLATFORMS
 
 DEPENDENCIES
   acts-as-taggable-on
+  acts_as_commentable_with_threading!
+  awesome_nested_set!
   devise!
   flutie
   friendly_id
@@ -163,7 +188,7 @@ DEPENDENCIES
   hpricot
   jquery-rails
   koala
-  omniauth
+  omniauth!
   rails
   ruby-mysql
   ruby_parser

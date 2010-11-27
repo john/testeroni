@@ -3,24 +3,22 @@ ol {font-size:1.2em;}
 li {margin:15px;}
 </style>
 
-<h2>Deployment/Infrastructure</h2>
-<ol>
-	<li>Get codebase on github soon</li>
-	<li>Start writing tests!</li>
-	<li>Set up Google Analytics</li>
-	<li>At first just deploy with git, I think. Then consider... Capistrano?</li>
-	<li>Use Amazon's free EC2 instance to start (32 bit), so long as you confirm it would be easy to move up to a 64 bit instance. If it's just me, use micro. If there's any kind of backing at all, future proof a little with a large.</li>
-	<li>Automate db backups (hourly?), and make sure they can be moved to S3. Do test restorations to verify.</li>
-	<li>Document the shit out of the instance create/deployment process</li>
-	<li><b>Later on...</b></li>
-	<li>Set up Google Apps account, so I can have a john@testeroni.com</li>
-	<li>Set up a blog</li>
-</ol>
-
 <h2>Priority Features</h2>
 
 <ol>
+  
+  <li>after creating a question, should get a better response. maybe go to the edit page?</li>
+
+  <li>when adding questions to an already-published test, need to handle it better (should it even be possible? maybe only if it's never been taken? clone?)</li>
+  
+  <li><b>OPEN EVERYTHING</b>. Open book test, you can see the answers, you can see individual questions, everything is independently addressable (though connected). To start, make questions have their own urls (use the bbq jquery plugin if appropriate, same one you used for thesaurus comparisons)</li>
+  
+  <li>A way to make tests out of Stack Overflow questions? Is their data available? That'd be awesome.</li>
+  
+  <li>Need to allow collaborative tests that get added to over time. How to deal with grades and history for tests that change often?</li>
+  <li>Comments on tests and questions, but how, given that both of those have taken and untaken states? Try to find a minimal wysiwyg editor this time too.</li>
   <li>Start of test should show first question</li>
+  <li>When editing questions, can I switch type, say MC to SA?</li>
   <li>Should be able to take tests without creating an account--especially for embedded tests. If you do, it should store results either in a cookie (might hit space issues), or in the session, and if you create an account, it should then populate your account with your earlier activity.</li>
   <li>Questions should be directly addressable, maybe? maybe not--how would you score a test that someone entered in the middle? Maybe tests are rolling--if you start on question 5, it goes to the end, then presents you with questions 1-4.</li>
   <li>Taking your own tests should probably be allowed, but those takes shouldn't count towards any of your stats, or the stats for the test.</li>
@@ -103,13 +101,17 @@ li {margin:15px;}
 <p>Write these people, implore them to blog/tweet/whatever</p>
 
 <ol>
-	<li>The university contact list for the thesaurus launch</li>
+  <li>Repoint all my social media link crap/sig/etc to testroni.com</li>
+  <li>
+  <li>Jon Bischke (hacking education)</li>
+  <li>
+	<li>The university/education beat contact list for the thesaurus launch</li>
 	<li>Daniel Terdiman</li>
 	<li>Arik</li>
 	<li>Altay</li>
 	<li>Tim</li>
 	<li>Theo</li>
-	<li>Steve (ask him to tell Jono, Catarini)</li>
+	<li>Steve (ask him to tell Jono, Catarina)</li>
 	<li>Christian</li>
 	<li>Go over Jschool people, see who's in tech</li>
 	<li>Go over linked in, ditto</li>
@@ -121,6 +123,22 @@ li {margin:15px;}
 </ol>
 
 <p>Next NY: I've been working on a side project that I'm about to launch, and am wondering if anyone has any suggestions for simple, free places to announce/promote it. I know this ain't the place, but what is? I'm going to write bloggers in the field (education)... any other suggestions?</p>
+
+
+<h2>Deployment/Infrastructure</h2>
+<ol>
+	<li>Get codebase on github soon</li>
+	<li>Start writing tests!</li>
+	<li>Set up Google Analytics</li>
+	<li>At first just deploy with git, I think. Then consider... Capistrano?</li>
+	<li>Use Amazon's free EC2 instance to start (32 bit), so long as you confirm it would be easy to move up to a 64 bit instance. If it's just me, use micro. If there's any kind of backing at all, future proof a little with a large.</li>
+	<li>Automate db backups (hourly?), and make sure they can be moved to S3. Do test restorations to verify.</li>
+	<li>Document the shit out of the instance create/deployment process</li>
+	<li><b>Later on...</b></li>
+	<li>Set up Google Apps account, so I can have a john@testeroni.com</li>
+	<li>Set up a blog</li>
+</ol>
+
 
 <h1>Money</h1>
 <p>Most attractive sources of it</p>

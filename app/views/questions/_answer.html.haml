@@ -24,6 +24,10 @@
 %p
   = "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
 
+%h4 Comments
+%form
+  %input{:type => 'textarea'}
+  
 -if @more
   %h2
     %a#question_link{:href => '#'}Next question

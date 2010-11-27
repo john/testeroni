@@ -1,0 +1,11 @@
+%h3{:style => 'padding:0 0 15px 0;'}
+  Search results for
+  %em= params[:term]
+  
+
+-if @results
+  %ul.bulletless
+    -@results.each do |r|
+      %li= link_to r.name, test_path(r)
+-else
+  %em Sorry, no results found.

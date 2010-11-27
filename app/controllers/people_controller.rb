@@ -12,6 +12,8 @@ class PeopleController < ApplicationController
     @person = User.find_by_username(params[:username])
     @title = "#{@person.username} - Testeroni"
     @description = "#{@person.username}'s homepage on Testeroni."
+    
+    @owner = true if user_signed_in? && @person.id == current_user.id
   end
 
 end

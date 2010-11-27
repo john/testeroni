@@ -7,6 +7,8 @@ class Choice < ActiveRecord::Base
   MULTIPLE = 2
   SHORT = 3
   
+  MAX_ALLOWED_CHOICES = 5
+  
   belongs_to :question
   has_many :responses
   

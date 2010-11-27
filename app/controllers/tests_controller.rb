@@ -20,14 +20,24 @@ class TestsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.xml
   def show
+    @test = Test.find_by_sql(['SELECT * FROM tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
     
-    # should require signin?
-    
-    @test = Test.find(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
     @description = "'#{@test.name}' on Testeroni."
     @question_number = 1
+    
+    @question = @test.questions.first
+
+    # if @question_number == 1
+    #   @take = Take.new
+    #   @take.test = @test
+    #   @take.user = current_user
+    #   @take.started_at = Time.now
+    #   @take.save
+    # else
+    #   @take = Take.find(params[:take_id])
+    # end
     
     respond_to do |format|
       format.html # show.html.erb
