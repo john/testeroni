@@ -14,7 +14,10 @@ $(document).ready(function(){
 			$('#question_pane').html(data);
 			$('#question_pane').show('slide', {direction:'right'}, 600);
 			
-			
+			var state = $.bbq.getState();
+  		state['q'] = <%= @question.id %>;
+  		state['p'] = 'q'
+  		$.bbq.pushState( state );
 			
 		});
 		

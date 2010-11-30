@@ -1,7 +1,7 @@
 -if @test
   %p{:style => "padding:0 0 20px 0;"}
     For the test
-    %strong= link_to @test.name, test_path(@test.to_param)
+    %strong= link_to @test.name, test_path(@test.id, @test.to_param)
 
 =form_for(@question) do |f|
   =render(:partial => 'shared/errors', :locals => {:errors => @question.errors})
@@ -24,16 +24,16 @@
       %p The answer to this question is:
       %p
         =f.radio_button :correct_response, Choice::TRUE
-        true
+        =f.label "correct_response_#{Choice::TRUE}", 'true', :style => 'display:inline;'
       %p
         =f.radio_button :correct_response, Choice::FALSE
-        false
+        =f.label "correct_response_#{Choice::FALSE}", 'false', :style => 'display:inline;'
       %p
         =f.radio_button :correct_response, Choice::SHORT, :class => 'short_answer', :checked => (@short_answer) ? 'checked' : 'false'
-        short answer
+        =f.label "correct_response_#{Choice::SHORT}", 'short answer', :style => 'display:inline;'
       %p
         =f.radio_button :correct_response, Choice::MULTIPLE, :class => 'multiple_choice', :checked => (@multiple_choice) ? 'checked' : 'false'
-        multiple choice
+        =f.label "correct_response_#{Choice::MULTIPLE}", 'multiple choice', :style => 'display:inline;'
         
       #short_answers{:style => (@short_answer) ? '' : 'display:none;'}
         %div

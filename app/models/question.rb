@@ -6,6 +6,8 @@ class Question < ActiveRecord::Base
   MULTIPLECHOICE = 2
   SHORTANSWER = 3
   
+  has_friendly_id :name, :use_slug => true
+  
   # https://github.com/elight/acts_as_commentable_with_threading
   acts_as_commentable
   

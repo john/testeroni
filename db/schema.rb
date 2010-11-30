@@ -10,12 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101126194330) do
+ActiveRecord::Schema.define(:version => 20101113173054) do
 
   create_table "authentications", :force => true do |t|
     t.string   "provider"
     t.integer  "user_id"
     t.string   "uid"
+    t.integer  "status",     :limit => 3
     t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -28,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.string   "name"
     t.string   "simple_name"
     t.string   "description"
+    t.integer  "status",      :limit => 3
     t.string   "explanation"
     t.boolean  "correct"
     t.datetime "created_at"
@@ -43,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.text     "body"
     t.string   "subject",                        :default => ""
     t.integer  "user_id",                        :default => 0,  :null => false
+    t.string   "username",                       :default => "", :null => false
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
@@ -58,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
+    t.integer  "status",           :limit => 3
     t.string   "image_url"
     t.string   "explanation"
     t.integer  "kind"
@@ -79,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.boolean  "correct"
     t.string   "name"
     t.string   "description"
+    t.integer  "status",      :limit => 3
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -120,8 +125,11 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
   create_table "takes", :force => true do |t|
     t.integer  "test_id"
     t.integer  "user_id"
+    t.integer  "questions_answered"
+    t.integer  "questions_correct"
     t.datetime "started_at"
     t.datetime "finished_at"
+    t.integer  "status",             :limit => 3
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -133,6 +141,8 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
+    t.integer  "status",       :limit => 3
+    t.integer  "contributors", :limit => 3
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -144,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
   create_table "users", :force => true do |t|
     t.string   "username"
     t.boolean  "email_list"
+    t.integer  "status",               :limit => 3
     t.string   "email",                               :default => "", :null => false
     t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
@@ -166,6 +177,7 @@ ActiveRecord::Schema.define(:version => 20101126194330) do
     t.integer  "question_id"
     t.string   "name"
     t.string   "description"
+    t.integer  "status",      :limit => 3
     t.string   "provider"
     t.string   "url"
     t.string   "provider_id"

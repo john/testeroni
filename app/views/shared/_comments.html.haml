@@ -1,0 +1,43 @@
+-added_id ||= nil
+
+#comments
+  -unless comments.blank?
+    %h5 Comments
+    %ul.bulletless
+      -comments.each do |c|
+        %li{:style => 'padding:0 0 15px 0'}
+          - unless added_id.nil?
+            -if added_id == c.id
+              =render(:partial => 'shared/flash', :locals => {:flash => flash})
+          %div #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.username))} said:
+          %div= "#{c.id} #{c.body}"
+  %h5 Add a Comment
+  
+  =form_for(comment) do |f|
+    =f.hidden_field(:commentable_type)
+    =f.hidden_field(:commentable_id)
+  
+    -# using SO branch of wmd editor: https://github.com/derobins/wmd
+    %div{:id => 'wmd-button-bar', :class => 'wmd-panel', :style => "background-color:white;"}
+    %div
+      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'width:500px;background-color:white;'}
+    #wmd-preview.wmd-panel
+    -#wmd-output.wmd-panel
+    =f.submit
+    
+:javascript
+  $(document).ready(function(){
+    $('#new_comment').submit(function() {
+      $.ajax({
+        type: 'POST',
+        url: '/comments',
+        data: $('#new_comment').serialize(),
+        success: function(data) {
+          // some kind of flash that the new comment was added.
+          $('#comments').html(data);
+        },
+        error: function(data) { alert('fail!'); }
+      });
+      return false;
+    });
+  });

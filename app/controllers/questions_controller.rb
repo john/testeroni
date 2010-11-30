@@ -44,21 +44,20 @@ class QuestionsController < ApplicationController
     @test = Test.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
-    # @take = Take.find(params[:take_id])
+    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     
     if @question_number == 1
       @take = Take.new
       @take.test = @test
       @take.user = current_user
       @take.started_at = Time.now
-      @take.save
+      @take.questions_answered = 1
+      @take.questions_correct = 1
     else
       @take = Take.find(params[:take_id])
+      @take.questions_answered = @take.number_answered+1
+      @take.questions_correct = @take.number_correct+1
     end
-    
-    
-    
-    
     
     @response = Response.new
     if params[:answer]
@@ -102,11 +101,12 @@ class QuestionsController < ApplicationController
     if @test.questions.length == @question_number
       @more = false
       @take.finished_at = Time.now
-      @take.save
     else
       @more = true
       @question_number = @question_number + 1
     end
+    
+    @take.save
     
     render :partial => 'questions/answer'
   end
@@ -115,9 +115,11 @@ class QuestionsController < ApplicationController
   # GET /questions/new.xml
   def new
     @test = Test.find(params[:test_id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     @question = Question.new
-    @title = "New question for '#{@test.name}' - Testeroni"
-    @description = "New question for '#{@test.name}' - Testeroni"
+    @title = "New question for '#{@test.name}' - Test"
+    @description = "New question for '#{@test.name}' - Test"
 
     respond_to do |format|
       format.html # new.html.erb
@@ -129,6 +131,8 @@ class QuestionsController < ApplicationController
   def edit
     @question = Question.find(params[:id])
     @test = Test.find(params[:test_id]) if params[:test_id]
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     if @question.kind == Question::SHORTANSWER
       @short_answer = true
     end
@@ -143,6 +147,8 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(params[:question])
     @test = Test.find(params[:test_id]) if params[:test_id]
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
     @question.test = @test
     @question.user = current_user
     
@@ -179,8 +185,7 @@ class QuestionsController < ApplicationController
       if @saved
         format.html do
           if @test
-            # redirect_to(@test, :notice => "Question was successfully created. #{self.class.helpers.link_to('Add another.', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}")
-            redirect_to(test_path(@test, :a => 'a'))
+            redirect_to(test_path(@test.id, @test.to_param, :a => 'a'))
           else
             redirect_to(@question, :notice => 'Question was successfully created.')
           end
@@ -198,6 +203,7 @@ class QuestionsController < ApplicationController
   def update
     @question = Question.find(params[:id])
     @test = Test.find(params[:test_id]) if params[:test_id]
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     respond_to do |format|
       if @question.update_attributes(params[:question])
@@ -239,6 +245,8 @@ class QuestionsController < ApplicationController
   # DELETE /questions/1.xml
   def destroy
     @question = Question.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @question.user == current_user
+    
     @question.destroy
 
     respond_to do |format|

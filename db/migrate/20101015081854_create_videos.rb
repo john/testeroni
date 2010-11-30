@@ -5,6 +5,7 @@ class CreateVideos < ActiveRecord::Migration
       t.integer :question_id
       t.string :name
       t.string :description
+      t.integer :status, :limit => 3
       t.string :provider      # youtube, ted, etc
       t.string :url           # ie, http://www.youtube.com/watch?v=W0VWO4asgmk
       t.string :provider_id   # unique id of video on providers site, ie W0VWO4asgmk

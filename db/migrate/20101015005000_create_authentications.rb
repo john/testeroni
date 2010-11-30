@@ -4,7 +4,7 @@ class CreateAuthentications < ActiveRecord::Migration
       t.string :provider
       t.integer :user_id
       t.string :uid
-      
+      t.integer :status, :limit => 3
       t.string :token # added by jmcgrath
       
       t.timestamps

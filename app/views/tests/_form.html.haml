@@ -5,26 +5,28 @@
       %ul
         -@test.errors.full_messages.each do |msg|
           %li= msg
-
   .actions
     %p
       =f.label :name, 'Title'
       =f.text_field :name
-
     %p
-      = f.label :description, 'Description'
-      = f.text_area :description, :style => 'height:60px;'
-
+      =f.label :description, 'Description'
+      =f.text_area :description, :style => 'height:60px;'
+    %h6{:style => 'padding:0 0 5px 0;'} Questions can be added to this test by:
+    %div{:style => 'padding:0 0 5px 0;'}
+      =f.radio_button :contributors, Test::ANYONE
+      =f.label :contributors_1, 'Anyone, anyone at all', :style => 'display:inline;'
+    %div
+      =f.radio_button :contributors, Test::JUSTME
+      =f.label :contributors_2, 'Just me', :style => 'display:inline;'
     %p
-      = f.label :tags, 'Tags'
-      = f.text_field :tag_list
-
+      =f.label :tag_list, 'Tags'
+      =f.text_field :tag_list
     %h6{:style => 'padding:15px 0 0 0;'} Media (all optional):
     -if @test.id.blank?
       %p
-        = f.label :video_url, 'Video (add a YouTube URL)'
-        = f.text_field :video_url
-
+        =f.label :video_url, 'Video (add a YouTube URL)'
+        =f.text_field :video_url
     -unless @test.id.blank?
       %p Videos associated with this test:
       -if @test.videos.blank?
@@ -32,9 +34,8 @@
       -else
         %ul
           -@test.videos.each do |video|
-            %li= "video: #{video.class}; #{video.name}"
-
+            %li="video: #{video.class}; #{video.name}"
   - if @test.id.blank?
     %input{:type =>'submit', :value => 'Create test'}
   - else
-    = f.submit
+    =f.submit

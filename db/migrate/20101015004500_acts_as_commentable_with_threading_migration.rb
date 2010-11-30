@@ -7,6 +7,9 @@ class ActsAsCommentableWithThreadingMigration < ActiveRecord::Migration
       t.text :body, :default => ""
       t.string :subject, :default => ""
       t.integer :user_id, :default => 0, :null => false
+      
+      t.string :username, :default => '', :null => false #added jmcgrath
+      
       t.integer :parent_id, :lft, :rgt
       t.timestamps
     end

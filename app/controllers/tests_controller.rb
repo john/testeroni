@@ -8,8 +8,8 @@ class TestsController < ApplicationController
   # GET /tests.xml
   def index
     @tests = Test.all
-    @title = "Make surveys and quizzes from YouTube videos - Testeroni"
-    @description = "Testeroni lets you make surveys and quizzes from YouTube videos."
+    @title = "Make surveys and quizzes from YouTube videos - Test"
+    @description = "Test lets you make surveys and quizzes from YouTube videos."
 
     respond_to do |format|
       format.html # index.html.erb
@@ -20,24 +20,29 @@ class TestsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.xml
   def show
-    @test = Test.find_by_sql(['SELECT * FROM tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
     
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
-    @title = "#{@test.name} - Testeroni"
-    @description = "'#{@test.name}' on Testeroni."
-    @question_number = 1
+    @title = "#{@test.name} - Test"
+    @description = "'#{@test.name}' on Test."
     
-    @question = @test.questions.first
-
-    # if @question_number == 1
-    #   @take = Take.new
-    #   @take.test = @test
-    #   @take.user = current_user
-    #   @take.started_at = Time.now
-    #   @take.save
-    # else
-    #   @take = Take.find(params[:take_id])
-    # end
+    @question_number = 1
+    if params[:question_id]
+      @question = Question.find(params[:question_id])
+      
+      # is there a way to get the question_number without having to loop?
+      @test.questions.each_with_index do |q, i|
+        if q.id == @question.id
+          @question_number = i+1
+          break
+        end
+      end
+      
+    else
+      @question = @test.questions.first
+    end
+    
+    @comment = Comment.new
     
     respond_to do |format|
       format.html # show.html.erb
@@ -50,9 +55,9 @@ class TestsController < ApplicationController
   def new
     redirect_to root_path and return unless user_signed_in?
     
-    @test = Test.new
-    @title = "Create a new quiz or survey - Testeroni"
-    @description = "Create a new quiz or survey on Testeroni."
+    @test = Test.new(:contributors => Test::ANYONE)
+    @title = "Create a new quiz or survey - Test"
+    @description = "Create a new quiz or survey on Test."
 
     respond_to do |format|
       format.html # new.html.erb
@@ -115,7 +120,7 @@ class TestsController < ApplicationController
     
     if params[:invite].blank?
       flash[:notice] = "Please select people to invite and resubmit."
-      redirect_to test_path(@test)
+      redirect_to test_path(@test.id, @test.to_param)
     else
       if @token = current_user.facebook_token
         @graph = Koala::Facebook::GraphAPI.new(@token)
@@ -129,7 +134,8 @@ class TestsController < ApplicationController
   end
   
   def individual_results
-    @test = Test.find(params[:id])
+    # @test = Test.find(params[:id])
+    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @user = User.find(params[:username])
@@ -138,7 +144,8 @@ class TestsController < ApplicationController
   end
   
   def results
-    @test = Test.find(params[:id])
+    # @test = Test.find(params[:id])
+    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
   end
 
   # PUT /tests/1

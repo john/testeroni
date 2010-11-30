@@ -5,7 +5,7 @@ development:
   database: testeroni_development
   pool: 2
   username: root
-  password: #4Bcd3fg
+  password: 4Bcd3fg
   socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -22,7 +22,7 @@ test:
   database: testeroni_test
   pool: 2
   username: root
-  password: #4Bcd3fg
+  password: 4Bcd3fg
   socket: /tmp/mysql.sock
 
 production:
@@ -36,5 +36,5 @@ production:
   database: testeroni_production
   pool: 2
   username: root
-  password: #4Bcd3fg
+  password: 4Bcd3fg
   socket: /tmp/mysql.sock

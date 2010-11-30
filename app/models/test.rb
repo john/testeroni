@@ -2,6 +2,9 @@
 
 class Test < ActiveRecord::Base
   
+  ANYONE = 1
+  JUSTME = 2
+  
   attr_accessor :video_url
   
   belongs_to :user

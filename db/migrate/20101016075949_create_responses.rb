@@ -10,6 +10,7 @@ class CreateResponses < ActiveRecord::Migration
       t.boolean :correct
       t.string :name
       t.string :description
+      t.integer :status, :limit => 3
       t.timestamps
     end
     add_index :responses, :user_id

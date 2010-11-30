@@ -1,5 +1,5 @@
 -if user_signed_in?
-  %h2= link_to 'Create a test right now', new_test_path
+  %h2= link_to 'Create a test right now', new_test_url
 - else
   %p{:style => "padding:15px 0; font-size:1.2em;"}
     %strong< Testeroni
@@ -15,19 +15,19 @@
       %li{:style => 'padding-bottom:15px;'}
         %h3
           -if user_signed_in?
-            = link_to(t.name, test_path(t.id, t.to_param))
+            = link_to(t.name, test_url(t.id, t.to_param))
           - else
             = link_to_function(t.name, "signupThenGoTo('#{escape_javascript(test_path(t.id, t.to_param))}')")
         %div
-          = "Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}"
+          = "Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}."
           
           -unless t.grade.blank?
             with an average grade of #{t.grade}.
           
           -if user_signed_in?
-            = link_to('Take this test.', test_path(t.id, t.to_param), :style => 'font-weight:normal;')
+            = link_to('Take this test.', test_url(t.id, t.to_param))
           - else
-            = link_to_function('Take this test.', "signupThenGoTo('#{escape_javascript(test_path(t.id, t.to_param))}')", :style => 'font-weight:normal;')
+            = link_to_function('Take this test.', "signupThenGoTo('#{escape_javascript(test_path(t.id, t.to_param))}')")
           
 - else
   %div{:style => 'font-style:italic;'} No tests created yet.

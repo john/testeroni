@@ -5,6 +5,7 @@ class CreateChoices < ActiveRecord::Migration
       t.string :name
       t.string :simple_name
       t.string :description
+      t.integer :status, :limit => 3
       t.string :explanation
       t.boolean :correct
       t.timestamps

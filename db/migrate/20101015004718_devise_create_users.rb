@@ -3,6 +3,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
     create_table(:users) do |t|
       t.string :username
       t.boolean :email_list
+      t.integer :status, :limit => 3
       t.database_authenticatable :null => false # creates encrypted_password and password_salt fields
       t.recoverable # creates reset_password_token field
       t.rememberable # creates remember_token and remember_created_at

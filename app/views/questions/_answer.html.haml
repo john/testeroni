@@ -1,4 +1,11 @@
 #answer
+
+  -if @more
+    %div{:style => 'float:right; font-size: 1.5em;'}
+      %a#question_link.green.button{:href => '#'}Next question &gt;
+      :javascript
+        #{render :partial => 'questions/next_question_js'}
+      
   %h4
     -if @response.correct
       Correct!
@@ -21,19 +28,18 @@
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
     
-%p
-  = "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
+%p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
 
-%h4 Comments
-%form
-  %input{:type => 'textarea'}
-  
--if @more
-  %h2
-    %a#question_link{:href => '#'}Next question
-    :javascript
-      #{render :partial => 'questions/next_question_js'}
-- else
+%p= "You're tk for #{@question_number-1}, and have #{@test.questions.size + 1 - @question_number} questions left."
+- unless @more
   %p{:style => 'padding:10px 0;'} Thus endeth the test.
-  
   %h5= link_to('View your results', individual_test_results_path(@test, current_user, @take.id))
+  
+=render :partial => 'shared/comments', :locals => {:comment => @comment, :comments => @question.root_comments}
+
+:javascript
+  //  $(document).ready(function(){
+  //    var state = $.bbq.getState();
+  //    state[ 'view' ] = tab;
+  //    $.bbq.pushState( state );
+  //  });
