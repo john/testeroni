@@ -5,7 +5,7 @@
  *
  * This rails.js file supports jQuery 1.4.3 and 1.4.4 .
  *
- */ 
+ */
 
 jQuery(function ($) {
     var csrf_token = $('meta[name=csrf-token]').attr('content'),
@@ -35,13 +35,13 @@ jQuery(function ($) {
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is execute when status is complete
          * - ajax:failure  - is execute in case of error
-         * - ajax:after    - is execute every single time at the end of ajax call 
+         * - ajax:after    - is execute every single time at the end of ajax call
          */
         callRemote: function () {
             var el      = this,
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href'),
-                dataType  = el.attr('data-type')  || ($.ajaxSettings && $.ajaxSettings.dataType) || 'script';
+                dataType  = el.attr('data-type')  || ($.ajaxSettings && $.ajaxSettings.dataType);
 
             if (url === undefined) {
                 throw "No URL specified for remote call (action or href must be present).";
@@ -54,6 +54,7 @@ jQuery(function ($) {
                         dataType: dataType,
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Accept", "text/javascript");
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
@@ -85,7 +86,7 @@ jQuery(function ($) {
             }
         }
     });
-  
+
 
 
     /**
@@ -101,6 +102,11 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
+    /**
+     * <%= link_to "Delete", user_path(@user), :method => :delete, :confirm => "Are you sure?" %>
+     *
+     * <a href="/users/5" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Delete</a>
+     */
     $('a[data-method]:not([data-remote])').live('click.rails', function (e){
         var link = $(this),
             href = link.attr('href'),
@@ -149,8 +155,9 @@ jQuery(function ($) {
 
     var jqueryVersion = $().jquery;
 
-    if ( (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2') ){
-        alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
-    }
+	if (!( (jqueryVersion === '1.4.3') || (jqueryVersion === '1.4.4'))){
+		alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
+	}
+
 
 });

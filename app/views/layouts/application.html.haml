@@ -115,9 +115,8 @@
       })(document, 'script');
 
       function signupThenGoTo(url) {
-        
-        // this redirect mechanism only works for people using the traditional
-        // signup form. need somthing that works with auth services too -- session? cookie?
+        // redirect only works for people using the traditional signup form.
+        // need something that works with auth services too -- session? cookie?
         $('#redirect_to').val(url);
         
         $('#signup').lightbox_me({

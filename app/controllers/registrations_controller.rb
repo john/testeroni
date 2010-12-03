@@ -5,7 +5,6 @@ class RegistrationsController < Devise::RegistrationsController
   def create
     @user.password_confirmation = @user.password if @user && @user.password #hack
     super
-    
     session[:omniauth] = nil unless @user.new_record?
   end
   
@@ -19,9 +18,6 @@ class RegistrationsController < Devise::RegistrationsController
     
     super
   end
-  
-  # def last_step
-  # end
   
   private
   

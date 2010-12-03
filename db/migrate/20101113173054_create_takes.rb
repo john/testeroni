@@ -7,7 +7,7 @@ class CreateTakes < ActiveRecord::Migration
       t.integer :questions_correct
       t.datetime :started_at
       t.datetime :finished_at
-      t.integer :status, :limit => 3
+      t.integer :status, :limit => 1
       t.timestamps
     end
     add_index :takes, :user_id

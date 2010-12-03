@@ -20,7 +20,9 @@ class TestsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.xml
   def show
-    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    # @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    
+    @test = Test.load_active_by_id( params[:id] )
     
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Test"
@@ -75,6 +77,8 @@ class TestsController < ApplicationController
   # POST /tests.xml
   def create
     @test = Test.new(params[:test])
+    @test.status = Test::ACTIVE
+    
     @test.user = current_user
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
@@ -144,7 +148,10 @@ class TestsController < ApplicationController
   end
   
   def results
-    # @test = Test.find(params[:id])
+    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+  end
+  
+  def questions
     @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
   end
 

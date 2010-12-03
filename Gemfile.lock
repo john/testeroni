@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: 089c316f37a059532b9d5d9cdc50aaaa13a1d557
+  revision: b50fd1a72e711049508bf7af4610ad422be34f3b
   specs:
     devise (1.2.rc)
       bcrypt-ruby (~> 2.1.2)
@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: http://github.com/elight/acts_as_commentable_with_threading.git
-  revision: 31983bdc23bc62199777c8d940ad2ba17d1c1cf4
+  revision: 9aaf5e2f3a69a67065fec346358e601a42666c7a
   specs:
-    acts_as_commentable_with_threading (0.2.0)
+    acts_as_commentable_with_threading (1.1.0)
       activerecord (~> 3.0)
       activesupport (~> 3.0)
       moretea-awesome_nested_set
@@ -25,7 +25,7 @@ GIT
 
 GIT
   remote: https://github.com/intridea/omniauth.git
-  revision: 5f412b305ed274322f32c4264238c97327ded947
+  revision: 3cdb4908d1a79df038be75e28077738584547cb6
   specs:
     oa-basic (0.2.0.beta1)
       multi_json (~> 0.0.2)
@@ -89,7 +89,7 @@ GEM
     activesupport (3.0.3)
     acts-as-taggable-on (2.0.6)
     addressable (2.2.2)
-    arel (2.0.4)
+    arel (2.0.6)
     babosa (0.2.0)
     bcrypt-ruby (2.1.2)
     builder (2.1.2)
@@ -99,13 +99,13 @@ GEM
       addressable (~> 2.2.2)
       multipart-post (~> 1.0.1)
       rack (>= 1.1.0, < 2)
-    flutie (1.1.3)
+    flutie (1.1.4)
     friendly_id (3.1.8)
       babosa (~> 0.2.0)
     haml (3.0.24)
     hpricot (0.8.3)
     i18n (0.5.0)
-    jquery-rails (0.2.5)
+    jquery-rails (0.2.6)
       rails (~> 3.0)
       thor (~> 0.14.4)
     json (1.4.6)
@@ -165,10 +165,11 @@ GEM
     sexp_processor (3.0.5)
     sqlite3-ruby (1.3.2)
     thor (0.14.6)
+    thumbs_up (0.3.1)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
-    unicorn (3.0.0)
+    unicorn (3.0.1)
       kgio (~> 2.0.0)
       rack
     warden (1.0.2)
@@ -193,4 +194,5 @@ DEPENDENCIES
   ruby-mysql
   ruby_parser
   sqlite3-ruby
+  thumbs_up
   unicorn

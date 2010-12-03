@@ -46,7 +46,7 @@ textarea {
   background-color: white; }
 
 #wmd-input {
-  height: 500px;
+  height: 200px;
   width: 500px;
   background-color: white;
   border: 1px solid DarkGray; }
@@ -273,11 +273,11 @@ textarea {
 
 .bulletless li {
   margin: 0;
-  padding: 0 0 5px 0; }
+  padding: 0 0 8px 0; }
 
-.bulletless li a {
-  font-weight: bold; }
-
+/*.bulletless li a {
+  font-weight:bold;
+}*/
 .bulletless li span {
   font-size: .9em; }
 

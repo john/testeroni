@@ -21,7 +21,7 @@
           &nbsp;
           %span
             [
-            =link_to 'results', test_results_path(t)
+            =link_to 'results', test_results_path(t.id, t.to_param)
             |
             =link_to 'edit', edit_test_path(t)
             |

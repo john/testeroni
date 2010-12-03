@@ -6,9 +6,14 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-@user = User.create(:username => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@Test.com')
-@test = Test.create(:name => 'US State Capitals', :user_id => @user.id, :contributors => Test::ANYONE)
+@user = User.create(:username => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@testeroni.com')
 
+@user2 = User.create(:username => 'resteroni', :password => 'noodle', :password_confirmation => 'noodle', :email => 'john@resteroni.com')
+@test = Test.create(:name => 'How Much Do You Really Know About McDonalds?', :user_id => @user2.id, :contributors => Test::ANYONE, :status => Test::ACTIVE)
+@test.published_at = Time.now
+@test.save
+
+@test = Test.create(:name => 'US State Capitals', :user_id => @user.id, :contributors => Test::ANYONE, :status => Test::ACTIVE)
 # add questions, choices, responses
 @q = Question.create( :name => "What is the capital of Alabama?",
                       :kind => Question::MULTIPLECHOICE,
@@ -58,7 +63,7 @@
 
 
 
-@test = Test.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Test::JUSTME)
+@test = Test.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Test::JUSTME, :status => Test::ACTIVE)
 
 # add questions, choices, responses
 @q = Question.create( :name => "Who is the protagonist of 'Hamlet'?",
@@ -70,6 +75,6 @@
 @test.published_at = Time.now
 @test.save
 
-@test = Test.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Test::ANYONE)
+@test = Test.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Test::ANYONE, :status => Test::ACTIVE)
 @test.published_at = Time.now
 @test.save

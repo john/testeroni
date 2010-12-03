@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.string   "name"
     t.string   "simple_name"
     t.string   "description"
-    t.integer  "status",      :limit => 3
+    t.integer  "status",      :limit => 1
     t.string   "explanation"
     t.boolean  "correct"
     t.datetime "created_at"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
-    t.integer  "status",           :limit => 3
+    t.integer  "status",           :limit => 1
     t.string   "image_url"
     t.string   "explanation"
     t.integer  "kind"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.boolean  "correct"
     t.string   "name"
     t.string   "description"
-    t.integer  "status",      :limit => 3
+    t.integer  "status",      :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.integer  "questions_correct"
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.integer  "status",             :limit => 3
+    t.integer  "status",             :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -141,8 +141,8 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
-    t.integer  "status",       :limit => 3
-    t.integer  "contributors", :limit => 3
+    t.integer  "status",       :limit => 1
+    t.integer  "contributors", :limit => 1
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.integer  "question_id"
     t.string   "name"
     t.string   "description"
-    t.integer  "status",      :limit => 3
+    t.integer  "status",      :limit => 1
     t.string   "provider"
     t.string   "url"
     t.string   "provider_id"
@@ -187,5 +187,19 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
 
   add_index "videos", ["question_id"], :name => "index_videos_on_question_id"
   add_index "videos", ["test_id"], :name => "index_videos_on_test_id"
+
+  create_table "votes", :force => true do |t|
+    t.boolean  "vote",          :default => false
+    t.integer  "voteable_id",                      :null => false
+    t.string   "voteable_type",                    :null => false
+    t.integer  "voter_id"
+    t.string   "voter_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "votes", ["voteable_id", "voteable_type"], :name => "fk_voteables"
+  add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "uniq_one_vote_only", :unique => true
+  add_index "votes", ["voter_id", "voter_type"], :name => "fk_voters"
 
 end

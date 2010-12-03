@@ -10,8 +10,12 @@ Testeroni::Application.routes.draw do
   
   devise_for :users, :controllers => {:registrations => 'registrations'}
   
-  #  instead of constraints, allowing . across the board (see top of file)
-  # match 'people/:username', :to => 'people#show', :as => 'people', :constraints => {:username => /[^\/]+/}
+  resources :authentications
+  match 'auth/set_session_and_go/:id' => 'authentications#set_session_and_go'
+  match 'auth/:provider/callback' => 'authentications#create', :as => 'auth_callback'
+  match 'auth/failure' => 'authentications#failure', :as => 'auth_failure'
+  
+  # instead of constraints, consider allowing . across the board (see top of file)
   match 'people/:username', :to => 'people#show', :as => 'people', :constraints => {:username => /[^\/]+/}
   match 'people', :to => "people#show", :as => 'user_root'
   resources :users
@@ -24,22 +28,17 @@ Testeroni::Application.routes.draw do
   match 'tests/:id/:permalink/results/:username/:take', :to => 'tests#individual_results', :as => 'individual_test_results'
   match 'tests/:id/:permalink/results', :to => 'tests#results', :as => 'test_results'
   
+  match 'tests/:id/:permalink/questions', :to => 'tests#questions', :as => 'test_questions'
+  
   resources :tests
   
   match 'tests/:id/:permalink', :to => 'tests#show', :as => 'test', :via => :get
-  # match 'tests/:id/:permalink/questions/:question_id', :to => 'tests#show', :as => 'test_question', :via => :get
   match 'tests/:id/:permalink/questions/:question_id/:qpermalink', :to => 'tests#show', :as => 'test_question', :via => :get
   match 'tests/:id/:permalink/questions/:question_id', :to => 'tests#show', :via => :get
   match 'tests/:id/:permalink', :to => 'tests#destroy', :as => 'test', :via => :delete
 
   resources :results
   resources :comments
-  
-  # match 'auth' => 'authentications#index'
-  # match 'auth' => 'authentications#index', :as => 'sign_in'
-  match 'auth/:provider' => 'authentications#create', :as => 'auth'
-  match 'auth/:provider/callback' => 'authentications#create', :as => 'auth_callback'
-  match 'last_step' => 'registrations#last_step'
   
   match 'search', :to => 'search#results', :as => 'search'
   match 'search/:term', :to => 'search#results', :as => 'search_term'

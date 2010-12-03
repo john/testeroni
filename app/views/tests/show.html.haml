@@ -1,5 +1,8 @@
 %h1{:style => 'font-size:1.6em;'}
-  = link_to(@test.name, test_path(@test.id, @test.to_param), :confirm => 'Are you sure? That will end your current test-taking session and bring you back to the start of the test.')
+  -if params[:a]
+    =@test.name
+  -else
+    =link_to(@test.name, test_path(@test.id, @test.to_param), :confirm => 'Are you sure? That will end your current test-taking session and bring you back to the start of the test.')
   
 -unless @test.description.blank?
   %p= @test.description
@@ -27,7 +30,12 @@
                 $('#added').effect('fade');
               });
             });
-
+        
+        %p Thee questions so far:
+        %ol
+          -@test.questions.each do |q|
+            %li{:style => 'margin-left:20px;'}= q.name
+        
     -if @test.has_questions? && @test.published?
       
       -# ajax the first one in, like all the rest?

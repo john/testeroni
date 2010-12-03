@@ -4,8 +4,8 @@ class CreateTests < ActiveRecord::Migration
       t.integer :user_id
       t.string :name
       t.string :description
-      t.integer :status, :limit => 3
-      t.integer :contributors, :limit => 3
+      t.integer :status, :limit => 1
+      t.integer :contributors, :limit => 1
       t.datetime :published_at
       t.timestamps
     end

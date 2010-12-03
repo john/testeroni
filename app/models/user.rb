@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-         # , :token_authenticatable, :oauthable # for warden_oauth (twitter, facebook) support
+         # , :omniauthable # for omniauth (twitter, facebook) support
+         # https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me,

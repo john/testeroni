@@ -18,9 +18,9 @@
     =f.hidden_field(:commentable_id)
   
     -# using SO branch of wmd editor: https://github.com/derobins/wmd
-    %div{:id => 'wmd-button-bar', :class => 'wmd-panel', :style => "background-color:white;"}
+    %div{:id => 'wmd-button-bar', :class => 'wmd-panel', :style => "background-color:white;width:500px;"}
     %div
-      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'width:500px;background-color:white;'}
+      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'background-color:white;width:500px;height:100px;'}
     #wmd-preview.wmd-panel
     -#wmd-output.wmd-panel
     =f.submit

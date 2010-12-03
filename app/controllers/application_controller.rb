@@ -15,9 +15,15 @@ class ApplicationController < ActionController::Base
   
   # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
   def stored_location_for(resource)
-    if current_user && params[:redirect_to]
-      flash[:notice] = "Congratulations, you're signed up!"
-      return params[:redirect_to]
+    if current_user
+      flash[:notice] = "You. Are. Signed. UP!"
+      if params[:redirect_to]
+        return params[:redirect_to]
+      elsif cookies[:redirect_to]
+        redir = cookies[:redirect_to]
+        cookies[:redirect_to] = nil
+        return redir
+      end
     end
     super( resource ) 
   end

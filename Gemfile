@@ -15,6 +15,7 @@ gem 'friendly_id'
 gem 'acts-as-taggable-on'
 gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nested_set.git'
 gem 'acts_as_commentable_with_threading', :git => 'http://github.com/elight/acts_as_commentable_with_threading.git'
+gem 'thumbs_up'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

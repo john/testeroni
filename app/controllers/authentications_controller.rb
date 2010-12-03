@@ -6,8 +6,18 @@ class AuthenticationsController < ApplicationController
     @authentications = current_user.authentications if current_user
   end
   
+  # I'm not really sure where the /auth paths come from--there's nothing in routes that match.
+  # Maybe Rack? but in any case, need to set a session value before hitting it, so set up this
+  # intermediate path. Might want to consider switching to the built-in support for omniauth in
+  # recent versions of devise.
+  def set_session_and_go
+    logger.debug "GOT HERE!"
+    # session[:redirect_to] = params[:redirect_to] if params[:redirect_to]
+    redirect_to "/auth/#{params[:id]}"
+  end
+  
   def create
-    omniauth = request.env["omniauth.auth"]
+    omniauth = request.env['omniauth.auth']
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
     
     if authentication
@@ -36,11 +46,11 @@ class AuthenticationsController < ApplicationController
       # if not, put the omniauth shit in the session and redirect to a page where they can add what's missing
       else
         
-        if omniauth['provider'] == 'twitter'
-          session[:omniauth] = omniauth.except('extra')
-        else
+        # if omniauth['provider'] == 'twitter'
+        #   session[:omniauth] = omniauth.except('extra')
+        # else
           session[:omniauth] = omniauth
-        end
+        # end
         
         redirect_to new_user_registration_url(:source => omniauth['provider'])
         #redirect_to last_step_url
@@ -53,6 +63,9 @@ class AuthenticationsController < ApplicationController
     @authentication.destroy
     flash[:notice] = "Successfully destroyed authentication."
     redirect_to authentications_url
+  end
+  
+  def failure
   end
   
 end

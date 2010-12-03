@@ -5,7 +5,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.integer :user_id
       t.string :name
       t.string :description
-      t.integer :status, :limit => 3
+      t.integer :status, :limit => 1
       t.string :image_url
       t.string :explanation
       t.integer :kind            # true/false or multiple choice, holds a constant

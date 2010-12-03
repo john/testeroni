@@ -60,7 +60,6 @@ del {
   text-decoration: line-through; }
 
 abbr[title], dfn[title] {
-  border-bottom: 1px dotted;
   cursor: help; }
 
 /* tables still need cellspacing="0" in the markup */
