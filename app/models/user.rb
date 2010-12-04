@@ -25,7 +25,10 @@ class User < ActiveRecord::Base
   def facebook_token
     @token = nil
     authentications.each do |a|
-      @token = a.token if a.provider == 'facebook'
+      if a.provider == 'facebook'
+        @token = a.token
+        break
+      end
     end
     @token
   end

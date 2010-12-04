@@ -108,12 +108,12 @@ class TstsController < ApplicationController
     @test.published_at = Time.now
     @test.save
     
-    if @token = current_user.facebook_token
-      logger.debug "@token: #{@token}"
-      @graph = Koala::Facebook::GraphAPI.new(@token)
-      logger.debug "@graph: #{@graph.inspect}"
-      @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
-    end
+    # if @token = current_user.facebook_token
+    #   logger.debug "@token: #{@token}"
+    #   @graph = Koala::Facebook::GraphAPI.new(@token)
+    #   logger.debug "@graph: #{@graph.inspect}"
+    #   @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
+    # end
   end
   
   def invite
