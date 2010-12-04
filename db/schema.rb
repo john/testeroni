@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101113173054) do
+ActiveRecord::Schema.define(:version => 20101203213036) do
 
   create_table "authentications", :force => true do |t|
     t.string   "provider"
@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.text     "body"
     t.string   "subject",                        :default => ""
     t.integer  "user_id",                        :default => 0,  :null => false
-    t.string   "username",                       :default => "", :null => false
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
@@ -57,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "questions", :force => true do |t|
-    t.integer  "test_id"
+    t.integer  "tst_id"
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
@@ -70,12 +69,12 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.datetime "updated_at"
   end
 
-  add_index "questions", ["test_id"], :name => "index_questions_on_test_id"
+  add_index "questions", ["tst_id"], :name => "index_questions_on_tst_id"
   add_index "questions", ["user_id"], :name => "index_questions_on_user_id"
 
   create_table "responses", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "test_id"
+    t.integer  "tst_id"
     t.integer  "question_id"
     t.integer  "choice_id"
     t.integer  "take_id"
@@ -90,7 +89,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
 
   add_index "responses", ["choice_id"], :name => "index_responses_on_choice_id"
   add_index "responses", ["question_id"], :name => "index_responses_on_question_id"
-  add_index "responses", ["test_id"], :name => "index_responses_on_test_id"
+  add_index "responses", ["tst_id"], :name => "index_responses_on_tst_id"
   add_index "responses", ["user_id"], :name => "index_responses_on_user_id"
 
   create_table "slugs", :force => true do |t|
@@ -123,7 +122,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
   end
 
   create_table "takes", :force => true do |t|
-    t.integer  "test_id"
+    t.integer  "tst_id"
     t.integer  "user_id"
     t.integer  "questions_answered"
     t.integer  "questions_correct"
@@ -134,10 +133,10 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.datetime "updated_at"
   end
 
-  add_index "takes", ["test_id"], :name => "index_takes_on_test_id"
+  add_index "takes", ["tst_id"], :name => "index_takes_on_tst_id"
   add_index "takes", ["user_id"], :name => "index_takes_on_user_id"
 
-  create_table "tests", :force => true do |t|
+  create_table "tsts", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
@@ -148,8 +147,8 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.datetime "updated_at"
   end
 
-  add_index "tests", ["name"], :name => "index_tests_on_name"
-  add_index "tests", ["user_id"], :name => "index_tests_on_user_id"
+  add_index "tsts", ["name"], :name => "index_tsts_on_name"
+  add_index "tsts", ["user_id"], :name => "index_tsts_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"
@@ -173,7 +172,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "videos", :force => true do |t|
-    t.integer  "test_id"
+    t.integer  "tst_id"
     t.integer  "question_id"
     t.string   "name"
     t.string   "description"
@@ -186,7 +185,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
   end
 
   add_index "videos", ["question_id"], :name => "index_videos_on_question_id"
-  add_index "videos", ["test_id"], :name => "index_videos_on_test_id"
+  add_index "videos", ["tst_id"], :name => "index_videos_on_tst_id"
 
   create_table "votes", :force => true do |t|
     t.boolean  "vote",          :default => false

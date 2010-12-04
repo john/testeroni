@@ -3,10 +3,10 @@
 class Take < ActiveRecord::Base
   
   belongs_to :user
-  belongs_to :test
+  belongs_to :tst
   has_many :responses
   
   validates :user_id, :presence => true, :numericality => true
-  validates :test_id, :presence => true, :numericality => true
+  validates :tst_id, :presence => true, :numericality => true
   
 end

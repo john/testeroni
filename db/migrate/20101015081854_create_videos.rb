@@ -1,7 +1,7 @@
 class CreateVideos < ActiveRecord::Migration
   def self.up
     create_table :videos do |t|
-      t.integer :test_id
+      t.integer :tst_id
       t.integer :question_id
       t.string :name
       t.string :description
@@ -11,7 +11,7 @@ class CreateVideos < ActiveRecord::Migration
       t.string :provider_id   # unique id of video on providers site, ie W0VWO4asgmk
       t.timestamps
     end
-    add_index :videos, :test_id
+    add_index :videos, :tst_id
     add_index :videos, :question_id
   end
 

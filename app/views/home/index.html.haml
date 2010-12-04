@@ -3,21 +3,30 @@
 - else
   %p{:style => "padding:15px 0; font-size:1.2em;"}
     %strong< Testeroni
-    lets you challenge yourself and others by making and taking surveys and tests.
+    lets you challenge yourself and others.
     =link_to_function('JOIN NOW', "signupThenGoTo('')", :class => 'green button')
   %h2
     %a#signup_link Create a test right now
 
+    -# put this in a content_for so that it's at the bottom of the template and doesn't slow page rendering
+    :javascript
+      $(document).ready(function() {
+        $('#signup_link').click(function() {
+          signupThenGoTo('#{new_test_path}');
+        });
+      });
+      
+      
 %h3{:style => 'padding:20px 0 5px 0;'} Recent tests
 -if @tests.size > 0
   %ul.bulletless
     -@tests.each do |t|
       %li{:style => 'padding-bottom:15px;'}
         %h3
-          -if user_signed_in?
-            =link_to(t.name, test_url(t.id, t.to_param))
-          - else
-            =link_to_function(t.name, "signupThenGoTo('#{escape_javascript(test_path(t.id, t.to_param))}')")
+          -#-if user_signed_in?
+          =link_to(t.name, test_url(t.id, t.to_param))
+          -#- else
+          -#  =link_to_function(t.name, "signupThenGoTo('#{escape_javascript(test_path(t.id, t.to_param))}')")
         %div
           ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}."
           
@@ -33,6 +42,11 @@
           =link_to('View questions', test_questions_path(t.id, t.to_param))
           |
           =link_to('View results', test_results_path(t.id, t.to_param))
+          -if user_signed_in?
+            -if t.user == current_user || t.contributors == Tst::ANYONE
+              |
+              =link_to('Edit this test', edit_test_url(t.id))
+            
           ]
 - else
   %div{:style => 'font-style:italic;'} No tests created yet.

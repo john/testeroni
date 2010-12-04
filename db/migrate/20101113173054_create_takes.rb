@@ -1,7 +1,7 @@
 class CreateTakes < ActiveRecord::Migration
   def self.up
     create_table :takes do |t|
-      t.integer :test_id
+      t.integer :tst_id
       t.integer :user_id
       t.integer :questions_answered
       t.integer :questions_correct
@@ -11,7 +11,7 @@ class CreateTakes < ActiveRecord::Migration
       t.timestamps
     end
     add_index :takes, :user_id
-    add_index :takes, :test_id
+    add_index :takes, :tst_id
   end
 
   def self.down

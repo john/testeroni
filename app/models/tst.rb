@@ -1,9 +1,9 @@
 # coding: utf-8
 
-class Test < ActiveRecord::Base
+class Tst < ActiveRecord::Base
   
-  ANYONE = 1
-  JUSTME = 2
+  ANYONE = 0
+  JUSTME = 1
   
   ACTIVE = 0
   CLOSED = 1
@@ -25,16 +25,16 @@ class Test < ActiveRecord::Base
   validates :user_id, :presence => true, :numericality => true
   # validation to make sure tests don't have more than 100 questions?
   
-  scope :active, where(['status=?', Test::ACTIVE])
+  scope :active, where(['status=?', Tst::ACTIVE])
   # http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/
   # "Without the lambda the time that would be used in the query logic would be the time that the class was first evaluated, not the scope itself."
   scope :published, lambda {
-    where("tests.published_at IS NOT NULL AND tests.published_at <= ?", Time.zone.now)
+    where("tsts.published_at IS NOT NULL AND tsts.published_at <= ?", Time.zone.now)
   }
-  scope :recently_published, active.published.order("tests.published_at DESC")
+  scope :recently_published, active.published.order("tsts.published_at DESC")
   
-  def load_active_by_id(id)
-    Test.find_by_sql(['SELECT * FROM Tests WHERE id=? AND STATUS=? LIMIT 1', params[:id].to_i, Test::ACTIVE])[0]
+  def self.load_active_by_id(id)
+    Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? AND STATUS=? LIMIT 1', id, Tst::ACTIVE])[0]
   end
   
   def owned_by?(some_user)
@@ -55,7 +55,7 @@ class Test < ActiveRecord::Base
   # Pain to do that with ruby :-(
   def percent_correct
     @_average_grade ||= begin
-      @responses = Response.where(['test_id=?', id])
+      @responses = Response.where(['tst_id=?', id])
       if @responses.size == 0
         0
       else

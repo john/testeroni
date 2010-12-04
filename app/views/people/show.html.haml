@@ -7,14 +7,14 @@
 %h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
 %p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.username}:
 
--if @person.tests.blank?
+-if @person.tsts.blank?
   %p
     None, yet.
     -if user_signed_in? && @person.id == current_user.id
       Why don't you #{link_to 'create one', new_test_path}?
 -else
   %ul.bulletless
-    -@person.tests.each do |t|
+    -@person.tsts.each do |t|
       %li
         =link_to t.name, test_path(t.id, t.to_param)
         -if t.user == current_user

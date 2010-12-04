@@ -13,15 +13,22 @@ class ApplicationController < ActionController::Base
   #   end
   # end
   
+  before_filter :setup_user
+  
+  def setup_user
+    #for hidden signup form
+    @user = User.new(:email_list => true) unless user_signed_in?
+  end
+  
   # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
   def stored_location_for(resource)
     if current_user
       flash[:notice] = "You. Are. Signed. UP!"
-      if params[:redirect_to]
-        return params[:redirect_to]
-      elsif cookies[:redirect_to]
-        redir = cookies[:redirect_to]
-        cookies[:redirect_to] = nil
+      if params[:return_to]
+        return params[:return_to]
+      elsif cookies[:return_to]
+        redir = cookies[:return_to]
+        cookies.delete :return_to
         return redir
       end
     end

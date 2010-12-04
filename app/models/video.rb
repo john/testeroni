@@ -2,7 +2,7 @@
 
 class Video < ActiveRecord::Base
   
-  belongs_to :test
+  belongs_to :tst
   belongs_to :question
   
   validates :url, :presence => true

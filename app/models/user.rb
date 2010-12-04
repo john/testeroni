@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_friendly_id :username, :use_slug => true
   
   has_many :authentications
-  has_many :tests
+  has_many :tsts
   has_many :questions
   has_many :responses
   has_many :takes

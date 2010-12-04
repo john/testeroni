@@ -11,7 +11,7 @@ class Question < ActiveRecord::Base
   # https://github.com/elight/acts_as_commentable_with_threading
   acts_as_commentable
   
-  belongs_to :test
+  belongs_to :tst
   belongs_to :user
   has_many :choices
   has_many :responses
@@ -29,7 +29,7 @@ class Question < ActiveRecord::Base
   
   validates :name, :presence => true
   validates :kind, :presence => true
-  validates :test_id, :presence => true, :numericality => true
+  validates :tst_id, :presence => true, :numericality => true
   validates :user_id, :presence => true, :numericality => true
   
   # if it's a multiple choice question, get the correct one

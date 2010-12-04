@@ -2,7 +2,7 @@ class CreateResponses < ActiveRecord::Migration
   def self.up
     create_table :responses do |t|
       t.integer :user_id
-      t.integer :test_id
+      t.integer :tst_id
       t.integer :question_id
       t.integer :choice_id
       t.integer :take_id
@@ -14,7 +14,7 @@ class CreateResponses < ActiveRecord::Migration
       t.timestamps
     end
     add_index :responses, :user_id
-    add_index :responses, :test_id
+    add_index :responses, :tst_id
     add_index :responses, :question_id
     add_index :responses, :choice_id
   end

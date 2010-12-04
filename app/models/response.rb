@@ -3,13 +3,13 @@
 class Response < ActiveRecord::Base
   
   belongs_to :user
-  belongs_to :test
+  belongs_to :tst
   belongs_to :question
   belongs_to :choice
   belongs_to :take
   
   validates :user_id, :presence => true, :numericality => true
-  validates :test_id, :presence => true, :numericality => true
+  validates :tst_id, :presence => true, :numericality => true
   validates :question_id, :presence => true, :numericality => true
   validates :take_id, :presence => true, :numericality => true
   

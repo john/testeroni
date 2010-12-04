@@ -74,7 +74,7 @@
           %h4 Create an account
           = form_for(@user, :url => registration_path(@user)) do |f|
             -#= devise_error_messages!
-            %input#redirect_to{:type => 'hidden', :name => 'redirect_to', :value => ''}/
+            %input#return_to{:type => 'hidden', :name => 'return_to', :value => '/tests/new'}/
             %p= f.label :username
             = f.text_field :username
             %p= f.label :email
@@ -100,8 +100,6 @@
     =javascript_include_tag("jquery.ba-bbq.min.js")
     =javascript_include_tag("/wmd/wmd.js")
     =javascript_include_tag("/wmd/showdown.js")
-    -# =javascript_include_tag("/showdown-v0.9/compressed/showdown.js")
-    -#%script{:src => 'http://sstatic.net/Js/wmd.js?v=438bf97578da', :type => 'text/javascript'}
     
     :javascript
     
@@ -117,7 +115,7 @@
       function signupThenGoTo(url) {
         // redirect only works for people using the traditional signup form.
         // need something that works with auth services too -- session? cookie?
-        $('#redirect_to').val(url);
+        $('#return_to').val(url);
         
         $('#signup').lightbox_me({
             centered: true,
@@ -136,12 +134,6 @@
           $('.account').toggle();
           $('#user_username').focus();
         });
-        
-        // this belong on the index page only, and should be put in a content_for
-        $('#signup_link').click(function() {
-          signupThenGoTo('#{new_test_path}');
-        });
-        
       });
       
       window.fbAsyncInit = function() {

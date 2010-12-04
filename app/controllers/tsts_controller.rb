@@ -1,13 +1,13 @@
 # coding: utf-8
 
-class TestsController < ApplicationController
+class TstsController < ApplicationController
   
   before_filter :authenticate_user!, :except => [:index, :show]
   
   # GET /tests
   # GET /tests.xml
   def index
-    @tests = Test.all
+    @tests = Tst.all
     @title = "Make surveys and quizzes from YouTube videos - Test"
     @description = "Test lets you make surveys and quizzes from YouTube videos."
 
@@ -20,13 +20,12 @@ class TestsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.xml
   def show
-    # @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
-    
-    @test = Test.load_active_by_id( params[:id] )
+    # @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.load_active_by_id(params[:id])
     
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Test"
-    @description = "'#{@test.name}' on Test."
+    @description = "'#{@test.name}' on Tst."
     
     @question_number = 1
     if params[:question_id]
@@ -57,9 +56,9 @@ class TestsController < ApplicationController
   def new
     redirect_to root_path and return unless user_signed_in?
     
-    @test = Test.new(:contributors => Test::ANYONE)
+    @test = Tst.new(:contributors => Tst::ANYONE)
     @title = "Create a new quiz or survey - Test"
-    @description = "Create a new quiz or survey on Test."
+    @description = "Create a new quiz or survey on Tst."
 
     respond_to do |format|
       format.html # new.html.erb
@@ -69,23 +68,22 @@ class TestsController < ApplicationController
 
   # GET /tests/1/edit
   def edit
-    @test = Test.find(params[:id])
+    @test = Tst.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
   end
 
   # POST /tests
   # POST /tests.xml
   def create
-    @test = Test.new(params[:test])
-    @test.status = Test::ACTIVE
-    
+    @test = Tst.new(params[:tst])
+    @test.status = Tst::ACTIVE
     @test.user = current_user
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if @test.video_url
       @video = Video.new
       @video.url = @test.video_url
-      @video.test = @test
+      @video.tst = @test
       # enter video name? get it from YouTube?
       
       @video.provider_id = @video.get_provider_id_from_url
@@ -98,13 +96,13 @@ class TestsController < ApplicationController
         format.xml  { render :xml => @test, :status => :created, :location => @test }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @test.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @Tst.errors, :status => :unprocessable_entity }
       end
     end
   end
   
   def publish
-    @test = Test.find(params[:id])
+    @test = Tst.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @test.published_at = Time.now
@@ -119,7 +117,7 @@ class TestsController < ApplicationController
   end
   
   def invite
-    @test = Test.find(params[:id])
+    @test = Tst.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if params[:invite].blank?
@@ -130,7 +128,7 @@ class TestsController < ApplicationController
         @graph = Koala::Facebook::GraphAPI.new(@token)
         params[:invite].each do |i|
           # WANT to send message (email via fb, or internal fb messages, doesn't matter), not post to walls. doesn't look like graph api supports that, though :-(
-          # @graph.put_wall_post("has invited you to take a test:", {:name => @test.name, :link => test_url(@test)}, "me")
+          # @graph.put_wall_post("has invited you to take a test:", {:name => @Tst.name, :link => test_url(@test)}, "me")
           logger.debug "INVITE:----------> #{i.inspect}"
         end
       end
@@ -138,8 +136,8 @@ class TestsController < ApplicationController
   end
   
   def individual_results
-    # @test = Test.find(params[:id])
-    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    # @test = Tst.find(params[:id])
+    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @user = User.find(params[:username])
@@ -148,21 +146,21 @@ class TestsController < ApplicationController
   end
   
   def results
-    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
   end
   
   def questions
-    @test = Test.find_by_sql(['SELECT * FROM Tests WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
   end
 
   # PUT /tests/1
   # PUT /tests/1.xml
   def update
-    @test = Test.find(params[:id])
+    @test = Tst.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     respond_to do |format|
-      if @test.update_attributes(params[:test])
+      if @Tst.update_attributes(params[:tst])
         format.html { redirect_to(@test, :notice => 'Test was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -175,7 +173,7 @@ class TestsController < ApplicationController
   # DELETE /tests/1
   # DELETE /tests/1.xml
   def destroy
-    @test = Test.find(params[:id])
+    @test = Tst.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @test.destroy

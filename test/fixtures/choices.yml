@@ -2,12 +2,17 @@
 
 one:
   name: MyString
+  simple_name: MyString
   description: MyString
-  kind: MyString
-  correct: false
+  status: 0
+  explanation: stringy
+  correct: true
 
 two:
   name: MyString
+  simple_name: MyString
   description: MyString
-  kind: MyString
+  status: 0
+  explanation: stringy
   correct: false
+  

@@ -18,13 +18,13 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.xml
   def show
-    @test = Test.find(params[:test_id])
+    @test = Tst.find(params[:test_id])
     @question = Question.find(params[:id])
     @question_number = (params[:question_number]) ? params[:question_number].to_i : 1
 
     if @question_number == 1
       @take = Take.new
-      @take.test = @test
+      @take.tst = @test
       @take.user = current_user
       @take.started_at = Time.now
       @take.save
@@ -41,14 +41,14 @@ class QuestionsController < ApplicationController
   end
   
   def answer
-    @test = Test.find(params[:test_id])
+    @test = Tst.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     
     if @question_number == 1
       @take = Take.new
-      @take.test = @test
+      @take.tst = @test
       @take.user = current_user
       @take.started_at = Time.now
       @take.questions_answered = 1
@@ -87,7 +87,7 @@ class QuestionsController < ApplicationController
     end
     
     @response.user = current_user
-    @response.test = @test
+    @response.tst = @test
     @response.question = @question
     @response.take = @take
     @response.save
@@ -114,7 +114,7 @@ class QuestionsController < ApplicationController
   # GET /questions/new
   # GET /questions/new.xml
   def new
-    @test = Test.find(params[:test_id])
+    @test = Tst.find(params[:test_id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @question = Question.new
@@ -130,7 +130,7 @@ class QuestionsController < ApplicationController
   # GET /questions/1/edit
   def edit
     @question = Question.find(params[:id])
-    @test = Test.find(params[:test_id]) if params[:test_id]
+    @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if @question.kind == Question::SHORTANSWER
@@ -146,10 +146,10 @@ class QuestionsController < ApplicationController
   # POST /questions.xml
   def create
     @question = Question.new(params[:question])
-    @test = Test.find(params[:test_id]) if params[:test_id]
+    @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
-    @question.test = @test
+    @question.tst = @test
     @question.user = current_user
     
     if params[:question][:correct_response].to_i == Choice::MULTIPLE
@@ -202,7 +202,7 @@ class QuestionsController < ApplicationController
   # PUT /questions/1.xml
   def update
     @question = Question.find(params[:id])
-    @test = Test.find(params[:test_id]) if params[:test_id]
+    @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     respond_to do |format|
