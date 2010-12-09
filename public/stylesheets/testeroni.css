@@ -39,29 +39,31 @@ textarea {
 
 /**************** WMD editor (wysiwym textarea) *****************/
 .wmd-panel {
-  width: 500px; }
+  /*  margin-left: 25%;
+    margin-right: 25%;*/
+  width: 500px;
+  min-width: 500px; }
 
-#wmd-button-bar {
+#wmd-editor {
+  background-color: Aquamarine; }
+
+.wmd-button-bar {
   width: 500px;
   background-color: white; }
 
-#wmd-input {
-  height: 200px;
+.wmd-input {
+  height: 100px;
   width: 500px;
   background-color: white;
   border: 1px solid DarkGray; }
 
-#wmd-preview {
-  background-color: white;
-  border: 1px dashed DarkGray;
-  padding: 10px 0 0 10px;
-  margin: 0 0 10px 0;
-  width: 500px; }
+.wmd-preview {
+  background-color: LightGray; }
 
-#wmd-output {
+.wmd-output {
   background-color: Pink; }
 
-#wmd-button-row {
+.wmd-button-row {
   position: relative;
   margin-left: 5px;
   margin-right: 5px;
@@ -73,8 +75,9 @@ textarea {
 .wmd-spacer {
   width: 1px;
   height: 20px;
-  margin-left: 14px;
-  position: absolute;
+  margin-left: 7px;
+  margin-right: 7px;
+  position: relative;
   background-color: Silver;
   display: inline-block;
   list-style: none; }
@@ -84,7 +87,7 @@ textarea {
   height: 20px;
   margin-left: 5px;
   margin-right: 5px;
-  position: absolute;
+  position: relative;
   background-image: url(/images/wmd-buttons.png);
   background-repeat: no-repeat;
   background-position: 0px 0px;
@@ -100,64 +103,44 @@ textarea {
   display: inline-block; }
 
 /* sprite button slicing style information */
-#wmd-button-bar #wmd-bold-button {
-  left: 0px;
+.wmd-bold-button {
   background-position: 0px 0; }
 
-#wmd-button-bar #wmd-italic-button {
-  left: 25px;
+.wmd-italic-button {
   background-position: -20px 0; }
 
-#wmd-button-bar #wmd-spacer1 {
-  left: 50px; }
-
-#wmd-button-bar #wmd-link-button {
-  left: 75px;
+.wmd-link-button {
   background-position: -40px 0; }
 
-#wmd-button-bar #wmd-quote-button {
-  left: 100px;
+.wmd-quote-button {
   background-position: -60px 0; }
 
-#wmd-button-bar #wmd-code-button {
-  left: 125px;
+.wmd-code-button {
   background-position: -80px 0; }
 
-#wmd-button-bar #wmd-image-button {
-  left: 150px;
+.wmd-image-button {
   background-position: -100px 0; }
 
-#wmd-button-bar #wmd-spacer2 {
-  left: 175px; }
-
-#wmd-button-bar #wmd-olist-button {
-  left: 200px;
+.wmd-olist-button {
   background-position: -120px 0; }
 
-#wmd-button-bar #wmd-ulist-button {
-  left: 225px;
+.wmd-ulist-button {
   background-position: -140px 0; }
 
-#wmd-button-bar #wmd-heading-button {
-  left: 250px;
+.wmd-heading-button {
   background-position: -160px 0; }
 
-#wmd-button-bar #wmd-hr-button {
-  left: 275px;
+.wmd-hr-button {
   background-position: -180px 0; }
 
-#wmd-button-bar #wmd-spacer3 {
-  left: 300px; }
-
-#wmd-button-bar #wmd-undo-button {
-  left: 325px;
+.wmd-undo-button {
   background-position: -200px 0; }
 
-#wmd-button-bar #wmd-redo-button {
-  left: 350px;
+.wmd-redo-button {
   background-position: -220px 0; }
 
-#wmd-button-bar #wmd-help-button {
+.wmd-help-button {
+  position: absolute;
   right: 0px;
   background-position: -240px 0; }
 
@@ -183,18 +166,19 @@ textarea {
   font-weight: bold; }
 
 /**************** id's and classes *****************/
+#head-wrap {
+  width: 100%;
+  border-bottom: 1px solid #ddd; }
+
 #header {
-  background-image: url("/images/phrenologo6.png");
   background-repeat: no-repeat;
   background-position: 0 0;
-  width: 920px;
+  width: 970px;
   height: 40px;
-  border: 1px solid #ddd;
   padding: 10px 15px 5px 15px;
   margin-top: 10px;
   margin-left: auto;
-  margin-right: auto;
-  font-family: Palatino Linotype, Book Antiqua, Palatino, serif; }
+  margin-right: auto; }
 
 #header .right {
   float: right; }
@@ -203,10 +187,22 @@ textarea {
   text-align: right;
   padding-bottom: 6px; }
 
+#q {
+  width: 120px;
+  height: 10px;
+  color: #ddd; }
+
 #logotype {
-  font-weight: bold;
-  font-size: 1.7em;
-  padding-left: 66px; }
+  color: #BF0000;
+  font-size: 5em;
+  margin-top: -10px;
+  padding: 0; }
+
+#logotype a {
+  color: #BF0000; }
+
+#logotype a:hover {
+  text-decoration: none; }
 
 #signup {
   width: 500px;
@@ -237,10 +233,9 @@ textarea {
   font-size: 1em; }
 
 #container {
-  width: 920px;
-  border: 1px solid #ddd;
-  padding: 20px;
-  margin-top: 20px;
+  width: 970px;
+  padding: 0;
+  margin-top: 30px;
   margin-left: auto;
   margin-right: auto; }
 
@@ -266,6 +261,23 @@ textarea {
   padding: 0;
   margin: 0; }
 
+#choices li {
+  border: 0px solid red;
+  padding: 5px 0px;
+  margin: 0; }
+
+#choices li label {
+  border: 0px solid green;
+  padding: 5px 0px;
+  margin: 0; }
+
+#answer {
+  width: 80%; }
+
+#answer #next {
+  float: right;
+  font-size: 1.5em; }
+
 .bulletless {
   list-style-type: none;
   padding: 0;
@@ -279,7 +291,8 @@ textarea {
   font-weight:bold;
 }*/
 .bulletless li span {
-  font-size: .9em; }
+  font-size: .9em;
+  font-family: arial; }
 
 .bulletless li span a {
   font-weight: normal; }
@@ -306,7 +319,6 @@ textarea {
   -webkit-border-radius: 8px; }
 
 .button {
-  /*float:left;*/
   padding: 8px;
   margin: 0 5px 0 15px;
   height: 11px;
@@ -326,19 +338,55 @@ textarea {
   background-color: #99cc33;
   border: 1px solid #99cc33; }
 
+/*.green.button:visited {
+  background-color: #99cc33;
+  border: 1px solid #99cc33;} */
+.green.button:hover {
+  background-color: #9966ff;
+  color: white;
+  text-decoration: none; }
+
+.tag {
+  border: 1px solid #ddd;
+  padding: 3px 4px; }
+
+.tag:hover {
+  background-color: #aaa;
+  color: #fff; }
+
+.tag:hover a {
+  text-decoration: none;
+  color: white; }
+
+.tag1 {
+  font-size: 1.0em; }
+
+.tag2 {
+  font-size: 1.2em; }
+
+.tag3 {
+  font-size: 1.4em; }
+
+.tag4 {
+  font-size: 1.6em; }
+
 /* replace with clearfix? */
 #pusher {
   clear: both; }
 
+#foot-wrap {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  margin-top: 50px; }
+
 #footer {
-  width: 920px;
-  border: 1px solid #ddd;
+  width: 970px;
   padding: 20px;
-  margin-top: 20px;
+  margin-top: 0;
   margin-left: auto;
   margin-right: auto;
-  text-align: center;
-  font-family: Palatino Linotype, Book Antiqua, Palatino, serif;
+  text-align: left;
+  font-family: Georgia, serif;
   vertical-align: middle; }
 
 .field_with_errors {

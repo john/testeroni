@@ -37,9 +37,14 @@
 -else
   %ul.bulletless
     -@person.takes.each do |t|
-      -@test = Test.find(t.test_id)
+      -@test = Tst.find(t.tst_id)
       %li
         =link_to @test.name, test_path(@test.id, @test.to_param)
         -if t.user == current_user
           &nbsp;
-          %span [#{link_to 'your results', individual_test_results_path(@test, current_user, t)} | #{link_to 'overall results', test_results_path(@test)}]
+          %span
+            [
+            =link_to('your results', individual_test_results_url(@test.id, @test.to_param, current_user.username, t.id))
+            |
+            =link_to('overall results', test_results_url(@test.id, @test.to_param))
+            ]

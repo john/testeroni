@@ -17,17 +17,24 @@
     =f.hidden_field(:commentable_type)
     =f.hidden_field(:commentable_id)
   
-    -# using SO branch of wmd editor: https://github.com/derobins/wmd
-    %div{:id => 'wmd-button-bar', :class => 'wmd-panel', :style => "background-color:white;width:500px;"}
+    %div{:id => 'wmd-button-bar', :class => 'wmd-panel'}
     %div
-      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'background-color:white;width:500px;height:100px;'}
+      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'width:500px;'}
     #wmd-preview.wmd-panel
     -#wmd-output.wmd-panel
     =f.submit
     
 :javascript
   $(document).ready(function(){
-    $('#new_comment').submit(function() {
+    
+    setup_wmd({
+      input: "wmd-input",
+      button_bar: "wmd-button-bar",
+      preview: "wmd-preview",
+      output: "wmd-output"
+    });
+    
+    $('#new_comment').submit(function(){
       $.ajax({
         type: 'POST',
         url: '/comments',
@@ -36,8 +43,9 @@
           // some kind of flash that the new comment was added.
           $('#comments').html(data);
         },
-        error: function(data) { alert('fail!'); }
+        error: function(data){ alert('fail!'); }
       });
       return false;
     });
+    
   });

@@ -20,12 +20,13 @@ class TstsController < ApplicationController
   # GET /tests/1
   # GET /tests/1.xml
   def show
-    # @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
     @test = Tst.load_active_by_id(params[:id])
     
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Test"
     @description = "'#{@test.name}' on Tst."
+    
+    @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
     
     @question_number = 1
     if params[:question_id]
@@ -38,9 +39,6 @@ class TstsController < ApplicationController
           break
         end
       end
-      
-    else
-      @question = @test.questions.first
     end
     
     @comment = Comment.new
@@ -136,8 +134,7 @@ class TstsController < ApplicationController
   end
   
   def individual_results
-    # @test = Tst.find(params[:id])
-    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.load_active_by_id(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     @user = User.find(params[:username])

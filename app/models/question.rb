@@ -16,6 +16,11 @@ class Question < ActiveRecord::Base
   has_many :choices
   has_many :responses
   has_many :videos
+    
+  validates :name, :presence => true
+  validates :kind, :presence => true
+  validates :tst_id, :presence => true, :numericality => true
+  validates :user_id, :presence => true, :numericality => true
   
   # this should probably be stored in the question, so
   # this it doesn't have to do the calculation ever time
@@ -26,11 +31,6 @@ class Question < ActiveRecord::Base
     end
     @correct
   end
-  
-  validates :name, :presence => true
-  validates :kind, :presence => true
-  validates :tst_id, :presence => true, :numericality => true
-  validates :user_id, :presence => true, :numericality => true
   
   # if it's a multiple choice question, get the correct one
   def correct_choice

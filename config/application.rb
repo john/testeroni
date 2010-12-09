@@ -46,9 +46,12 @@ module Testeroni
     config.filter_parameters += [:password]
     
     config.generators do |g| 
-      g.orm :active_record 
-      g.template_engine :haml 
-      g.test_framework :test_unit, :fixture => true 
+      g.orm :active_record
+      # g.orm             :mongo_mapper
+      g.template_engine :haml
+      g.test_framework  :rspec
+      # g.template_engine :erb
+      # g.test_framework :test_unit, :fixture => true 
     end
     
   end

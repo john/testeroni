@@ -7,13 +7,20 @@
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
 @user = User.create(:username => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@testeroni.com')
-
 @user2 = User.create(:username => 'resteroni', :password => 'noodle', :password_confirmation => 'noodle', :email => 'john@resteroni.com')
-@test = Tst.create(:name => 'How Much Do You Really Know About McDonalds?', :user_id => @user2.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.published_at = Time.now
-@test.save
 
-@test = Tst.create(:name => 'US State Capitals', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+# @test = Tst.create(:name => 'How Much Do You Really Know About McDonalds?',
+#                     :user_id => @user2.id,
+#                     :contributors => Tst::ANYONE,
+#                     :status => Tst::ACTIVE)
+# @test.published_at = Time.now
+# @test.save
+
+@test = Tst.create(:name => 'US State Capitals',
+                    :description => "Test your knowledge of US geography with this mixture of multiple choice, true/false, and short-answer questions about state capitals.",
+                    :user_id => @user.id,
+                    :contributors => Tst::ANYONE,
+                    :status => Tst::ACTIVE)
 # add questions, choices, responses
 @q = Question.create( :name => "What is the capital of Alabama?",
                       :kind => Question::MULTIPLECHOICE,
@@ -57,6 +64,14 @@
 
 @q = Question.create(:name => "Is Wilmington the capital of Delaware?", :kind => Question::TRUEFALSE, :tst => @test,
 :user => @user, :correct_response => false)
+
+@q = Question.create(:name => "What Florida city, and state capital, is pictured here?", :image_url => 'http://3.bp.blogspot.com/_SNSoiGhOsCY/TLcMn-4E_eI/AAAAAAAAAH0/-ZTiAJjoFPo/s400/A-Tidal-Wave-Of-Distressed-Properties-In-The-Tallahassee-Real-Estate-Market.jpg',
+:kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user)
+@qc1 = Choice.create(:name => 'Tallahassee', :question_id => @q.id, :correct => true)
+@qc2 = Choice.create(:name => 'Miami', :question_id => @q.id, :correct => false)
+@qc3 = Choice.create(:name => 'Pensicola', :question_id => @q.id, :correct => false)
+@qc4 = Choice.create(:name => 'Chad', :question_id => @q.id, :correct => false)
+
 
 @test.published_at = Time.now
 @test.save

@@ -10,6 +10,11 @@ class Tst < ActiveRecord::Base
   ARCHIVED = 2
   SUSPENDED = 3
   
+  # https://github.com/elight/acts_as_commentable_with_threading
+  acts_as_commentable
+  has_friendly_id :name, :use_slug => true
+  acts_as_taggable
+  
   attr_accessor :video_url
   
   belongs_to :user
@@ -17,9 +22,6 @@ class Tst < ActiveRecord::Base
   has_many :questions
   has_many :responses
   has_many :takes
-  
-  has_friendly_id :name, :use_slug => true
-  acts_as_taggable
   
   validates :name, :presence => true
   validates :user_id, :presence => true, :numericality => true

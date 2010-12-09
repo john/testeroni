@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   #   end
   # end
   
+  layout 'testeroni'
+  
   before_filter :setup_user
   
   def setup_user

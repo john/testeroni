@@ -23,9 +23,12 @@ gem 'thumbs_up'
 group :development, :test do
   gem 'ruby_parser'
   gem 'sqlite3-ruby', :require => 'sqlite3'
-end
-
-group :test do
-  gem "shoulda"
-  gem "rspec-rails"
+  gem 'rails3-generators'
+  # gem "shoulda"
+  # gem "rspec"
+  # gem "rspec-rails"
+  # # gem "capybara"
+  # gem "cucumber"
+  # gem "cucumber-rails"
+  # # gem "webrat"
 end

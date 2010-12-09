@@ -21,9 +21,12 @@ class QuestionsController < ApplicationController
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:id])
     @question_number = (params[:question_number]) ? params[:question_number].to_i : 1
+    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
     if @question_number == 1
       @take = Take.new
+      @take.questions_answered = 0
+      @take.questions_correct = 0
       @take.tst = @test
       @take.user = current_user
       @take.started_at = Time.now
@@ -46,19 +49,6 @@ class QuestionsController < ApplicationController
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     
-    if @question_number == 1
-      @take = Take.new
-      @take.tst = @test
-      @take.user = current_user
-      @take.started_at = Time.now
-      @take.questions_answered = 1
-      @take.questions_correct = 1
-    else
-      @take = Take.find(params[:take_id])
-      @take.questions_answered = @take.number_answered+1
-      @take.questions_correct = @take.number_correct+1
-    end
-    
     @response = Response.new
     if params[:answer]
       @answer = (params[:answer] == 'true') ? 1 : 0
@@ -66,14 +56,12 @@ class QuestionsController < ApplicationController
       @response.take = @take
       @response.correct = (@answer == @question.correct_response) ? true : false
     end
-    
     if params[:choice_id]
       # figure out if they answered correctly
       @choice = Choice.find(params[:choice_id])
       @response.choice = @choice
       @response.correct = @choice.correct
     end
-    
     if params[:short_answer]
       # UPDATE this when there can be more than one correct choice for short answer questions
       @response.choice = @question.choices.first
@@ -85,6 +73,12 @@ class QuestionsController < ApplicationController
       
       @response.correct = (Choice.simplify(@response.name) == @question.choices.first.simple_name) ? true : false
     end
+    
+    @take = Take.find(params[:take_id])
+    @take.questions_answered = @take.questions_answered+1
+    @take.questions_correct = @take.questions_correct+1 if @response.correct?
+    
+    # if user isn't logged in, memoize the Take object to the session for saving later.
     
     @response.user = current_user
     @response.tst = @test
