@@ -2,7 +2,7 @@
   -if params[:a]
     =@test.name
   -else
-    =link_to(@test.name, test_path(@test.id, @test.to_param), :confirm => 'Are you sure? That will end your current test-taking session and bring you back to the start of the test.')
+    =link_to(@test.name, test_path(@test.id, @test.to_param))
   
 -#-unless @test.description.blank?
 -#  %p= @test.description
@@ -42,7 +42,8 @@
       -else
         =render(:partial => 'tsts/intro')
       
-      -#=render :partial => 'shared/comments', :locals => {:comment => @comment, :comments => @test.root_comments}
+      * Comments should be click to see *
+      =render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
       
 -unless @test.videos.blank?
   #left_col

@@ -32,7 +32,9 @@ class QuestionsController < ApplicationController
       @take.started_at = Time.now
       @take.save
     else
-      @take = Take.find(params[:take_id])
+      unless params[:take_id].blank?
+        @take = Take.find(params[:take_id])
+      end
     end
 
     respond_to do |format|
@@ -49,11 +51,29 @@ class QuestionsController < ApplicationController
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     
+    # TODO: try creating a take object without an id or user_id,
+    # and putting that in the session
+    
+    if !params[:take_id].blank?
+      @take = Take.find(params[:take_id])
+    elsif !session[:take].blank?
+      @take = session[:take]
+      logger.debug "got take from session:--------->"
+      logger.debug session[:take].inspect
+    else
+      @take = Take.new
+      @take.started_at = Time.now
+      @take.questions_answered = 0
+      @take.questions_correct = 0
+      session[:take] = @take
+      logger.debug "created take, put in session"
+    end
+    
     @response = Response.new
     if params[:answer]
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
-      @response.take = @take
+      @response.take = @take if params[:take_id]
       @response.correct = (@answer == @question.correct_response) ? true : false
     end
     if params[:choice_id]
@@ -62,10 +82,11 @@ class QuestionsController < ApplicationController
       @response.choice = @choice
       @response.correct = @choice.correct
     end
+    
     if params[:short_answer]
       # UPDATE this when there can be more than one correct choice for short answer questions
       @response.choice = @question.choices.first
-      @response.take = @take
+      @response.take = @take if params[:take_id]
       @response.name = params[:short_answer]
       @question.choices.first.simple_name
 
@@ -74,19 +95,26 @@ class QuestionsController < ApplicationController
       @response.correct = (Choice.simplify(@response.name) == @question.choices.first.simple_name) ? true : false
     end
     
-    @take = Take.find(params[:take_id])
-    @take.questions_answered = @take.questions_answered+1
-    @take.questions_correct = @take.questions_correct+1 if @response.correct?
+    # if params[:take_id]
+      @take.questions_answered = @take.questions_answered+1
+      @take.questions_correct = @take.questions_correct+1 if @response.correct?
+    # end
     
-    # if user isn't logged in, memoize the Take object to the session for saving later.
-    
-    @response.user = current_user
     @response.tst = @test
     @response.question = @question
-    @response.take = @take
-    @response.save
     
-    @question.responses << @response
+    if user_signed_in?
+      @response.user = current_user
+      @response.take = @take
+      @response.save
+      @question.responses << @response
+    else
+      # if user isn't logged in, memoize the Take object to the session for saving later.
+      session[:take] = @take
+      # TODO: if the user then signs up and the take gets persisted, remember
+      # to persist the take first, then go through the responses and add the
+      # take_id to them.
+    end
     
     @response_count = @question.responses.size
     @correct_response_count = @question.number_correct
@@ -94,13 +122,13 @@ class QuestionsController < ApplicationController
     
     if @test.questions.length == @question_number
       @more = false
-      @take.finished_at = Time.now
+      @take.finished_at = Time.now if params[:take_id]
     else
       @more = true
       @question_number = @question_number + 1
     end
     
-    @take.save
+    @take.save if params[:take_id]
     
     render :partial => 'questions/answer'
   end

@@ -1,7 +1,7 @@
 -if params[:source]
   %h2{:style => 'padding-bottom:5px;'} One last step
   
-  %img{:src => @fbpicture, :style => 'float:left; padding-right:15px;'}
+  %img{:src => @picture, :style => 'float:left; padding-right:15px;'}
   
   %p
     ="This will connect the #{params[:source].titleize} account for"
@@ -36,7 +36,8 @@
   %p
     -if params[:source]
       %label{:for => 'username'} Username
-      %input{:type => 'text', :id => 'username', :name => "user[username]", :value => resource.username }
+      %input{:type => 'text', :id => 'username', :name => "user[username]", :value => @username }
+      
       -if resource.email.blank?
         %label{:for => 'email'} Email
         %input{:type => 'email', :id => 'email', :name => "user[email]", :value => resource.email }

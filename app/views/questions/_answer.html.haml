@@ -1,14 +1,4 @@
 #answer
-  -if @more
-    -if @take
-      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
-    -else
-      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
-    
-    #next
-      %a.question_link.green.button{:href => '#'}Next question &gt;
-      :javascript
-        #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
   %h4
     -if @response.correct
       Correct!
@@ -27,18 +17,27 @@
         = @question.correct_choice.name
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
-    
-%p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
-
-%p= "You're tk for #{@question_number-1}, and have #{@test.questions.size + 1 - @question_number} questions left."
-
--if @more
+  %p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
   %p
-    %a.question_link{:href => '#'}Next question &gt;
-  
+    = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
+    -if @more
+      = "have #{pluralize((@test.questions.size+1-@question_number), 'question')} left."
+    -else
+      done with the test.
+  -if @more
+    -if @take
+      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
+    -else
+      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+
+    #next
+      %a.question_link.green.button{:href => '#', :style => 'float:none; text-align:left;'}Next question &gt;
+    
+    :javascript
+      #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
+
 - unless @more
-  %p{:style => 'padding:10px 0;'} Thus endeth the test.
   %h5
     = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.username, @take.id))
-  
-=render :partial => 'shared/comments', :locals => {:comment => @comment, :comments => @question.root_comments}
+
+=render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}

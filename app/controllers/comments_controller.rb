@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     
     @commented_on = Object.const_get(params[:comment][:commentable_type]).find(params[:comment][:commentable_id])
     @comment = Comment.build_from(@commented_on, current_user.id, params[:comment_text] )
-    @comment.username = current_user.username
+    @comment.user = current_user
     @comment.save
     flash[:notice] = 'Comment added.'
     render :partial => 'shared/comments', :locals => {:comment => Comment.new, :comments => @commented_on.root_comments, :added_id => @comment.id}

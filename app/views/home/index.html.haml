@@ -4,7 +4,7 @@
 
   %p{:style => "padding:0; margin:0; font-size:1.2em; width:80%;float:left;"}
     %strong< Testeroni is a free site for making and taking tests.
-    Anyone can make a test and anyone can take any test on the site. Tests can have from 1 to 100 questions, which can be true/false, multiple choice, or short answer. Test are fun to take, easy to make, can contain video and images, and you can embed them in blogs and facebook pages.
+    Anyone can make a test and anyone can take any test on the site. Test are fun to take, easy to make, and you can embed them in blogs and facebook pages.
   %div{:style => 'width:20%;float:right; margin-top:20px;'}
     =link_to_function('JOIN NOW', "signupThenGoTo('')", :class => 'green button', :style => 'font-size:2em; font-style:italic; font-weight:bold;padding:15px 10px;')
   .clearfix
@@ -21,7 +21,7 @@
       });
       
       
-%h3{:style => 'padding:20px 0 5px 60px;'} Recent tests
+%h3{:style => 'padding:20px 0 5px 60px;'} Or take one of these recent tests
 -if @tests.size > 0
   %ul.bulletless{:style => 'margin-left:60px;'}
     -@tests.each do |t|

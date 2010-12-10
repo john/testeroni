@@ -9,11 +9,20 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def new
-    if session[:omniauth] && session[:omniauth]['provider'] == 'facebook'
-      @token = session[:omniauth]['credentials']['token']
-      @graph = Koala::Facebook::GraphAPI.new("#{@token}")
-      @fbpicture = @graph.get_picture("me")
-      @username = session[:omniauth]['user_info']['name']
+    if session[:omniauth]
+      if session[:omniauth]['provider'] == 'facebook'
+        @token = session[:omniauth]['credentials']['token']
+        @graph = Koala::Facebook::GraphAPI.new("#{@token}")
+        @picture = @graph.get_picture("me")
+        @username = session[:omniauth]['user_info']['name']
+      elsif session[:omniauth]['provider'] == 'twitter'
+        
+        @picture = session[:omniauth]['user_info']['image']
+        @username = session[:omniauth]['user_info']['nickname']
+        
+        logger.debug "------------From TWITTER------------>"
+        logger.debug "session[:omniauth]: #{session[:omniauth].inspect}"
+      end
     end
     
     super

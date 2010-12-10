@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101203213036) do
+ActiveRecord::Schema.define(:version => 20101113173054) do
 
   create_table "authentications", :force => true do |t|
     t.string   "provider"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20101203213036) do
     t.integer  "rgt"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "username",                       :default => ""
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"

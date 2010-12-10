@@ -135,8 +135,7 @@ class TstsController < ApplicationController
   
   def individual_results
     @test = Tst.load_active_by_id(params[:id])
-    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
-    
+    #redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     @user = User.find(params[:username])
     @take = Take.find(params[:take])
     

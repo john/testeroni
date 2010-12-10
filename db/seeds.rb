@@ -38,7 +38,7 @@
 @qc4 = Choice.create(:name => 'Wasilla', :question_id => @q.id, :correct => false)
 
 @q = Question.create(:name => "Is Phoenix the capital of Arizona?", :kind => Question::TRUEFALSE, :tst => @test,
-:user => @user, :correct_response => true)
+:user => @user, :correct_response => true, :explanation => 'The capital of Arizona is Phoenix.')
 
 @q = Question.create(:name => "What is the capital of Arkansas?", :kind => Question::SHORTANSWER, :tst => @test,
 :user => @user)
@@ -63,7 +63,7 @@
 @qc4 = Choice.create(:name => 'Norwalk', :question_id => @q.id, :correct => false)
 
 @q = Question.create(:name => "Is Wilmington the capital of Delaware?", :kind => Question::TRUEFALSE, :tst => @test,
-:user => @user, :correct_response => false)
+:user => @user, :correct_response => false, :explanation => 'The capital of Delaware is Dover.')
 
 @q = Question.create(:name => "What Florida city, and state capital, is pictured here?", :image_url => 'http://3.bp.blogspot.com/_SNSoiGhOsCY/TLcMn-4E_eI/AAAAAAAAAH0/-ZTiAJjoFPo/s400/A-Tidal-Wave-Of-Distressed-Properties-In-The-Tallahassee-Real-Estate-Market.jpg',
 :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user)

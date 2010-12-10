@@ -2,16 +2,19 @@
 
 #comments
   -unless comments.blank?
-    %h5 Comments
+    %h5= "Comments on this #{((commentable.class == Tst) ? 'Test' : commentable.class.to_s).downcase}"
     %ul.bulletless
       -comments.each do |c|
         %li{:style => 'padding:0 0 15px 0'}
           - unless added_id.nil?
             -if added_id == c.id
-              =render(:partial => 'shared/flash', :locals => {:flash => flash})
-          %div #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.username))} said:
+              %div{:style => 'width:50%'}
+                =render(:partial => 'shared/flash', :locals => {:flash => flash})
+          %div #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.user))} said:
           %div= "#{c.id} #{c.body}"
-  %h5 Add a Comment
+  %h5
+    Add a comment for this
+    =((commentable.class == Tst) ? 'Test' : commentable.class.to_s).downcase
   
   =form_for(comment) do |f|
     =f.hidden_field(:commentable_type)

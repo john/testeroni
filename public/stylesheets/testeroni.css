@@ -275,8 +275,8 @@ textarea {
   width: 80%; }
 
 #answer #next {
-  float: right;
-  font-size: 1.5em; }
+  font-size: 1.5em;
+  padding: 20px 0; }
 
 .bulletless {
   list-style-type: none;
