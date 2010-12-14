@@ -19,10 +19,11 @@ class RegistrationsController < Devise::RegistrationsController
         
         @picture = session[:omniauth]['user_info']['image']
         @username = session[:omniauth]['user_info']['nickname']
-        
-        logger.debug "------------From TWITTER------------>"
-        logger.debug "session[:omniauth]: #{session[:omniauth].inspect}"
       end
+    end
+    
+    if session[:take]
+      logger.debug "----------> TAKE! add usere info and save it <----------"
     end
     
     super

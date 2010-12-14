@@ -8,11 +8,6 @@ class QuestionsController < ApplicationController
   # GET /questions.xml
   def index
     @questions = Question.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @questions }
-    end
   end
 
   # GET /questions/1
@@ -23,26 +18,16 @@ class QuestionsController < ApplicationController
     @question_number = (params[:question_number]) ? params[:question_number].to_i : 1
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
-    if @question_number == 1
-      @take = Take.new
-      @take.questions_answered = 0
-      @take.questions_correct = 0
-      @take.tst = @test
-      @take.user = current_user
-      @take.started_at = Time.now
-      @take.save
-    else
-      unless params[:take_id].blank?
-        @take = Take.find(params[:take_id])
+    if user_signed_in?
+      if @question_number == 1
+        @take = Take.new(:tst_id => @test.id, :user_id => current_user.id, :started_at => Time.now, :questions_answered => 0, :questions_correct => 0)
+        @take.save
+      else
+        @take = Take.find(params[:take_id]) unless params[:take_id].blank?
       end
     end
 
-    respond_to do |format|
-      format.html do
-        render :partial => 'show'
-      end
-      format.xml  { render :xml => @question }
-    end
+    render :partial => 'show'
   end
   
   def answer
@@ -51,57 +36,41 @@ class QuestionsController < ApplicationController
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     
-    # TODO: try creating a take object without an id or user_id,
-    # and putting that in the session
-    
-    if !params[:take_id].blank?
+    if user_signed_in?
+      # if user is signed in, a take was previously created
       @take = Take.find(params[:take_id])
-    elsif !session[:take].blank?
-      @take = session[:take]
-      logger.debug "got take from session:--------->"
-      logger.debug session[:take].inspect
+    elsif session[:take] && @question_number > 1
+      # if they're not signed in and it's not the first question, get from session
+      # @session_take = session[:take]
+      @take = Take.desessionize(session)
     else
-      @take = Take.new
-      @take.started_at = Time.now
-      @take.questions_answered = 0
-      @take.questions_correct = 0
-      session[:take] = @take
-      logger.debug "created take, put in session"
+      # they're not signed in and just starting, so create object to put in session
+      @take = Take.new(:tst_id => @test.id, :started_at => Time.now, :questions_answered => 0, :questions_correct => 0)
     end
     
-    @response = Response.new
-    if params[:answer]
+    @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
+    @response.take_id = @take.id if @take.id
+    
+    if !params[:answer].blank?
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
-      @response.take = @take if params[:take_id]
       @response.correct = (@answer == @question.correct_response) ? true : false
-    end
-    if params[:choice_id]
-      # figure out if they answered correctly
+    elsif !params[:choice_id].blank?
       @choice = Choice.find(params[:choice_id])
       @response.choice = @choice
       @response.correct = @choice.correct
-    end
-    
-    if params[:short_answer]
-      # UPDATE this when there can be more than one correct choice for short answer questions
+    elsif !params[:short_answer].blank?
       @response.choice = @question.choices.first
-      @response.take = @take if params[:take_id]
       @response.name = params[:short_answer]
-      @question.choices.first.simple_name
-
-      # once you can add multiple correct choices, get them all and loop through looking for matches
-      
-      @response.correct = (Choice.simplify(@response.name) == @question.choices.first.simple_name) ? true : false
+      @response.correct = (Choice.simplify(params[:short_answer]) == @question.choices.first.simple_name) ? true : false
     end
     
-    # if params[:take_id]
-      @take.questions_answered = @take.questions_answered+1
-      @take.questions_correct = @take.questions_correct+1 if @response.correct?
-    # end
+    @take.questions_answered = @take.questions_answered+1
+    @take.questions_correct = @take.questions_correct+1 if @response.correct?
     
-    @response.tst = @test
-    @response.question = @question
+    # might be able to get rid of this now that it's a Take through and through
+    @questions_answered = @take.questions_answered
+    @questions_correct = @take.questions_correct
     
     if user_signed_in?
       @response.user = current_user
@@ -109,11 +78,8 @@ class QuestionsController < ApplicationController
       @response.save
       @question.responses << @response
     else
-      # if user isn't logged in, memoize the Take object to the session for saving later.
-      session[:take] = @take
-      # TODO: if the user then signs up and the take gets persisted, remember
-      # to persist the take first, then go through the responses and add the
-      # take_id to them.
+      @take.responses << @response
+      session[:take] = @take.sessionize
     end
     
     @response_count = @question.responses.size
@@ -123,18 +89,17 @@ class QuestionsController < ApplicationController
     if @test.questions.length == @question_number
       @more = false
       @take.finished_at = Time.now if params[:take_id]
+      session[:take] = @take.sessionize
     else
       @more = true
       @question_number = @question_number + 1
     end
     
-    @take.save if params[:take_id]
+    @take.save if @take.id
     
     render :partial => 'questions/answer'
   end
 
-  # GET /questions/new
-  # GET /questions/new.xml
   def new
     @test = Tst.find(params[:test_id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
@@ -142,14 +107,8 @@ class QuestionsController < ApplicationController
     @question = Question.new
     @title = "New question for '#{@test.name}' - Test"
     @description = "New question for '#{@test.name}' - Test"
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @question }
-    end
   end
 
-  # GET /questions/1/edit
   def edit
     @question = Question.find(params[:id])
     @test = Tst.find(params[:test_id]) if params[:test_id]
@@ -203,77 +162,57 @@ class QuestionsController < ApplicationController
       @saved = @question.save
     end
     
-    respond_to do |format|
-      if @saved
-        format.html do
-          if @test
-            redirect_to(test_path(@test.id, @test.to_param, :a => 'a'))
-          else
-            redirect_to(@question, :notice => 'Question was successfully created.')
-          end
-        end
-        format.xml  { render :xml => @question, :status => :created, :location => @question }
+    if @saved
+      if @test
+        redirect_to(test_path(@test.id, @test.to_param, :a => 'a'))
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @question.errors, :status => :unprocessable_entity }
+        redirect_to(@question, :notice => 'Question was successfully created.')
       end
+    else
+      render :action => "new"
     end
   end
 
-  # PUT /questions/1
-  # PUT /questions/1.xml
   def update
     @question = Question.find(params[:id])
     @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
-    respond_to do |format|
-      if @question.update_attributes(params[:question])
-        
-        # handle short answer
-        if @question.kind == Question::SHORTANSWER
-          @choice = @question.choices.first
-          @choice.name = params[:short_answer]
-          @choice.simple_name = Choice.simplify(params[:short_answer])
-          @choice.save
-        end
-        
-        # handle multiple choice
-        params.each do |param|
-          if param[0].include?('choiceupdate_')
-            choice = Choice.find(param[0].split('_')[1])
-            choice.name = param[1]
-            choice.correct = (params[:correct_answer] == param[0]) ? true : false
-            choice.save
-          end
-        end
-        
-        format.html do
-          if @test
-            redirect_to(@test, :notice => 'Question was successfully updated.')
-          else
-            redirect_to(@question, :notice => 'Question was successfully updated.')
-          end
-        end
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @question.errors, :status => :unprocessable_entity }
+    if @question.update_attributes(params[:question])
+      
+      # handle short answer
+      if @question.kind == Question::SHORTANSWER
+        @choice = @question.choices.first
+        @choice.name = params[:short_answer]
+        @choice.simple_name = Choice.simplify(params[:short_answer])
+        @choice.save
       end
+      
+      # handle multiple choice
+      params.each do |param|
+        if param[0].include?('choiceupdate_')
+          choice = Choice.find(param[0].split('_')[1])
+          choice.name = param[1]
+          choice.correct = (params[:correct_answer] == param[0]) ? true : false
+          choice.save
+        end
+      end
+      
+      if @test
+        redirect_to(@test, :notice => 'Question was successfully updated.')
+      else
+        redirect_to(@question, :notice => 'Question was successfully updated.')
+      end
+    else
+      render :action => "edit"
     end
   end
 
-  # DELETE /questions/1
-  # DELETE /questions/1.xml
   def destroy
     @question = Question.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @question.user == current_user
     
     @question.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(test_path(params[:test_id]), :notice => 'Question was permanently deleted.') }
-      format.xml  { head :ok }
-    end
+    redirect_to(test_path(params[:test_id]), :notice => 'Question was permanently deleted.')
   end
 end
