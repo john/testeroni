@@ -19,13 +19,14 @@
       %p{:style => 'padding:10px 0;'}= @question.explanation
   %p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
   %p
-    = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
+    -#= "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
+    = "You're #{@questions_correct} for #{@questions_answered}, and "
     -if @more
       = "have #{pluralize((@test.questions.size+1-@question_number), 'question')} left."
     -else
       done with the test.
   -if @more
-    -if @take
+    -if @take && @take.class == Take
       -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
     -else
       -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
@@ -38,6 +39,11 @@
 
 - unless @more
   %h5
-    = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.username, @take.id))
-
+    -if user_signed_in?
+      = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.username, @take.id))
+    -else
+      If you want to save the results of the test you just took please either
+      =link_to 'sign up'
+      or
+      =link_to 'log in'
 =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}

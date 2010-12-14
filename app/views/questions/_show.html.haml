@@ -9,7 +9,6 @@
   
 %div{:style => "padding:0;"}
   %form#theForm
-    -#=form_tag(answer_path) do
     %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
     %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
     %input{:type => 'hidden', :name => 'question_number', :value => @question_number}

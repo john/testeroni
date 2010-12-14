@@ -3,8 +3,8 @@ class CreateTakes < ActiveRecord::Migration
     create_table :takes do |t|
       t.integer :tst_id
       t.integer :user_id
-      t.integer :questions_answered
-      t.integer :questions_correct
+      t.integer :questions_answered, :default => 0
+      t.integer :questions_correct, :default => 0
       t.datetime :started_at
       t.datetime :finished_at
       t.integer :status, :limit => 1
