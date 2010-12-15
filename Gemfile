@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 # bundle install after modifying this
-gem 'unicorn'
 gem 'rails'
 gem 'ruby-mysql'
 gem 'jquery-rails'
@@ -24,6 +23,7 @@ group :development, :test do
   gem 'ruby_parser'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'rails3-generators'
+  
   # gem "shoulda"
   # gem "rspec"
   # gem "rspec-rails"

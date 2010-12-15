@@ -43,7 +43,8 @@
       = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.username, @take.id))
     -else
       If you want to save the results of the test you just took please either
-      =link_to 'sign up'
+      = link_to_function('sign up', "signupThenGoTo('')")
       or
-      =link_to 'log in'
+      = link_to('log in', new_user_session_path)
+      
 =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}

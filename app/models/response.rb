@@ -11,7 +11,7 @@ class Response < ActiveRecord::Base
   validates :user_id, :presence => true, :numericality => true
   validates :tst_id, :presence => true, :numericality => true
   validates :question_id, :presence => true, :numericality => true
-  validates :take_id, :presence => true, :numericality => true
+  # validates :take_id, :presence => true, :numericality => true
   
   # don't validate this, because if it's a true/false question, it's null
   # validates :choice_id, :presence => true, :numericality => true

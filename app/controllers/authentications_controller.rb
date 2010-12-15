@@ -11,16 +11,27 @@ class AuthenticationsController < ApplicationController
     omniauth = request.env['omniauth.auth']
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
     
-    # if they're already signed in, and have previously authenticated
+    # they're signing in, and have previously authenticated
     if authentication
-      flash[:notice] = "Signed in successfully."
-
+      
+      if session[:take]
+        Take.save_from_session_for_user(session, authentication.user)
+        flash[:notice] = "Signed in successfully and saved the results of your last test."
+      else
+        flash[:notice] = "Signed in successfully."
+      end
       sign_in_and_redirect(:user, authentication.user)
       
     # if they're already signed in, and they failed to authenticate, meaning they haven't previously set up fb or twitter
     elsif current_user
       current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => omniauth['credentials']['token'])
-      flash[:notice] = "Authentication successful."
+
+      if session[:take]
+        Take.save_from_session_for_user(session, current_user)
+        flash[:notice] = "Signed in successfully and saved the results of your last test."
+      else
+        flash[:notice] = "Signed in successfully."
+      end
       
       redirect_to authentications_url
       
@@ -60,6 +71,7 @@ class AuthenticationsController < ApplicationController
         else
           redirect_to new_user_registration_url(:source => omniauth['provider'])
         end
+        
       end
     end
   end

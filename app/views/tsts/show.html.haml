@@ -42,8 +42,8 @@
       -else
         =render(:partial => 'tsts/intro')
       
-      * Comments should be click to see *
-      =render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+      %p{:style => 'padding:20px 0;'}* Comments should be click to see *
+      -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
       
 -unless @test.videos.blank?
   #left_col

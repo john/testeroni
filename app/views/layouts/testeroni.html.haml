@@ -1,26 +1,15 @@
 !!! 5
--#%html{'xmlns:fb' => 'http://www.facebook.com/2008/fbml'}
 %html
   %head
     %meta{:charset => 'utf-8'}
-    -#%meta{'http-equiv' => 'X-UA-Compatible', :content => 'IE=edge,chrome=1'}
+    %meta{'http-equiv' => 'X-UA-Compatible', :content => 'IE=edge,chrome=1'}
     
     %title= @title ||= 'Testeroni'
     
     %meta{:name => 'description', :content => 'A platform for casual and fun learning. Make and take tests your own tests. Answers can be multiple choice or true/false, and tests can be shared and embedded.'}
-    -#%meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
     
-    -#%meta{:property => 'og:site_name', :content => 'Testeroni.com'}
-    -#%meta{:property => 'og:type', :content => 'website'}
-    -#%meta{:property => 'og:email', :content => 'john@testeroni.com'}
-    -#%meta{:property => 'fb:app_id', :content => 'efa7a0626a2203b5d4ca475d7a10c322'}
-    
-    -#
-      -if @test && @test.id
-      %meta{:property => 'og:title', :content => url_escape(@test.name)}
-      %meta{:property => 'og:url', :content => test_url(@test.id, @test.to_param)}
-    
-    =stylesheet_link_tag(:flutie, 'testeroni', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/cupertino/jquery-ui.css',  :cache => true)
+    =stylesheet_link_tag(:flutie, 'testeroni', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/accordion/jquery-ui.css',  :cache => true)
     
     =javascript_include_tag('http://use.typekit.com/jxe0dey.js')
     %script{:type => "text/javascript"} try{Typekit.load();}catch(e){}
@@ -75,6 +64,7 @@
               
     #container
       =render(:partial => 'shared/flash', :locals => {:flash => flash})
+      
       =yield
       
     #foot-wrap
@@ -104,15 +94,13 @@
           %h4 Create an account
           = form_for(@user, :url => registration_path(@user)) do |f|
             -#= devise_error_messages!
-            %input#return_to{:type => 'hidden', :name => 'return_to', :value => '/tests/new'}/
+            %input#return_to{:type => 'hidden', :name => 'return_to', :value => ''}/
             %p= f.label :username
             = f.text_field :username
             %p= f.label :email
             = f.text_field :email
             %p= f.label :password
             = f.password_field :password
-            -#%p= f.label :password_confirmation, 'Again with the password, please'
-            -#= f.password_field :password_confirmation
             %p{:style => 'padding-top:8px;'}
               #{f.check_box :email_list, {}, 'true', 'false'} Get email updates from Testeroni
             .submit
@@ -124,7 +112,6 @@
         -# In this case, should go to test#new page.
         -#= render :partial => "devise/shared/links"
 
-    #fb-root/
     =javascript_include_tag('rails')
     =javascript_include_tag 'jquery.lightbox_me.js'
     =javascript_include_tag('jquery.ba-bbq.min.js')
@@ -164,16 +151,3 @@
           $('#user_username').focus();
         });
       });
-      
-      window.fbAsyncInit = function() {
-        FB.init({	appId: 'efa7a0626a2203b5d4ca475d7a10c322',
-        status: true,
-        cookie: true,
-        xfbml: true});
-      };
-      (function() {
-        var e = document.createElement('script'); e.async = true;
-        e.src = document.location.protocol +
-        '//connect.facebook.net/en_US/all.js';
-        document.getElementById('fb-root').appendChild(e);
-      }());

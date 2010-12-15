@@ -1,0 +1,64 @@
+!!! 5
+%html
+  %head
+    %meta{:charset => 'utf-8'}
+    %meta{'http-equiv' => 'X-UA-Compatible', :content => 'IE=edge,chrome=1'}
+    
+    %title= @title ||= 'Testeroni'
+    
+    %meta{:name => 'description', :content => 'A platform for casual and fun learning. Make and take tests your own tests. Answers can be multiple choice or true/false, and tests can be shared and embedded.'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
+    
+    =stylesheet_link_tag(:flutie, 'testeroni', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/accordion/jquery-ui.css',  :cache => true)
+    
+    =javascript_include_tag('http://use.typekit.com/jxe0dey.js')
+    %script{:type => "text/javascript"} try{Typekit.load();}catch(e){}
+    =javascript_include_tag('http://www.google.com/jsapi?key=ABQIAAAAnohM6sqTs6drjmtNvnIyhBQX4KEUxjBL_ZDpzqYIgEd3Cy73NxTBwcj0akdZnV23u8exfLERTanWEw')
+    :javascript
+      google.load("jquery", "1.4.4");
+      google.load("jqueryui", "1.8.7");
+      
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20111813-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+      
+    =javascript_include_tag("/wmd/wmd.js")
+    =javascript_include_tag("/wmd/showdown.js")
+    =csrf_meta_tag
+    
+  %body
+    
+    #container{:style => 'width:630px;'}
+      =render(:partial => 'shared/flash', :locals => {:flash => flash})
+      
+      =yield
+      
+    -#
+      #foot-wrap
+        #footer
+          =link_to('about', about_path)
+          &#183;
+          =link_to('contact', contact_path)
+          &#183;
+          %a.twitter-share-button{:href => "http://twitter.com/share", 'data-count' => "none", 'data-via' => "besteroni"} Tweet
+          %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
+
+    =javascript_include_tag('rails')
+    =javascript_include_tag('tstrni.js')
+    
+    :javascript
+    
+      var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+      (function(d, t) {
+        var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+        g.async = true;
+        g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g, s);
+      })(document, 'script');

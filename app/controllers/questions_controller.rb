@@ -31,6 +31,8 @@ class QuestionsController < ApplicationController
   end
   
   def answer
+    logger.debug "COOKIES IN ANSWER (should not contain 'return to'): #{cookies.inspect}"
+    
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i

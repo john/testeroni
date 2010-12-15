@@ -1,11 +1,11 @@
 GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: b50fd1a72e711049508bf7af4610ad422be34f3b
+  revision: a23a52b2f7224d16f38d36a2f2848bb528d22616
   specs:
     devise (1.2.rc)
       bcrypt-ruby (~> 2.1.2)
-      orm_adapter (~> 0.0.2)
-      warden (~> 1.0.2)
+      orm_adapter (~> 0.0.3)
+      warden (~> 1.0.3)
 
 GIT
   remote: https://github.com/collectiveidea/awesome_nested_set.git
@@ -70,9 +70,8 @@ GEM
       rails (~> 3.0)
       thor (~> 0.14.4)
     json (1.4.6)
-    kgio (2.0.0)
-    koala (0.9.1)
-      json
+    koala (0.10.0)
+      json (>= 1.0)
     mail (2.2.12)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -137,7 +136,8 @@ GEM
       activesupport (= 3.0.3)
       bundler (~> 1.0)
       railties (= 3.0.3)
-    rails3-generators (0.14.0)
+    rails3-generators (0.17.0)
+      railties (>= 3.0.0)
     railties (3.0.3)
       actionpack (= 3.0.3)
       activesupport (= 3.0.3)
@@ -160,10 +160,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
-    unicorn (3.0.1)
-      kgio (~> 2.0.0)
-      rack
-    warden (1.0.2)
+    warden (1.0.3)
       rack (>= 1.0.0)
 
 PLATFORMS
@@ -187,4 +184,3 @@ DEPENDENCIES
   ruby_parser
   sqlite3-ruby
   thumbs_up
-  unicorn

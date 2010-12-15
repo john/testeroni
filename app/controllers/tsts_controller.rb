@@ -31,6 +31,7 @@ class TstsController < ApplicationController
         end
       end
     end
+    render :layout => 'embed' if request.path =~ /embed/
   end
 
   def new

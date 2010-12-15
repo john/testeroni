@@ -70,9 +70,7 @@ class Tst < ActiveRecord::Base
   
   def grade
     @_grade ||= begin
-      if percent_correct == 0
-        ''
-      elsif percent_correct < 60
+      if percent_correct < 60
         'F'
       elsif percent_correct < 63
         'D-'

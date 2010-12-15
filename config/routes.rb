@@ -22,6 +22,8 @@ Testeroni::Application.routes.draw do
   match 'people', :to => "people#show", :as => 'user_root'
   resources :users
   
+  match 'embed/:id', :to => 'tsts#show', :as => 'embed_test', :via => :get
+  
   match 'tests/new', :to => 'tsts#new', :as => 'new_test'
   match 'tests/:id/edit', :to => 'tsts#edit', :as => 'edit_test'
   match 'tests/:id/publish', :to => 'tsts#publish', :as => 'publish_test'

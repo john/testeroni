@@ -4,7 +4,14 @@ class RegistrationsController < Devise::RegistrationsController
   
   def create
     @user.password_confirmation = @user.password if @user && @user.password #hack
+    
     super
+    
+    if session[:take]
+      flash[:notice] = "Successfully created an account and saved the results of your last test."
+      Take.save_from_session_for_user(session, @user)
+    end
+    
     session[:omniauth] = nil unless @user.new_record?
   end
   
@@ -22,11 +29,13 @@ class RegistrationsController < Devise::RegistrationsController
       end
     end
     
+    super
+    
     if session[:take]
-      logger.debug "----------> TAKE! add usere info and save it <----------"
+      flash[:notice] = "Successfully created an account and saved the results of your last test."
+      Take.save_from_session_for_user(session, @user)
     end
     
-    super
   end
   
   private
