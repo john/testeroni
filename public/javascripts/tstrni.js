@@ -14,4 +14,8 @@ var Tstrni = new function() {
     Tstrni.clearAllTimeouts.last = i;
   }
   
+  this.clear_state = function() {
+    $.bbq.removeState();
+  }
+  
 }

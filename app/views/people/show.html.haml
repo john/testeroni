@@ -4,7 +4,9 @@
   -if @owner
     Hi,
   = @person.username
+
 %h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
+
 %p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.username}:
 
 -if @person.tsts.blank?
@@ -31,9 +33,7 @@
 %p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.username}:
 
 -if @person.takes.blank?
-  %p None, yet.
-  -if @owner
-    There are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
+  %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}, if you want to try some.
 -else
   %ul.bulletless
     -@person.takes.each do |t|
@@ -48,3 +48,7 @@
             |
             =link_to('overall results', test_results_url(@test.id, @test.to_param))
             ]
+            
+%p{:style => 'font-style:italic;'}tests created by #{@person.username}'s friends:
+
+%p{:style => 'font-style:italic;'}tests taken by #{@person.username}'s friends:

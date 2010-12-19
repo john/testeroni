@@ -15,8 +15,8 @@ class CommentsController < ApplicationController
     @comment = Comment.build_from(@commented_on, current_user.id, params[:comment_text] )
     @comment.user = current_user
     @comment.save
-    flash[:notice] = 'Comment added.'
-    render :partial => 'shared/comments', :locals => {:comment => Comment.new, :comments => @commented_on.root_comments, :added_id => @comment.id}
+    # flash[:notice] = 'Comment added.'
+    render :partial => 'shared/comments', :locals => {:commentable => @commented_on, :comment => Comment.new, :comments => @commented_on.root_comments, :added_id => @comment.id}
   end
   
   # return a comment editing form

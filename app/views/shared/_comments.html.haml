@@ -1,17 +1,20 @@
 -added_id ||= nil
 
 #comments
+
+  - unless added_id.nil?
+    :javascript
+      $('##{added_id}').effect('highlight', {}, 3000);
+      
+      
   -unless comments.blank?
     %h5= "Comments on this #{((commentable.class == Tst) ? 'Test' : commentable.class.to_s).downcase}"
     %ul.bulletless
       -comments.each do |c|
         %li{:style => 'padding:0 0 15px 0'}
-          - unless added_id.nil?
-            -if added_id == c.id
-              %div{:style => 'width:50%'}
-                =render(:partial => 'shared/flash', :locals => {:flash => flash})
-          %div #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.user))} said:
-          %div= "#{c.id} #{c.body}"
+          %div{:id => c.id}
+            #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.user))} said:
+          %div= c.body
   %h5
     Add a comment for this
     =((commentable.class == Tst) ? 'Test' : commentable.class.to_s).downcase
@@ -22,7 +25,7 @@
   
     %div{:id => 'wmd-button-bar', :class => 'wmd-panel'}
     %div
-      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'width:500px;'}
+      %textarea{:id => 'wmd-input', :class => 'wmd-panel', :name => 'comment_text', :style => 'width:500px;height:90px;'}
     #wmd-preview.wmd-panel
     -#wmd-output.wmd-panel
     =f.submit

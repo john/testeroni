@@ -26,10 +26,7 @@
     -else
       done with the test.
   -if @more
-    -if @take && @take.class == Take
-      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
-    -else
-      -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+    -@next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
 
     #next
       %a.question_link.green.button{:href => '#', :style => 'float:none; text-align:left;'}Next question &gt;
@@ -46,5 +43,11 @@
       = link_to_function('sign up', "signupThenGoTo('')")
       or
       = link_to('log in', new_user_session_path)
-      
-=render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
+-if user_signed_in?
+  =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
+-else
+  %p
+    = link_to_function('Sign up', "signupThenGoTo('')")
+    or
+    = link_to('sign in', new_user_session_path)
+    to leave comments on questions.

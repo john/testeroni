@@ -34,12 +34,17 @@
             %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
     =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
     -if @question_number < @test.questions.length
-      (<a href="#" id="skip">skip</a> | <a href="#" id="stop">stop test</a>)
+      (<a href="#" id="skip">skip</a>)
 
 -if @question_number <= @test.questions.length
 
   :javascript
     $(document).ready(function(){
+    
+      var state = $.bbq.getState();
+      state[ 'question' ] = '#{@question.to_param}';
+      $.bbq.pushState( state );
+      
       $('#submit_button').click(function() {
         // validate. if valid...
         $.ajax({

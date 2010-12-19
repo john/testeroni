@@ -12,7 +12,6 @@ class TstsController < ApplicationController
 
   def show
     @test = Tst.load_active_by_id(params[:id])
-    
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Test"
     @description = "'#{@test.name}' on Tst."
@@ -31,6 +30,13 @@ class TstsController < ApplicationController
         end
       end
     end
+    
+    # if @take
+    #   @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
+    # else
+      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+    # end
+      
     render :layout => 'embed' if request.path =~ /embed/
   end
 

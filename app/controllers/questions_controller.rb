@@ -15,7 +15,29 @@ class QuestionsController < ApplicationController
   def show
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:id])
-    @question_number = (params[:question_number]) ? params[:question_number].to_i : 1
+    
+    
+    # pass in question number when practical, to save a lookup, but
+    # if it's not present, figure it out.
+    @question_number = 1
+    if params[:question_number]
+      @question_number = params[:question_number].to_i
+    else
+      logger.debug "@question.id: #{@question.id}"
+      logger.debug ""
+      @test.questions.each_with_index do |q,i|
+        logger.debug "q.id: #{q.id}"
+        if q.id == @question.id
+          @question_number = i+1
+          logger.debug "set question number to: #{@question_number}"
+          break
+        end
+        
+      end
+    end
+    
+    
+    
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
     if user_signed_in?
@@ -26,13 +48,18 @@ class QuestionsController < ApplicationController
         @take = Take.find(params[:take_id]) unless params[:take_id].blank?
       end
     end
-
+    
+    if @take
+      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
+    else
+      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+    end
+    
+    
     render :partial => 'show'
   end
   
   def answer
-    logger.debug "COOKIES IN ANSWER (should not contain 'return to'): #{cookies.inspect}"
-    
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
@@ -43,7 +70,6 @@ class QuestionsController < ApplicationController
       @take = Take.find(params[:take_id])
     elsif session[:take] && @question_number > 1
       # if they're not signed in and it's not the first question, get from session
-      # @session_take = session[:take]
       @take = Take.desessionize(session)
     else
       # they're not signed in and just starting, so create object to put in session
