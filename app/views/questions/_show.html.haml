@@ -15,7 +15,7 @@
     -if @take
       %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
   
-    -# PARTIALS for all this shit.
+    -# PARTIALS for all this shit?
     -if @question.kind == Question::TRUEFALSE
       %div{:style => 'padding:10px 0 5px 0;'}
         %input#answer_true{:type => "radio", :name => "answer", :value => "true"}
@@ -25,16 +25,25 @@
         %label{:for => "answer_false", :style => "display:inline;"} false
     -elsif @question.kind == Question::SHORTANSWER
       %div{:style => 'padding:10px 0;'}
-        %input{:type => 'text', :name => 'short_answer'}
+        %input{:type => 'text', :name => 'short_answer', :id => 'short_answer'}
+      :javascript
+        $(document).ready(function(){
+          $('#short_answer').focus();
+        });
     -else
       %ul#choices
         -@question.choices.each_with_index do |choice,i|
           %li>
             %input{:type => "radio", :name => "choice_id", :id => "choice_#{i}", :value => choice.id}
             %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
-    =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
-    -if @question_number < @test.questions.length
-      (<a href="#" id="skip">skip</a>)
+    -if @question_number == 1 || (@take && @take.questions_answered > 0)
+      =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
+      -if @question_number < @test.questions.length
+        (<a href="#" id="skip">skip</a>)
+    -else
+      %div{:style => 'padding-top:20px;'}
+        Want to take this test? Then
+        %a{:href => '', :style => 'font-weight:bold;'}Go to the first question
 
 -if @question_number <= @test.questions.length
 

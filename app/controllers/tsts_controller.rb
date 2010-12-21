@@ -6,16 +6,15 @@ class TstsController < ApplicationController
   
   def index
     @tests = Tst.all
-    @title = "Make surveys and quizzes from YouTube videos - Test"
-    @description = "Test lets you make surveys and quizzes from YouTube videos."
+    @title = "Make and take surveys and tests on Testeroni"
+    @description = "Make and take surveys and tests on Testeroni.com"
   end
 
   def show
     @test = Tst.load_active_by_id(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
-    @title = "#{@test.name} - Test"
-    @description = "'#{@test.name}' on Tst."
-    
+    @title = "#{@test.name} - Testeroni"
+    @description = "'#{@test.name}' a test on Testeroni.com"
     @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
     
     @question_number = 1
@@ -30,12 +29,7 @@ class TstsController < ApplicationController
         end
       end
     end
-    
-    # if @take
-    #   @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
-    # else
-      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
-    # end
+    @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
       
     render :layout => 'embed' if request.path =~ /embed/
   end
@@ -44,8 +38,8 @@ class TstsController < ApplicationController
     redirect_to root_path and return unless user_signed_in?
     
     @test = Tst.new(:contributors => Tst::ANYONE)
-    @title = "Create a new quiz or survey - Test"
-    @description = "Create a new quiz or survey on Tst."
+    @title = "Create a new test or survey on Testeroni"
+    @description = "Create a new test or survey on Testeroni.com"
   end
 
   def edit

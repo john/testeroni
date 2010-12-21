@@ -69,7 +69,7 @@
       
     #foot-wrap
       #footer
-        %table{:style => 'width:200px;'}
+        %table{:style => 'width:120px;'}
           %tr
             %td{:style => 'border:0;'}
               =link_to('about', about_path)
@@ -78,9 +78,9 @@
             %td{:style => 'border:0;'}
               =link_to('contact', contact_path)
             %td{:style => 'border:0;'}
-              &#183;
-            %td{:style => 'border:0;'}
-              %a.twitter-share-button{:href => "http://twitter.com/share", 'data-count' => "none", 'data-via' => "besteroni"} Tweet
+            -#  &#183;
+            -#%td{:style => 'border:0;'}
+            -#  %a.twitter-share-button{:href => "http://twitter.com/share", 'data-count' => "none", 'data-via' => "besteroni"} Tweet
 
         %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
       
@@ -117,10 +117,6 @@
               = f.submit "Sign up", :class => 'btn'
               &nbsp;
               = link_to_function('Cancel', "$('.account').toggle()")
-
-        -# Is there a way to tell signup where to go next?
-        -# In this case, should go to test#new page.
-        -#= render :partial => "devise/shared/links"
 
     =javascript_include_tag('rails')
     =javascript_include_tag 'jquery.lightbox_me.js'

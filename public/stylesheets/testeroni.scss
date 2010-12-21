@@ -319,9 +319,9 @@ width:$input-width;
   margin:0;
   padding:0 0 8px 0;
 }
-/*.bulletless li a {
-  font-weight:bold;
-}*/
+.bulletless.home li {
+padding-bottom:25px;
+}
 .bulletless li span {
   font-size:.9em;
   font-family:arial;
@@ -357,7 +357,7 @@ width:$input-width;
 
 .button {
   padding: 8px;
-  margin:0 5px 0 15px;
+  margin:0 5px 0 0px;
   height:11px;
   vertical-align:middle;
   color:#fff;
@@ -371,6 +371,16 @@ width:$input-width;
   position: relative;
   cursor: pointer;
 }
+
+.sm {
+  padding:2px 4px;
+  margin:0 0 50px 5px;
+  font-size:.8em;
+  line-height:inherit;
+  height:9px;
+  vertical-align:middle;
+}
+
 .green.button, .green.button:visited { background-color: #99cc33; border: 1px solid #99cc33; }
 
 /*.green.button:visited {

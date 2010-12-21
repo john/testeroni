@@ -16,27 +16,18 @@ class QuestionsController < ApplicationController
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:id])
     
-    
-    # pass in question number when practical, to save a lookup, but
-    # if it's not present, figure it out.
+    # to save a lookup pass in question number when practical, but if it's not present, figure it out.
     @question_number = 1
     if params[:question_number]
       @question_number = params[:question_number].to_i
     else
-      logger.debug "@question.id: #{@question.id}"
-      logger.debug ""
       @test.questions.each_with_index do |q,i|
-        logger.debug "q.id: #{q.id}"
         if q.id == @question.id
           @question_number = i+1
-          logger.debug "set question number to: #{@question_number}"
           break
         end
-        
       end
     end
-    
-    
     
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
@@ -47,6 +38,8 @@ class QuestionsController < ApplicationController
       else
         @take = Take.find(params[:take_id]) unless params[:take_id].blank?
       end
+    elsif session[:take]
+      @take = Take.desessionize(session)
     end
     
     if @take
@@ -54,7 +47,6 @@ class QuestionsController < ApplicationController
     else
       @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
     end
-    
     
     render :partial => 'show'
   end
@@ -105,13 +97,19 @@ class QuestionsController < ApplicationController
       @response.take = @take
       @response.save
       @question.responses << @response
+      
+      @response_count = @question.responses.size
+      @correct_response_count = @question.number_correct
     else
       @take.responses << @response
       session[:take] = @take.sessionize
+      
+      @response_count = @question.responses.size + 1
+      @correct_response_count = (@response.correct?) ? @question.number_correct+1 : @question.number_correct
     end
     
-    @response_count = @question.responses.size
-    @correct_response_count = @question.number_correct
+    
+    
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
     if @test.questions.length == @question_number

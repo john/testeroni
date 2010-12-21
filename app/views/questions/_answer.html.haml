@@ -18,6 +18,7 @@
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
   %p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
+  
   %p
     -#= "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
     = "You're #{@questions_correct} for #{@questions_answered}, and "

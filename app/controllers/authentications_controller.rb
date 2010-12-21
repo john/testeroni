@@ -13,26 +13,13 @@ class AuthenticationsController < ApplicationController
     
     # they're signing in, and have previously authenticated
     if authentication
-      
-      if session[:take]
-        Take.save_from_session_for_user(session, authentication.user)
-        flash[:notice] = "Signed in successfully and saved the results of your last test."
-      else
-        flash[:notice] = "Signed in successfully."
-      end
+      save_take_and_set_flash(authentication.user)
       sign_in_and_redirect(:user, authentication.user)
       
     # if they're already signed in, and they failed to authenticate, meaning they haven't previously set up fb or twitter
     elsif current_user
       current_user.authentications.create!(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => omniauth['credentials']['token'])
-
-      if session[:take]
-        Take.save_from_session_for_user(session, current_user)
-        flash[:notice] = "Signed in successfully and saved the results of your last test."
-      else
-        flash[:notice] = "Signed in successfully."
-      end
-      
+      save_take_and_set_flash(current_user)
       redirect_to authentications_url
       
     # they don't have an existing account, but they just authenticated--so create an account
@@ -44,8 +31,7 @@ class AuthenticationsController < ApplicationController
       
       # save user if you can. this never gets hit by this app, because we want to make people pick a username and add their email
       if user.save
-        flash[:notice] = "Signed in successfully."
-        
+        save_take_and_set_flash(user)
         # see above...
         sign_in_and_redirect(:user, user)
         

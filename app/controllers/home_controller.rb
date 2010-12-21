@@ -4,7 +4,7 @@ class HomeController < ApplicationController
 
   def index
     @home = true
-    @title = "Make and take tests, surveys, and quizzes - Testeroni"
+    @title = "Testeroni - Make and take tests and surveys"
     @description = "Testeroni lets you make surveys and quizzes from YouTube videos."
     @tests = Tst.recently_published
   end

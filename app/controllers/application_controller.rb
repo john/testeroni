@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
   def stored_location_for(resource)
     if current_user
-      flash[:notice] = "You. Are. Signed. UP!"
+      # flash[:notice] = "You. Are. Signed. UP!"
       if params[:return_to]
         return params[:return_to]
       elsif cookies[:return_to]
@@ -35,6 +35,18 @@ class ApplicationController < ActionController::Base
       end
     end
     super( resource ) 
+  end
+  
+  # IF a user has taken tests but wasn't logged in, they'll be in the session. Check for those and persist them if they're there.
+  def save_take_and_set_flash(user)
+    logger.debug "----> in save_take_and_set_flash"
+    if session[:take]
+      logger.debug "----> found take in session"
+      Take.save_from_session_for_user(session, user)
+      flash[:notice] = "Signed in successfully and saved the results of your last test."
+    else
+      flash[:notice] = "Signed in successfully."
+    end
   end
   
   def url_escape(val)

@@ -3,15 +3,14 @@
 - else
 
   %p{:style => "padding:0; margin:0; font-size:1.2em; width:80%;float:left;"}
-    %strong< Testeroni is a free site for making and taking tests.
-    Anyone can make a test and anyone can take any test on the site. Test are fun to take, easy to make, and you can embed them in blogs and facebook pages.
-  %div{:style => 'width:20%;float:right; margin-top:20px;'}
-    =link_to_function('JOIN NOW', "signupThenGoTo('')", :class => 'green button', :style => 'font-size:2em; font-style:italic; font-weight:bold;padding:15px 10px;')
+    %strong< Testeroni is a free community for making and taking surveys and tests.
+    
+  %div{:style => 'width:600px; margin-top:20px; padding-top:60px;'}
+    =link_to_function('Create Account', "signupThenGoTo('')", :class => 'green button', :style => 'font-size:1.8em; font-style:italic; font-weight:bold;padding:5px 10px;')
+    Already have an account?
+    =link_to 'sign up'
   .clearfix
   
-  %h2{:style => 'padding:20px 0 0 0;'}
-    %a#signup_link Create a test right now
-
     -# put this in a content_for so that it's at the bottom of the template and doesn't slow page rendering
     :javascript
       $(document).ready(function() {
@@ -21,24 +20,26 @@
       });
       
       
-%h3{:style => 'padding:20px 0 5px 60px;'} Or take one of these recent tests
+%p{:style => 'padding:35px 0;'} Or start right now and take any of these tests. You can sign up when you're done if you want to save your results.
 -if @tests.size > 0
-  %ul.bulletless{:style => 'margin-left:60px;'}
+  %ul.bulletless.home
     -@tests.each do |t|
-      %li{:style => 'padding-bottom:25px;'}
+      %li
         %h3
-          %span{:style => 'margin-left:-80px;'}
-            %a.green.button{:style => 'padding:2px 4px; font-size:.8em;'} take me!
+
           =link_to(t.name, test_url(t.id, t.to_param))
+          %span
+            =link_to('take me!', test_url(t.id, t.to_param), :class => 'green button sm')
+
         %div
-          ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}."
-        
+          ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}"
+          -unless t.takes.blank?
+            with an average grade of #{t.grade}
+          
         -unless t.tags.empty?
           %div
             tags:
             !=t.tag_list.collect{|tag| "<span class='tag'>#{link_to(tag, tag_path(url_escape(tag)), :rel => 'tag')}</span>"}.join('&nbsp; ')
-          -unless t.grade.blank?
-            with an average grade of #{t.grade}.
           
           -#
             =link_to('View questions', test_questions_path(t.id, t.to_param))
