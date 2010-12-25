@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
     t.integer  "user_id"
     t.integer  "questions_answered",              :default => 0
     t.integer  "questions_correct",               :default => 0
+    t.string   "question_order"
     t.datetime "started_at"
     t.datetime "finished_at"
     t.integer  "status",             :limit => 1

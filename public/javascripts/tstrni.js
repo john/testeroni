@@ -3,6 +3,19 @@
 
 var Tstrni = new function() {
   
+  this.promo = new function() {
+    this.show = function() {
+      $('#promo').slideDown(800, 'easeOutElastic');
+    }
+    this.hide = function() {
+      $('#promo').slideUp();
+      $('#top-band').removeClass('with_promo');
+      $.post('/hide_promo');
+    }
+  }
+
+
+
   this.clearAllTimeouts = function(){
     if (typeof Tstrni.clearAllTimeouts.last == 'undefined' ) {
       Tstrni.clearAllTimeouts.last = setTimeout("||void",0); // Opera || IE other browsers accept "" or "void"

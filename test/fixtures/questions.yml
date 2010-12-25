@@ -1,11 +1,26 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  description: MyString
-  kind: MyString
-
+  id: 1
+  tst_id: 1
+  user_id: 1
+  name: Are you for real?
+  description: This is a description1
+  correct_response: true
+  kind: 1 #Question::TRUEFALSE
+  
 two:
-  name: MyString
-  description: MyString
-  kind: MyString
+  id: 2
+  tst_id: 1
+  user_id: 1
+  name: Whaddya want?
+  description: This is a description2
+  kind: 2 #Question::MULTIPLECHOICE
+  
+three:
+  id: 3
+  tst_id: 1
+  user_id: 1
+  name: Where are you going?
+  description: This is a description3
+  kind: 3 #Question::SHORTANSWER

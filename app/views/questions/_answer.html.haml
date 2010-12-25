@@ -20,8 +20,7 @@
   %p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
   
   %p
-    -#= "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
-    = "You're #{@questions_correct} for #{@questions_answered}, and "
+    = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
     -if @more
       = "have #{pluralize((@test.questions.size+1-@question_number), 'question')} left."
     -else

@@ -34,11 +34,16 @@
     
   %body
     -# TODO: add controller and style support for this
-    -if @global_notice
-      #global_notice{:style => 'display:none'}
+    -if @promo
+      #promo{:style => 'display:none;'}
         .notice
-          .global_notice_close"><%= link_to_function('x', "Wordnik.global_notice.hide();") %></div>
-          <%= @global_notice[:message_html]
+          .promo_close
+            = link_to_function('x', "Tstrni.promo.hide();")
+          = @promo[:message]
+      :javascript
+        $(document).ready(function(){
+          setTimeout(Tstrni.promo.show, 1000);
+        })
         
     #head-wrap
       #header
@@ -81,10 +86,8 @@
             -#  &#183;
             -#%td{:style => 'border:0;'}
             -#  %a.twitter-share-button{:href => "http://twitter.com/share", 'data-count' => "none", 'data-via' => "besteroni"} Tweet
-
+            
         %script{:type => "text/javascript", :src => "http://platform.twitter.com/widgets.js"}
-      
-      
       
     - if @user
       #signup.roundborder{:style => 'display:none'}

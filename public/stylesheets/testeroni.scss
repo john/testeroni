@@ -4,6 +4,10 @@ $input-width: 500px;
 
 /**************** Overrides *****************/
 
+form {
+  display:inline;
+}
+
 a, a:link {
   text-decoration:none;
 }
@@ -170,6 +174,55 @@ width:$input-width;
   font-size: 0.8em;
   font-weight: bold;
 }
+
+
+/**************** promo bar ***********************/
+
+#promo {
+  background:#ffcc33;
+  color:#514721;
+  opacity: .70;
+  filter: alpha(opacity=70);  
+  font-weight: normal;
+  font-size:15px;
+  margin-top: -10px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  z-index: 2000;
+  -moz-box-shadow: 0px 2px 6px #aaa;
+  -webkit-box-shadow: 0px 2px 6px #aaa;
+}
+
+#promo .notice {
+  border: 0;
+  background:transparent;
+  opacity: 1;
+  color:black;
+  filter: alpha(opacity=100);
+  padding: 3px 10px;
+  margin: 0 auto;
+  width:950px;
+}
+
+#promo a {
+  color: blue;
+}
+
+.promo_close {
+  background: #fff;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  height: 16px;
+  line-height: 1em;
+  margin: 3px 3px 0 0;
+  width: 16px;
+  float: right;
+  text-align: center;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
 
 /**************** id's and classes *****************/
 

@@ -1,18 +1,22 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  simple_name: MyString
-  description: MyString
+  id: 1
+  question_id: 2
+  name: Nothing!
+  simple_name: nothing
+  description: this gets displayed when the question is asked
   status: 0
-  explanation: stringy
+  explanation: this gets displayed when the question in answered.
   correct: true
 
 two:
-  name: MyString
-  simple_name: MyString
-  description: MyString
+  id: 2
+  question_id: 2
+  name: Everything!
+  simple_name: everything
+  description: this gets displayed when the question is asked
   status: 0
-  explanation: stringy
+  explanation: this gets displayed when the question in answered.
   correct: false
   

@@ -42,7 +42,7 @@
       -else
         %div{:style => 'padding:0; margin:-20px 0 0 0'}= @test.description
 
-        %div
+        %div{:style => 'padding:10px 0;'}
           - one_line do
             This test has #{pluralize(@test.questions.size, 'question')}#{(@test.takes.size > 0) ? ',' : ' and'} has been taken #{pluralize(@test.takes.size, 'time')}
             -if @test.takes.size > 0
@@ -50,8 +50,18 @@
               %strong= @test.grade
 
         %div{:style => 'padding:40px 0;'}
+          =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
+          =check_box_tag(:randomize)
+          =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
           
-          %a#start{:class => 'green button'} Start the test!
+          -#  
+            :javascript
+              $(document).ready(function(){
+                $('#start_form').submit(function() {
+                  $(this).serialize();
+                  return false;
+                });
+              });
             
         %div
           %a view questions
@@ -63,7 +73,18 @@
           %a see how people did
             
           :javascript
-            #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '#start'}}
+            $(document).ready(function(){
+              $('#start').bind('click', function() {
+                if( $('#randomize').is(':checked') ) {
+                  url = '#{@next_question_url}&randomize=1'
+                } else {
+                  url = '#{@next_question_url}'
+                }
+                $.get(url, function(data) {
+                  #{render :partial => 'shared/scroll'}
+                });
+              });
+            });
             
       -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
       

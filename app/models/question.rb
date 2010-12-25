@@ -22,8 +22,9 @@ class Question < ActiveRecord::Base
   validates :tst_id, :presence => true, :numericality => true
   validates :user_id, :presence => true, :numericality => true
   
-  # this should probably be stored in the question, so
-  # this it doesn't have to do the calculation ever time
+  # total number of times this question has been answered correctly,
+  # across all takes. this should probably be stored in the question, so
+  # this it doesn't have to do the calculation every time
   def number_correct
     @correct = 0
     responses.each do |r|
@@ -47,6 +48,12 @@ class Question < ActiveRecord::Base
   
   def is_short_answer
     (kind == Question::SHORTANSWER) ? true : false
+  end
+  
+  def get_nonzero_position_in_id_array(question_ids)
+    question_ids.each_with_index do |qid, i|
+      return i+1 if qid == id
+    end
   end
   
 end

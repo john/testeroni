@@ -2,5 +2,5 @@
 
 one:
   id: 1
-  username: john
-  email: john@testeroni.com
+  user_id: 1
+  name: 'state capitals'

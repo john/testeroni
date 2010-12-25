@@ -24,7 +24,8 @@ group :development, :test do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'rails3-generators'
   
-  # gem "shoulda"
+  gem "shoulda"
+  
   # gem "rspec"
   # gem "rspec-rails"
   # # gem "capybara"

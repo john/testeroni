@@ -29,6 +29,7 @@ class TstsController < ApplicationController
         end
       end
     end
+    
     @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
       
     render :layout => 'embed' if request.path =~ /embed/

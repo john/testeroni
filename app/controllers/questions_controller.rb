@@ -3,51 +3,36 @@
 class QuestionsController < ApplicationController
   
   before_filter :authenticate_user!, :except => [:index, :show, :answer]
-  
-  # GET /questions
-  # GET /questions.xml
-  def index
-    @questions = Question.all
-  end
 
-  # GET /questions/1
-  # GET /questions/1.xml
   def show
     @test = Tst.find(params[:test_id])
-    @question = Question.find(params[:id])
+    @take = Take.find_from_session_or_params(params, session)
     
-    # to save a lookup pass in question number when practical, but if it's not present, figure it out.
-    @question_number = 1
+    if params[:randomize] # this is only ever passed in when it's the start of a test
+      @question_ids = @test.questions.collect{|q| q.id}.shuffle
+      @question = Question.find(@question_ids[0])
+    else
+      @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
+      @question = Question.find(params[:id])
+    end
+    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
+
+    if @take.nil?
+      @take = Take.new( :tst_id => @test.id,
+                        :user_id => (user_signed_in?) ? current_user.id : nil,
+                        :started_at => Time.now,
+                        :questions_answered => 0,
+                        :questions_correct => 0,
+                        :question_order => @question_ids.join(',') )
+      (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
+    end
+    
+    # to save a lookup pass in the question number when practical, but if it's not present, figure it out.
     if params[:question_number]
       @question_number = params[:question_number].to_i
     else
-      @test.questions.each_with_index do |q,i|
-        if q.id == @question.id
-          @question_number = i+1
-          break
-        end
-      end
+      @question_number = @question.get_nonzero_position_in_id_array(@question_ids)      
     end
-    
-    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-
-    if user_signed_in?
-      if @question_number == 1
-        @take = Take.new(:tst_id => @test.id, :user_id => current_user.id, :started_at => Time.now, :questions_answered => 0, :questions_correct => 0)
-        @take.save
-      else
-        @take = Take.find(params[:take_id]) unless params[:take_id].blank?
-      end
-    elsif session[:take]
-      @take = Take.desessionize(session)
-    end
-    
-    if @take
-      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number, :take_id => @take.id)
-    else
-      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
-    end
-    
     render :partial => 'show'
   end
   
@@ -56,18 +41,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-    
-    if user_signed_in?
-      # if user is signed in, a take was previously created
-      @take = Take.find(params[:take_id])
-    elsif session[:take] && @question_number > 1
-      # if they're not signed in and it's not the first question, get from session
-      @take = Take.desessionize(session)
-    else
-      # they're not signed in and just starting, so create object to put in session
-      @take = Take.new(:tst_id => @test.id, :started_at => Time.now, :questions_answered => 0, :questions_correct => 0)
-    end
-    
+    @take = Take.find_from_session_or_params(params, session)
     @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
     @response.take_id = @take.id if @take.id
     
@@ -88,10 +62,6 @@ class QuestionsController < ApplicationController
     @take.questions_answered = @take.questions_answered+1
     @take.questions_correct = @take.questions_correct+1 if @response.correct?
     
-    # might be able to get rid of this now that it's a Take through and through
-    @questions_answered = @take.questions_answered
-    @questions_correct = @take.questions_correct
-    
     if user_signed_in?
       @response.user = current_user
       @response.take = @take
@@ -107,8 +77,6 @@ class QuestionsController < ApplicationController
       @response_count = @question.responses.size + 1
       @correct_response_count = (@response.correct?) ? @question.number_correct+1 : @question.number_correct
     end
-    
-    
     
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
@@ -149,8 +117,6 @@ class QuestionsController < ApplicationController
     end
   end
 
-  # POST /questions
-  # POST /questions.xml
   def create
     @question = Question.new(params[:question])
     @test = Tst.find(params[:test_id]) if params[:test_id]
