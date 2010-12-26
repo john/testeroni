@@ -64,8 +64,6 @@ class TakeTest < ActiveSupport::TestCase
   
   should "return an empty array when calling question_ids if there aren't any" do
     @take = Take.find(2)
-    puts "@take with now question_order: #{@take.inspect}"
-    
     assert_equal [], @take.question_ids
   end
   

@@ -113,11 +113,16 @@ class TstsController < ApplicationController
   end
   
   def results
-    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.load_active_by_id(params[:id])
   end
   
   def questions
-    @test = Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? LIMIT 1', params[:id].to_i])[0]
+    @test = Tst.load_active_by_id(params[:id])
+  end
+  
+  def comments
+    @test = Tst.load_active_by_id(params[:id])
+    @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
   end
 
   def update

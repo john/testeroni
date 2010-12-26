@@ -15,7 +15,7 @@ class QuestionsController < ApplicationController
       @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
       @question = Question.find(params[:id])
     end
-    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
+    # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
     if @take.nil?
       @take = Take.new( :tst_id => @test.id,

@@ -1,11 +1,4 @@
-%h1{:style => 'font-size:1.6em;'}
-  -if params[:a]
-    =@test.name
-  -else
-    =link_to(@test.name, test_path(@test.id, @test.to_param))
-  
--#-unless @test.description.blank?
--#  %p= @test.description
+=render(:partial => 'tsts/header')
 
 .questions
   #question_pane
@@ -35,20 +28,11 @@
         %ol
           -@test.questions.each do |q|
             %li{:style => 'margin-left:20px;'}= q.name
-        
+            
     -if @test.has_questions? && @test.published?
       -if @question
         =render(:partial => 'questions/show')
       -else
-        %div{:style => 'padding:0; margin:-20px 0 0 0'}= @test.description
-
-        %div{:style => 'padding:10px 0;'}
-          - one_line do
-            This test has #{pluralize(@test.questions.size, 'question')}#{(@test.takes.size > 0) ? ',' : ' and'} has been taken #{pluralize(@test.takes.size, 'time')}
-            -if @test.takes.size > 0
-              =", and has an average grade of "
-              %strong= @test.grade
-
         %div{:style => 'padding:40px 0;'}
           =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
           =check_box_tag(:randomize)
@@ -64,13 +48,13 @@
               });
             
         %div
-          %a view questions
+          %a questions
           |
-          %a view answers
+          %a answers
           |
-          %a view comments
+          =link_to('comments', test_comments_path(@test.id, @test.to_param))
           |
-          %a see how people did
+          %a results
             
           :javascript
             $(document).ready(function(){

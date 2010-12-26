@@ -4,3 +4,8 @@ one:
   id: 1
   username: john
   email: john@testeroni.com
+
+two:
+  id: 2
+  username: doug
+  email: doug@testeroni.com

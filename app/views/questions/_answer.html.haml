@@ -34,6 +34,10 @@
     :javascript
       #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
 
+  
+  %div{:style => 'border: 1px solid red;'}
+    =link_to('comments', test_comments_path(@test.id, @test.to_param))
+
 - unless @more
   %h5
     -if user_signed_in?
@@ -43,6 +47,7 @@
       = link_to_function('sign up', "signupThenGoTo('')")
       or
       = link_to('log in', new_user_session_path)
+      
 -if user_signed_in?
   =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
 -else

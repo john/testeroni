@@ -30,9 +30,10 @@ Testeroni::Application.routes.draw do
   match 'tests/:id/invite', :to => 'tsts#invite', :as => 'invite_test'
   match 'tests/:id/:permalink', :to => 'tsts#show', :as => 'test', :via => :get
   match 'tests/:id/:permalink', :to => 'tsts#destroy', :as => 'test', :via => :delete
-  match 'tests/:id/:permalink/questions', :to => 'tsts#questions', :as => 'test_questions'
+  match 'tests/:id/:permalink/questions', :to => 'tsts#questions', :as => 'test_questions', :via => :get
   match 'tests/:id/:permalink/questions/:question_id/:qpermalink', :to => 'tsts#show', :as => 'test_question', :via => :get
   match 'tests/:id/:permalink/questions/:question_id', :to => 'tsts#show', :via => :get
+  match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
   match 'tests/:id/:permalink/results/:username/:take', :to => 'tsts#individual_results', :as => 'individual_test_results'
   match 'tests/:id/:permalink/results', :to => 'tsts#results', :as => 'test_results'
   resources :tsts

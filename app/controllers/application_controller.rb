@@ -18,13 +18,6 @@ class ApplicationController < ActionController::Base
   before_filter :setup_user
   before_filter :promo
   
-  after_filter :dump_session
-  def dump_session
-    logger.debug "SESSION____________________>"
-    logger.debug session.inspect
-    logger.debug "-----------------------------"
-  end
-  
   def setup_user
     #for hidden signup form
     @user = User.new(:email_list => true) unless user_signed_in?

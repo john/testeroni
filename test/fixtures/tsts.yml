@@ -4,3 +4,12 @@ one:
   id: 1
   user_id: 1
   name: 'state capitals'
+  published_at: 2010-12-24 13:17:50 -0800
+  status: 0
+  
+two:
+  id: 2
+  user_id: 1
+  name: 'simpsons episodes'
+  published_at: 
+  status: 1

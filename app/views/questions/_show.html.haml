@@ -44,7 +44,9 @@
       %div{:style => 'padding-top:20px;'}
         Want to take this test? Then
         %a{:href => '', :style => 'font-weight:bold;'}Go to the first question
-
+    
+    %div{:style => 'border: 1px solid red;'}
+      =link_to('comments', test_comments_path(@test.id, @test.to_param))
 -if @question_number <= @test.questions.length
 
   :javascript
