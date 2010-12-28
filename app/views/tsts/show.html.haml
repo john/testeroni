@@ -33,10 +33,11 @@
       -if @question
         =render(:partial => 'questions/show')
       -else
-        %div{:style => 'padding:40px 0;'}
+        %div
           =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
           =check_box_tag(:randomize)
-          =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
+          -if @test.questions.size > 1
+            =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
           
           -#  
             :javascript
@@ -46,15 +47,6 @@
                   return false;
                 });
               });
-            
-        %div
-          %a questions
-          |
-          %a answers
-          |
-          =link_to('comments', test_comments_path(@test.id, @test.to_param))
-          |
-          %a results
             
           :javascript
             $(document).ready(function(){
@@ -89,4 +81,5 @@
         #{render :partial => 'shared/scroll'}
       });
     }
+
   });

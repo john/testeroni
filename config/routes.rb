@@ -9,6 +9,10 @@ Testeroni::Application.routes.draw do
   root :to => "home#index"
   
   devise_for :users, :controllers => {:registrations => 'registrations'}
+  devise_scope :user do
+    get "sign_in", :to => "devise/sessions#new"
+    get "sign_up", :to => "registrations#new"
+  end
   
   # from omniauth. this creates /auth/twitter and /auth/facebook, based on
   # contents of /config/initializers/omniauth

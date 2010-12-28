@@ -45,16 +45,21 @@
         Want to take this test? Then
         %a{:href => '', :style => 'font-weight:bold;'}Go to the first question
     
-    %div{:style => 'border: 1px solid red;'}
+    -# %div{:style => 'border: 1px solid red;'}
       =link_to('comments', test_comments_path(@test.id, @test.to_param))
+      
+      
+
 -if @question_number <= @test.questions.length
 
   :javascript
     $(document).ready(function(){
-    
+      
       var state = $.bbq.getState();
-      state[ 'question' ] = '#{@question.to_param}';
-      $.bbq.pushState( state );
+      state['question'] = '#{@question.to_param}';
+      $.bbq.pushState(state);
+      
+      $('#question_comment_link').attr( "href", '#{test_comments_path(@test.id, @test.to_param)}?question=#{@question.to_param}');
       
       $('#submit_button').click(function() {
         // validate. if valid...

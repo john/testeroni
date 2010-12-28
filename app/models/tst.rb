@@ -56,16 +56,20 @@ class Tst < ActiveRecord::Base
   # keep the number needing to be updated in memory, write to the db every time it hits 10, or whatever.
   # Pain to do that with ruby :-(
   def percent_correct
-    @_average_grade ||= begin
+    # @_percent_correct ||= begin
       @responses = Response.where(['tst_id=?', id])
       if @responses.size == 0
         0
       else
+        logger.debug "HERE------------"
         @correct_responses = 0
-        @responses.each {|r| @correct_responses += 1 if r.correct?}
+        @responses.each do |r|
+          @correct_responses += 1 if r.correct?
+        end
+        logger.debug "@correct_responses: #{@correct_responses}"
         (((@correct_responses.to_f/@responses.size.to_f)*100)+0.5).to_i
       end
-    end
+    # end
   end
   
   def grade

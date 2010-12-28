@@ -2,7 +2,7 @@
 
 class TstsController < ApplicationController
   
-  before_filter :authenticate_user!, :except => [:index, :show]
+  before_filter :authenticate_user!, :except => [:index, :show, :comments]
   
   def index
     @tests = Tst.all
@@ -52,6 +52,7 @@ class TstsController < ApplicationController
     @test = Tst.new(params[:tst])
     @test.status = Tst::ACTIVE
     @test.user = current_user
+    @test.username = current_user.username
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if @test.video_url
@@ -122,6 +123,9 @@ class TstsController < ApplicationController
   
   def comments
     @test = Tst.load_active_by_id(params[:id])
+    @title = "Comments on #{@test.name} - Testeroni"
+    @description = "Comments on '#{@test.name}' a test on Testeroni.com"
+    
     @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
   end
 

@@ -7,6 +7,7 @@ class RegistrationsController < Devise::RegistrationsController
     super
     save_take_and_set_flash(@user)
     session[:omniauth] = nil unless @user.new_record?
+    redirect_to stored_location_for(:user) || root_path
   end
   
   def new
@@ -17,7 +18,6 @@ class RegistrationsController < Devise::RegistrationsController
         @picture = @graph.get_picture("me")
         @username = session[:omniauth]['user_info']['name']
       elsif session[:omniauth]['provider'] == 'twitter'
-        
         @picture = session[:omniauth]['user_info']['image']
         @username = session[:omniauth]['user_info']['nickname']
       end

@@ -1,3 +1,6 @@
+=render(:partial => 'tsts/header')
 
-
-=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+-if signed_in?
+  =render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+-else
+  != "Please #{link_to('sign in', new_user_session_path)} or #{link_to('sign up', new_user_registration_path)} to post comments."

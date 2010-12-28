@@ -17,8 +17,9 @@
 # @test.save
 
 @test = Tst.create(:name => 'US State Capitals',
-                    :description => "Test your knowledge of US geography with this mixture of multiple choice, true/false, and short-answer questions about state capitals.",
+                    :description => "Test your knowledge of US geography with this test about state capitals.",
                     :user_id => @user.id,
+                    :username => @user.username,
                     :contributors => Tst::ANYONE,
                     :status => Tst::ACTIVE)
 # add questions, choices, responses
@@ -78,7 +79,7 @@
 
 
 
-@test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
+@test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :username => @user.username, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
 
 # add questions, choices, responses
 @q = Question.create( :name => "Who is the protagonist of 'Hamlet'?",
@@ -90,6 +91,6 @@
 @test.published_at = Time.now
 @test.save
 
-@test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :username => @user.username, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
 @test.published_at = Time.now
 @test.save

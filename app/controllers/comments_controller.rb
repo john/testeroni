@@ -13,10 +13,27 @@ class CommentsController < ApplicationController
     
     @commented_on = Object.const_get(params[:comment][:commentable_type]).find(params[:comment][:commentable_id])
     @comment = Comment.build_from(@commented_on, current_user.id, params[:comment_text] )
+    
+    if params[:comment][:commentable_type] == 'Tst'
+      @comment.test_id = params[:comment][:commentable_id]
+    end
+    
+    if params[:comment][:commentable_type] == 'Question'
+      @comment.question_id = params[:comment][:commentable_id]
+    end
+    
+    if params[:question_id]
+       @comment.question_id = params[:question_id]
+    end
+    
     @comment.user = current_user
     @comment.save
-    # flash[:notice] = 'Comment added.'
-    render :partial => 'shared/comments', :locals => {:commentable => @commented_on, :comment => Comment.new, :comments => @commented_on.root_comments, :added_id => @comment.id}
+    
+    if params[:comment][:commentable_type] == 'Tst'
+      @comment = Comment.new(:commentable_type => @commented_on.class, :commentable_id => @commented_on.id)
+    end
+    
+    render :partial => 'shared/comments', :locals => {:commentable => @commented_on, :comment => @comment, :comments => @commented_on.root_comments, :added_id => @comment.id}
   end
   
   # return a comment editing form

@@ -1,14 +1,24 @@
-%h1<
+%div
+  - one_line do
+    ="Created #{time_ago_in_words(@test.created_at)} ago by"
+    =link_to(@test.username, people_path(@test.username))
+    , taken #{pluralize(@test.takes.size, 'time')}
+    -if @test.takes.size > 0
+      =", average score "
+      %strong= @test.percent_correct
+      
+    
+%div{:style => 'padding:0 0 10px 0;'}
+  %a #{pluralize(@test.questions.size, 'question')}
+  |
+  %a #{pluralize(@test.responses.size, 'response')}
+  |
+  =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
+ 
+%h1
   -if params[:a]
     =@test.name
   -else
     =link_to(@test.name, test_path(@test.id, @test.to_param))
     
 %div{:style => 'padding:0; margin:0px 0 0 0'}= @test.description
-
-%div{:style => 'padding:10px 0;'}
-  - one_line do
-    This test has #{pluralize(@test.questions.size, 'question')}#{(@test.takes.size > 0) ? ',' : ' and'} has been taken #{pluralize(@test.takes.size, 'time')}
-    -if @test.takes.size > 0
-      =", and has an average grade of "
-      %strong= @test.grade

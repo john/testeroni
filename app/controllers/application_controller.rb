@@ -57,20 +57,20 @@ class ApplicationController < ActionController::Base
   
   
   
-  # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
-  def stored_location_for(resource)
-    if current_user
-      # flash[:notice] = "You. Are. Signed. UP!"
-      if params[:return_to]
-        return params[:return_to]
-      elsif cookies[:return_to]
-        redir = cookies[:return_to]
-        cookies.delete :return_to
-        return redir
-      end
-    end
-    super( resource ) 
-  end
+  # # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
+  # def stored_location_for(resource)
+  #   if current_user
+  #     # flash[:notice] = "You. Are. Signed. UP!"
+  #     if params[:return_to]
+  #       return params[:return_to]
+  #     elsif cookies[:return_to]
+  #       redir = cookies[:return_to]
+  #       cookies.delete :return_to
+  #       return redir
+  #     end
+  #   end
+  #   super( resource ) 
+  # end
   
   # IF a user has taken tests but wasn't logged in, they'll be in the session. Check for those and persist them if they're there.
   def save_take_and_set_flash(user)
