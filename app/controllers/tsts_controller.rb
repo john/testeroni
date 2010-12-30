@@ -52,7 +52,6 @@ class TstsController < ApplicationController
     @test = Tst.new(params[:tst])
     @test.status = Tst::ACTIVE
     @test.user = current_user
-    @test.username = current_user.username
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
     
     if @test.video_url

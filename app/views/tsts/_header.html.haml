@@ -1,7 +1,7 @@
 %div
   - one_line do
     ="Created #{time_ago_in_words(@test.created_at)} ago by"
-    =link_to(@test.username, people_path(@test.username))
+    =profile_link(@test.user)
     , taken #{pluralize(@test.takes.size, 'time')}
     -if @test.takes.size > 0
       =", average score "

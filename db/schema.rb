@@ -10,19 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101113173054) do
-
-  create_table "authentications", :force => true do |t|
-    t.string   "provider"
-    t.integer  "user_id"
-    t.string   "uid"
-    t.integer  "status",     :limit => 3
-    t.string   "token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "authentications", ["user_id"], :name => "index_authentications_on_user_id"
+ActiveRecord::Schema.define(:version => 20101228225343) do
 
   create_table "choices", :force => true do |t|
     t.integer  "question_id"
@@ -142,7 +130,6 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
 
   create_table "tsts", :force => true do |t|
     t.integer  "user_id"
-    t.string   "username"
     t.string   "name"
     t.string   "description"
     t.integer  "status",       :limit => 1
@@ -156,13 +143,18 @@ ActiveRecord::Schema.define(:version => 20101113173054) do
   add_index "tsts", ["user_id"], :name => "index_tsts_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "username"
+    t.integer  "auth_service"
+    t.string   "auth_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "display_name"
+    t.integer  "utc_offset"
+    t.string   "lang"
     t.boolean  "email_list"
     t.integer  "status",               :limit => 3
     t.string   "email",                               :default => "", :null => false
     t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
-    t.string   "remember_token"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                       :default => 0
     t.datetime "current_sign_in_at"

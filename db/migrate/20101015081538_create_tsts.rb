@@ -2,7 +2,6 @@ class CreateTsts < ActiveRecord::Migration
   def self.up
     create_table :tsts do |t|
       t.integer :user_id
-      t.string :username
       t.string :name
       t.string :description
       t.integer :status, :limit => 1

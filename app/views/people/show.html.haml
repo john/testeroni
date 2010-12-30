@@ -1,13 +1,11 @@
--#%h6= current_user.authentications.inspect
-
 %h1
   -if @owner
     Hi,
-  = @person.username
+  = @person.display_name
 
 %h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
 
-%p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.username}:
+%p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.display_name}:
 
 -if @person.tsts.blank?
   %p
@@ -30,7 +28,7 @@
             =link_to 'delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.'
             ]
 
-%p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.username}:
+%p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.display_name}:
 
 -if @person.takes.blank?
   %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}, if you want to try some.
@@ -49,6 +47,6 @@
             =link_to('overall results', test_results_url(@test.id, @test.to_param))
             ]
             
-%p{:style => 'font-style:italic;'}tests created by #{@person.username}'s friends:
+%p{:style => 'font-style:italic;'}tests created by #{@person.display_name}'s friends:
 
-%p{:style => 'font-style:italic;'}tests taken by #{@person.username}'s friends:
+%p{:style => 'font-style:italic;'}tests taken by #{@person.display_name}'s friends:

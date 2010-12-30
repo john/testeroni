@@ -15,5 +15,11 @@ class HomeController < ApplicationController
   def test
     render :layout => false
   end
+  
+  # hide the cross-site, top-of-page promo
+  def hide_promo
+    session[:promo][:dismissed_at] = DateTime.now if session[:promo]
+    render :nothing => true
+  end
 
 end

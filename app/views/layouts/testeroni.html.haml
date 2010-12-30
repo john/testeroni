@@ -50,7 +50,7 @@
         .right
           .user
             -if user_signed_in?
-              hello #{link_to current_user.username, people_path(url_escape(current_user.username))}
+              hello #{link_to current_user.display_name, person_with_name_path(current_user.id, current_user.slugged_display_name)}
               |
               #{link_to 'logout', destroy_user_session_path}
             -else
@@ -97,19 +97,20 @@
           %p{:style => 'padding:0 0 20px 0;'}
             Already have an account?
             = link_to('Log in', new_user_session_path)
-          %h2 Create an account with Facebook or Twitter
-          = render(:partial => 'authentications/services', :locals => {:redirect_to => new_test_path})
+          %h3 Create an account
+          = render(:partial => 'registrations/services', :locals => {:redirect_to => new_test_path})
+          
           .clearfix
-          %h3>
-            or
+          %div{:style => 'padding-top:20px;', :class => 'show_twitter'}>
+            don't have a facebook or twitter account?
             %a#use_email{:href =>"#"}use your email
         .account{:style => 'display:none;'}
           %h4 Create an account
           = form_for(@user, :url => registration_path(@user)) do |f|
             -#= devise_error_messages!
-            %input#return_to{:type => 'hidden', :name => 'return_to', :value => ''}/
-            %p= f.label :username
-            = f.text_field :username
+            -#%input#return_to{:type => 'hidden', :name => 'return_to', :value => ''}/
+            -#%p= f.label :username
+            -#= f.text_field :username
             %p= f.label :email
             = f.text_field :email
             %p= f.label :password

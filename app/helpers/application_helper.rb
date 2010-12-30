@@ -8,5 +8,8 @@ module ApplicationHelper
     haml_concat capture_haml(&block).gsub("\n,", ',').gsub('\\n,', "\n,")
   end
   
+  def profile_link(user)
+    link_to(user.display_name, person_with_name_path(user.id, user.slugged_display_name))
+  end
   
 end

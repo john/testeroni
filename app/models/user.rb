@@ -1,36 +1,63 @@
 # coding: utf-8
 
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-         # , :omniauthable # for omniauth (twitter, facebook) support
-         # https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
+  devise :database_authenticatable, :registerable, :token_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+  
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :auth_id, :first_name, :last_name, :display_name, :timezone, :email_list
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me,
-                  :username, :display_name, :email_list
-  
-  has_friendly_id :username, :use_slug => true
-  
-  has_many :authentications
   has_many :tsts
   has_many :questions
   has_many :responses
   has_many :takes
   
-  validates :username, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /[A-Za-z0-9\-_]+/}
+  FACEBOOK = 0
+  TWITTER = 1
+  TSTRNI = 2
   
-  def facebook_token
-    @token = nil
-    authentications.each do |a|
-      if a.provider == 'facebook'
-        @token = a.token
-        break
-      end
+  # validates :username, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /[A-Za-z0-9\-_]+/}
+  
+  def slugged_display_name
+    display_name.gsub(' ', '-').delete("?/#")
+  end
+  
+  # from: https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
+    data = access_token['extra']['user_hash']
+    
+    if user = User.find_by_email(data["email"])
+      user
+    else # Create an user with a stub password. 
+      User.create!( :email => data['email'],
+                    :auth_service => User::FACEBOOK,
+                    :auth_id => data['id'],
+                    :first_name => data['first_name'],
+                    :last_name => data['last_name'],
+                    :display_name => data['name'],
+                    :utc_offset => data['timezone'].to_i * 60 * 60,
+                    :lang => data['locale'],
+                    :password => Devise.friendly_token[0,20]) 
     end
-    @token
+  end
+  
+  def self.find_for_twitter_oauth(access_token, signed_in_resource=nil, email)
+    data = access_token['extra']['user_hash']
+    
+    # available:
+    # "name"=>"John McGrath" (use for :display_name)
+    # "utc_offset"=>-18000 (use for :timezone)
+    # "screen_name"=>"Wordie" (use for :auth_id)
+    
+    if user = User.find_by_email(data["email"])
+      user
+    else # Create an user with a stub password. 
+      User.create!( :email => email,
+                    :auth_service => User::TWITTER,
+                    :auth_id => data['screen_name'],
+                    :display_name => data['name'],
+                    :utc_offset => data['timezone'].to_i,
+                    :lang => data['lang'],
+                    :password => Devise.friendly_token[0,20])
+    end
   end
   
   # to allow people to log in with either email or username. see:
@@ -40,16 +67,13 @@ class User < ActiveRecord::Base
     self.where("email = ?", conditions[:email]).limit(1).first
   end
   
-  def apply_omniauth(omniauth)
-    if email.blank? && omniauth.has_key?('extra') && omniauth['extra'].has_key?('user_hash')
-      self.email = omniauth['extra']['user_hash']['email']
+  # from: https://github.com/plataformatec/devise/wiki/OmniAuth:-Overview
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["user_hash"]
+        user.email = data["email"]
+      end
     end
-    
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => omniauth['credentials']['token'])
   end
   
-  def password_required?
-    (authentications.empty? || !password.blank?) && super
-  end
-
 end

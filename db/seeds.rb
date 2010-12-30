@@ -6,8 +6,8 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-@user = User.create(:username => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@testeroni.com')
-@user2 = User.create(:username => 'resteroni', :password => 'noodle', :password_confirmation => 'noodle', :email => 'john@resteroni.com')
+@user = User.create(:display_name => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@testeroni.com')
+@user2 = User.create(:display_name => 'resteroni', :password => 'noodle', :password_confirmation => 'noodle', :email => 'john@resteroni.com')
 
 # @test = Tst.create(:name => 'How Much Do You Really Know About McDonalds?',
 #                     :user_id => @user2.id,
@@ -19,7 +19,6 @@
 @test = Tst.create(:name => 'US State Capitals',
                     :description => "Test your knowledge of US geography with this test about state capitals.",
                     :user_id => @user.id,
-                    :username => @user.username,
                     :contributors => Tst::ANYONE,
                     :status => Tst::ACTIVE)
 # add questions, choices, responses
@@ -79,7 +78,7 @@
 
 
 
-@test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :username => @user.username, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
+@test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
 
 # add questions, choices, responses
 @q = Question.create( :name => "Who is the protagonist of 'Hamlet'?",
@@ -91,6 +90,6 @@
 @test.published_at = Time.now
 @test.save
 
-@test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :username => @user.username, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
 @test.published_at = Time.now
 @test.save

@@ -1,0 +1,24 @@
+%div
+
+  %div{:style => 'width:184px; float:left; text-align:left;', :class => 'show_twitter'}
+    =link_to(image_tag("http://developers.facebook.com/images/devsite/login-button.png", :size => "154x22", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook), :class => 'auth')
+  
+  %div{:style => 'width:140px; float:left; text-align:left;', :class => 'show_twitter'}
+    =link_to_function('or login with Twitter', "$('.show_twitter').toggle();")
+
+
+  %div{:style => 'float:left; text-align:left; display:none;', :class => 'show_twitter'}
+    %div
+      %div enter your email then click 'login with twitter' to finish
+      %input{:type => 'text', :name => 'email', :id => 'email', :value => 'your email', :onclick => "this.value=''", :style => 'width:100px; height:15px;'}
+      
+      %div{:style => 'padding-top:20px;', :class => 'twitter'}
+        =link_to('login with twitter', user_omniauth_authorize_path(:twitter))
+    
+:javascript
+  $(document).ready(function() {
+    $('.twitter').click(function() {
+      document.cookie='email=' + $('#email').val() + '; path=/\;';
+    });
+  });
+  

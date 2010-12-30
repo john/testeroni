@@ -8,7 +8,8 @@ gem 'hpricot'
 gem 'haml'
 gem 'flutie'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
-gem 'omniauth' #, :git => 'https://github.com/intridea/omniauth.git'
+# gem "devise", "1.2.rc"
+gem "oa-oauth", :require => "omniauth/oauth"
 gem 'koala'
 gem 'friendly_id'
 gem 'acts-as-taggable-on'
@@ -23,13 +24,5 @@ group :development, :test do
   gem 'ruby_parser'
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem 'rails3-generators'
-  
   gem "shoulda"
-  
-  # gem "rspec"
-  # gem "rspec-rails"
-  # # gem "capybara"
-  # gem "cucumber"
-  # gem "cucumber-rails"
-  # # gem "webrat"
 end
