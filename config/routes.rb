@@ -8,23 +8,14 @@ Testeroni::Application.routes.draw do
   
   root :to => "home#index"
   
-  # # devise_for :users
-  # devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks", :registrations => 'registrations'}
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
-  devise_scope :user do
-    get "sign_in", :to => "devise/sessions#new"
-    get "sign_up", :to => "registrations#new"
-  end
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :registrations => 'registrations' }
+  # devise_for :users, :controllers => {:omniauth_callbacks => "users/omniauth_callbacks"}
   
-  # from omniauth. this creates /auth/twitter and /auth/facebook, based on
-  # contents of /config/initializers/omniauth
-  # resources :authentications
+  # devise_scope :user do
+  #   get "sign_in", :to => "devise/sessions#new"
+  #   get "sign_up", :to => "registrations#new"
+  # end
   
-  # match 'auth/:provider/callback' => 'authentications#create', :as => 'auth_callback'
-  # match 'auth/failure' => 'authentications#failure', :as => 'auth_failure'
-  
-  # instead of constraints, consider allowing . across the board (see top of file)
-  # match 'people', :to => "people#show", :as => 'user_root'
   match 'people/:id', :to => 'people#show', :as => 'person'
   match 'people/:id/:display_name', :to => 'people#show', :as => 'person_with_name' #, :constraints => {:username => /[^\/]+/}
   

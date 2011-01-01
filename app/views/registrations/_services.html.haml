@@ -1,19 +1,21 @@
 %div
 
-  %div{:style => 'width:184px; float:left; text-align:left;', :class => 'show_twitter'}
-    =link_to(image_tag("http://developers.facebook.com/images/devsite/login-button.png", :size => "154x22", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook), :class => 'auth')
+  .show_twitter{:style => 'width:210px; float:left; text-align:left;'}
+    =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
   
-  %div{:style => 'width:140px; float:left; text-align:left;', :class => 'show_twitter'}
-    =link_to_function('or login with Twitter', "$('.show_twitter').toggle();")
-
-
-  %div{:style => 'float:left; text-align:left; display:none;', :class => 'show_twitter'}
-    %div
-      %div enter your email then click 'login with twitter' to finish
-      %input{:type => 'text', :name => 'email', :id => 'email', :value => 'your email', :onclick => "this.value=''", :style => 'width:100px; height:15px;'}
+  .show_twitter{:style => 'width:140px; float:left; text-align:left;'}
+    =link_to_function('or sign up using Twitter', "$('.show_twitter').toggle();")
+    
+  .show_twitter{:style => 'display:none;'}
+    %div{:style => 'padding:0 0 4px 0;'}
+      Enter your email then click
+      %strong Sign in with Twitter
       
-      %div{:style => 'padding-top:20px;', :class => 'twitter'}
-        =link_to('login with twitter', user_omniauth_authorize_path(:twitter))
+    %input#email{:type => 'text', :name => 'email', :value => 'your email', :onclick => "this.value=''; $('#email').css('color','#000');", :style => 'width:150px; height:12px; color:#777'}
+      
+    .twitter{:style => 'padding-top:20px;'}
+      =link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter))
+      %a{:onclick => "$('.show_twitter').toggle();", :style => 'font-size:.9em;'} cancel
     
 :javascript
   $(document).ready(function() {

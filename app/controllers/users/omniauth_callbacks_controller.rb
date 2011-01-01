@@ -12,9 +12,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
   
-  
-  
-  
   def facebook
     @user = User.find_for_facebook_oauth(env["omniauth.auth"], current_user)
 
@@ -27,6 +24,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
   
-  
+  protected
+  def after_sign_up_path_for(resource)
+    logger.debug "GOT TO after_sign_up_path_for in application_controller"
+    'http://www.wordnik.com'
+  end
   
 end

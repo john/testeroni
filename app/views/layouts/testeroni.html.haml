@@ -94,7 +94,7 @@
         %div.dismiss
           %a.close [x]
         .account
-          %p{:style => 'padding:0 0 20px 0;'}
+          %p
             Already have an account?
             = link_to('Log in', new_user_session_path)
           %h3 Create an account
@@ -102,26 +102,32 @@
           
           .clearfix
           %div{:style => 'padding-top:20px;', :class => 'show_twitter'}>
-            don't have a facebook or twitter account?
-            %a#use_email{:href =>"#"}use your email
+            Don't have a Facebook or Twitter account?
+            %a#use_email{:href =>"#"} Use your email
         .account{:style => 'display:none;'}
           %h4 Create an account
           = form_for(@user, :url => registration_path(@user)) do |f|
             -#= devise_error_messages!
-            -#%input#return_to{:type => 'hidden', :name => 'return_to', :value => ''}/
-            -#%p= f.label :username
-            -#= f.text_field :username
-            %p= f.label :email
+            = f.label :email
             = f.text_field :email
-            %p= f.label :password
+            
+            = f.label :display_name, "Display name (Best to use your real name)"
+            = f.text_field :display_name
+            
+            = f.label :password
             = f.password_field :password
-            %p{:style => 'padding-top:8px;'}
-              #{f.check_box :email_list, {}, 'true', 'false'} Get email updates from Testeroni
-            .submit
-              = f.submit "Sign up", :class => 'btn'
-              &nbsp;
-              = link_to_function('Cancel', "$('.account').toggle()")
-
+            
+            %div
+              %div{:style => 'float:right; padding-top:15px;'}
+                = link_to_function('Cancel', "$('.account').toggle()")
+              .submit
+                = f.submit "Sign up", :class => 'btn'
+            
+                -#{f.check_box :email_list, {}, 'true', 'false'} Get email updates from Testeroni
+        .caption{:style => 'padding-top:25px;'}
+          By creating an account on Testeroni you are indicating that you
+          %br have read and agree to the
+          =link_to('Terms of Service', terms_path)
     =javascript_include_tag('rails')
     =javascript_include_tag 'jquery.lightbox_me.js'
     =javascript_include_tag('jquery.ba-bbq.min.js')

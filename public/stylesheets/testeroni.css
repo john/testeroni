@@ -170,7 +170,7 @@ textarea {
 
 /**************** promo bar ***********************/
 #promo {
-  background: #ffcc33;
+  background: #ccffff;
   color: #514721;
   opacity: .70;
   filter: alpha(opacity=70);
@@ -395,6 +395,12 @@ textarea {
   line-height: inherit;
   height: 9px;
   vertical-align: middle; }
+
+.caption {
+  font-size: 11px; }
+
+.gray {
+  color: #999; }
 
 .green.button, .green.button:visited {
   background-color: #99cc33;

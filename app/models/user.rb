@@ -4,7 +4,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :token_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   
   attr_accessible :email, :password, :password_confirmation, :remember_me, :auth_id, :first_name, :last_name, :display_name, :timezone, :email_list
-
+  
+  validates :display_name, :presence => true
+  # validates :email, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/}
+  
   has_many :tsts
   has_many :questions
   has_many :responses
@@ -13,8 +16,6 @@ class User < ActiveRecord::Base
   FACEBOOK = 0
   TWITTER = 1
   TSTRNI = 2
-  
-  # validates :username, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /[A-Za-z0-9\-_]+/}
   
   def slugged_display_name
     display_name.gsub(' ', '-').delete("?/#")

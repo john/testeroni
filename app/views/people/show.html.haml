@@ -42,7 +42,8 @@
           &nbsp;
           %span
             [
-            =link_to('your results', individual_test_results_url(@test.id, @test.to_param, current_user.username, t.id))
+            -#=link_to('your results', individual_test_results_url(@test.id, @test.to_param, current_user.username, t.id))
+            =link_to('your results')
             |
             =link_to('overall results', test_results_url(@test.id, @test.to_param))
             ]

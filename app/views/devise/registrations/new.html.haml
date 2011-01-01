@@ -28,13 +28,13 @@
       - else
         = f.hidden_field :email
     - else
-      = f.label :username
-      = f.text_field :username
+      = f.label :display_name
+      = f.text_field :display_name
       
       = f.label :email
       = f.email_field :email
 
-  - if @user.password_required?
+  -# if @user.password_required?
     %p
       = f.label :password
       = f.password_field :password

@@ -61,12 +61,10 @@ class Tst < ActiveRecord::Base
       if @responses.size == 0
         0
       else
-        logger.debug "HERE------------"
         @correct_responses = 0
         @responses.each do |r|
           @correct_responses += 1 if r.correct?
         end
-        logger.debug "@correct_responses: #{@correct_responses}"
         (((@correct_responses.to_f/@responses.size.to_f)*100)+0.5).to_i
       end
     # end
