@@ -21,6 +21,7 @@
                     :user_id => @user.id,
                     :contributors => Tst::ANYONE,
                     :status => Tst::ACTIVE)
+@test.tag_list = "U.S., geography, states, capitals"
 # add questions, choices, responses
 @q = Question.create( :name => "What is the capital of Alabama?",
                       :kind => Question::MULTIPLECHOICE,
@@ -76,9 +77,8 @@
 @test.published_at = Time.now
 @test.save
 
-
-
 @test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
+@test.tag_list = "Shakespeare, literature, english, drama"
 
 # add questions, choices, responses
 @q = Question.create( :name => "Who is the protagonist of 'Hamlet'?",
@@ -91,5 +91,29 @@
 @test.save
 
 @test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "Simpsons, Matt Groening, animation, tv, pop culture"
+@test.published_at = Time.now
+@test.save
+
+@test = Tst.create(:name => 'U.S. Presidents', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "United States, history, presidents"
+@test.published_at = Time.now
+@test.save
+
+@test = Tst.create(:name => 'Shatner', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "Shatner, pop culture"
+@test.published_at = Time.now
+@test.save
+
+@test = Tst.create(:name => 'Nobel Prize winners', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "Nobel, prizes, history"
+@test.published_at = Time.now
+@test.save
+
+@test = Tst.create(:name => 'Oscar winners', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "Oscars, prizes, movies, pop culture, history"
+@test.published_at = Time.now
+@test.save
+
 @test.published_at = Time.now
 @test.save

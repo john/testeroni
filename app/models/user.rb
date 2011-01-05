@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
     # "utc_offset"=>-18000 (use for :timezone)
     # "screen_name"=>"Wordie" (use for :auth_id)
     
-    if user = User.find_by_email(data["email"])
+    if user = User.find_by_email(email)
       user
     else # Create an user with a stub password. 
       User.create!( :email => email,

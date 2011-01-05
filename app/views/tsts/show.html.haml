@@ -35,8 +35,8 @@
       -else
         %div
           =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
-          =check_box_tag(:randomize)
           -if @test.questions.size > 1
+            =check_box_tag(:randomize)
             =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
           
           -#  

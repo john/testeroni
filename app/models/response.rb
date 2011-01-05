@@ -8,7 +8,10 @@ class Response < ActiveRecord::Base
   belongs_to :choice
   belongs_to :take
   
-  validates :user_id, :presence => true, :numericality => true
+  attr_accessible :id, :tst_id, :question_id, :choice_id, :answer, :correct, :name
+  
+  # record responses from anonymous takers
+  # validates :user_id, :presence => true, :numericality => true
   validates :tst_id, :presence => true, :numericality => true
   validates :question_id, :presence => true, :numericality => true
   

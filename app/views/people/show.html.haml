@@ -18,20 +18,26 @@
       %li
         =link_to t.name, test_path(t.id, t.to_param)
         -if t.user == current_user
-          &nbsp;
           %span
+            -unless t.published?
+              %em<
+                (unpublished)
+            &nbsp;
             [
-            =link_to 'results', test_results_path(t.id, t.to_param)
+            -unless t.published?
+              =link_to('publish', publish_test_path(t))
+              |
+            =link_to('results', test_results_path(t.id, t.to_param))
             |
-            =link_to 'edit', edit_test_path(t)
+            =link_to('edit', edit_test_path(t))
             |
-            =link_to 'delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.'
+            =link_to('delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.')
             ]
 
 %p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.display_name}:
 
 -if @person.takes.blank?
-  %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}, if you want to try some.
+  %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
 -else
   %ul.bulletless
     -@person.takes.each do |t|

@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   
   # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
   def stored_location_for(resource)
-    logger.debug "IN STORED_LOCATION_FOR!"
     if current_user
       logger.debug "FOUND Current user"
       if params[:return_to]
@@ -46,9 +45,11 @@ class ApplicationController < ActionController::Base
   end
   
   def set_return_to
-    logger.debug "set_return_to request.path: #{request.path}"
-    unless request.referrer.include?('auth')
-      session[:return_to] = request.referrer
+    unless request.referrer.include?('auth') || request.path.include?('questions')
+      logger.debug "set_return_to request.path: #{request.path}"
+      session[:return_to] = request.path
+    else
+      logger.debug "DID NOT set_return_to request.path: #{request.path}"
     end
   end
   
@@ -87,7 +88,9 @@ class ApplicationController < ActionController::Base
   
   # IF a user has taken tests but wasn't logged in, they'll be in the session. Check for those and persist them if they're there.
   def save_take_and_set_flash(user)
+    logger.debug "INSIDE save_take_and_set_flash"
     if session[:take]
+      logger.debug "ABOUT to do: Take.save_from_session_for_user(session, user)"
       Take.save_from_session_for_user(session, user)
       flash[:notice] = "Signed in successfully and saved the results of your last test."
     else

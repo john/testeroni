@@ -14,7 +14,7 @@ class Take < ActiveRecord::Base
   validates :tst_id, :presence => true, :numericality => true
   
   def sessionize
-    responses_hash = responses.map{|r| {:q => r.question_id, :c => r.choice_id, :a => r.answer, :cr => r.correct, :n => r.name}}
+    responses_hash = responses.map{|r| {:id => r.id, :q => r.question_id, :c => r.choice_id, :a => r.answer, :cr => r.correct, :n => r.name}}
     {:ta => id, :u => user_id, :te => tst_id, :s => started_at.to_i, :f => finished_at.to_i, :a => questions_answered, :c => questions_correct, :r => responses_hash, :qo => question_order}
   end
   
@@ -27,7 +27,7 @@ class Take < ActiveRecord::Base
                       :questions_correct => tk[:c],
                       :question_order => tk[:qo])
     take.id = tk[:ta] if tk.has_key?(:ta)
-    responses = tk[:r].map {|r| Response.new(:tst_id => tk[:t], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
+    responses = tk[:r].map {|r| Response.new(:id => r[:id], :tst_id => tk[:te], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
     take.responses = responses
     take
   end
@@ -45,10 +45,15 @@ class Take < ActiveRecord::Base
   # Used when someone has taken a test when not logged in, and they then either signup or log in, and the test tey just took needs to be persisted
   def self.save_from_session_for_user(session, user)
     @take = Take.desessionize(session)
+    
+    #logger.debug "immediately desessionaized take: #{@take.inspect}"
+    
     @take.user_id = user.id
     @take.created_at = Time.now
     @take.updated_at = Time.now
     @take.finished_at = Time.now
+    
+    logger.debug "INSIDE save_from_session_for_user, @take is: #{@take.inspect}"
     
     # prolly a better way to do this, but need to detach the responses so that validations pass when you save the take
     @responses = []
@@ -57,9 +62,15 @@ class Take < ActiveRecord::Base
     @take.save
     
     @responses.each do |r|
-      r.user_id = @take.user_id
-      r.take_id = @take.id
-      r.save
+      logger.debug "r: #{r.inspect}"
+      logger.debug "r.created_at: #{r.created_at}"
+      updated_response = Response.find(r.id)
+      logger.debug "updated response: #{updated_response.inspect}"
+      
+      updated_response.user_id = @take.user_id
+      updated_response.take_id = @take.id
+      logger.debug "IN TAKE, about to save response: #{updated_response.inspect}"
+      updated_response.save
     end
     session[:take] = nil
     @take

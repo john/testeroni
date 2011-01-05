@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# from here: https://github.com/mbleigh/acts-as-taggable-on
 class TagsController < ApplicationController
   
   def index

@@ -10,11 +10,24 @@
     
 %div{:style => 'padding:0 0 10px 0;'}
   %a #{pluralize(@test.questions.size, 'question')}
-  |
+  &#183;
   %a #{pluralize(@test.responses.size, 'response')}
-  |
+  &#183;
   =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
- 
+  &#183;
+  =link_to_function('share', "$('#share_tools').toggle()")
+  &#183;
+  =link_to_function('embed', "$('#embed_header').toggle()")
+  
+  %div{:id => 'share_tools', :style => 'display:none;'}
+    %label{:for => 'share_link'} Link to this test
+    %input{:id => 'share_link', :type => 'text', :value => test_url(@test.id, @test.to_param)}
+    
+    %p fb like, tweet, txt, mail, etc
+    
+  %div{:id => 'embed_header', :style => 'display:none;'}
+    %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
+    .caption After making your selection, copy and paste the embed code above. The code changes based on your selection.
 %h1
   -if params[:a]
     =@test.name

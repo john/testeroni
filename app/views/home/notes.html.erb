@@ -17,25 +17,21 @@ li {margin:15px;}
 <p>- David Brooks, <em>Ben Franklin’s Nation</em>, <a rhef="http://www.nytimes.com/2010/12/14/opinion/14brooks.html">http://www.nytimes.com/2010/12/14/opinion/14brooks.html</a>
 
 <ol>
-  <li>at the end of test, screen to link or embed the test, just like youtube</li>
-  <li>When you finish a test, it should give you a link and a prompt to take another similar one, like the way nytimes stories slide out a promo for the next story in that section</li>
-  <li>Should responses be recorded regardless of whether or not they're logged in? if you don't, they don't contribute to stats.</li>
+  <li>Social test creation: anyone registered user can add questions.</li><li>Need to allow collaborative tests that get added to over time. How to deal with grades and history for tests that change often?</li>
   
-  <li>Need to allow collaborative tests that get added to over time. How to deal with grades and history for tests that change often?</li>
+  <li>Surveys as well as tests. A survey is just a test with no correct answer.</li>
   
-  <li>Put a 'how to' video on the unloggedin homepage. Try using http://www.screentoaster.com/, http://www.techsmith.com/jing/, or http://screenr.com/
-  <li>"  I started using camstudio and a program called
-    super, both freeware.  Camstudio is great but the vids it creates can
-    be huge, so super does a great job of converting to a smaller file.
-
-    After vids are created I'm using vimeo since it allows password
-    protected videos."</li>
-    <li>Check out DIMDIM. . . they have a super simple and free solution that
-    I have been using for years.</li>
+  <li>Follow people and tests. Create 2 feeds: per-user activity, and an aggregated feed *for* each user (as opposed to their own activity) of what their contacts are doing.
+  
+  <li>When you finish a test it should give you a link and a prompt to take another similar one, like the way nytimes stories slide out a promo for the next story in that section</li>
+  
+  <li>Should responses be recorded regardless of whether or not they're logged in? If you don't, they don't contribute to stats.</li>
+  
+  <li>Migrate to Mongoid?</li>
+  
+  <li>Put a 'how to' video on the unloggedin homepage. Try using http://www.screentoaster.com/, http://www.techsmith.com/jing/, http://screenr.com/</li>
   <li>put results, or a mini-version of results, on last page of test:
   http://johneroni.testeroni.com:3000/tests/us-state-capitals/results/testeroni/7</li>
-  
-  <li>When possible, make signup optional. allow anonymous comments (but moderate them). Allow anonymous test taking (but collect data and add to profile if they sign up in the same session).</li>
   
   <li>after creating a question, should get a better response. maybe go to the edit page?</li>
 
@@ -43,16 +39,10 @@ li {margin:15px;}
   
   <li><b>OPEN EVERYTHING</b>. Open book test, you can see the answers, you can see individual questions, everything is independently addressable (though connected). To start, make questions have their own urls (use the bbq jquery plugin if appropriate, same one you used for thesaurus comparisons)</li>
   
-  <li>A way to make tests out of Stack Overflow questions? Is their data available? That'd be awesome.</li>
-  
-  
-  <li>Comments on tests and questions, but how, given that both of those have taken and untaken states? Try to find a minimal wysiwyg editor this time too.</li>
-  <li>Start of test should show first question</li>
   <li>When editing questions, can I switch type, say MC to SA?</li>
   <li>Should be able to take tests without creating an account--especially for embedded tests. If you do, it should store results either in a cookie (might hit space issues), or in the session, and if you create an account, it should then populate your account with your earlier activity.</li>
   <li>Questions should be directly addressable, maybe? maybe not--how would you score a test that someone entered in the middle? Maybe tests are rolling--if you start on question 5, it goes to the end, then presents you with questions 1-4.</li>
   <li>Taking your own tests should probably be allowed, but those takes shouldn't count towards any of your stats, or the stats for the test.</li>
-  <li>Way to randomize the order of the questions (make 'question_order' an attribute of a Take?), and the order of the choices to multiple-choice questions (do in template).
   <li>When creating tests options to get: email notifications when people take it</li>
   <li>Invites should only be able to be sent out once, so need a way to monitor who has and has not been sent them. Easy way would be to only allow the sending of invites once, at the end of test creation. Could start there, but that'd be limiting. Could also disallow fb invites (that graph api isn't even done yet anyway) and focus on using plain ol' email at first. Could also just post newly created tests once, to your own mini-feed, rather than directly to all your friends.</li>
   <li>Need validation on /tests/foo/pubish page, so that you have to select people before it lets you invite anyone</li>
@@ -196,7 +186,18 @@ li {margin:15px;}
 Twitter: besteroni/columbia
 YouTube/Google: besteroni/kristy
 
+<h2>education sites</h2>
+http://openstudy.com/
+http://ocw.mit.edu/
+
+<h2>survey and quiz sites</h2>
+http://www.surveymonkey.com/
+http://polldaddy.com/
+
+http://quizlet.com/
+
 http://challenge.zoho.com/login.do
+
 http://www.zoho.com/challenge/quiz-maker.html
 http://www.proprofs.com/quiz-school/
 http://www.classmarker.com/

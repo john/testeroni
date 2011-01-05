@@ -54,9 +54,10 @@
               |
               #{link_to 'logout', destroy_user_session_path}
             -else
-              = link_to_function('Join Now.', "signupThenGoTo('')")
+              = link_to_function('Join Now.', "Tstrni.viewSignup()")
               &nbsp; Already a member?
-              = link_to('Log in', new_user_session_path)
+              -#= link_to('Log in', new_user_session_path)
+              = link_to_function('Log in', "Tstrni.viewLogin()")
           .search
             =form_tag(search_path) do
               %input{:type => 'text', :id => 'q', :name => 'q', :value => 'search tests', :onclick => "this.value=''; this.style.color='#000'"}
@@ -93,13 +94,26 @@
       #signup.roundborder{:style => 'display:none'}
         %div.dismiss
           %a.close [x]
-        .account
+        .account.login
           %p
             Already have an account?
-            = link_to('Log in', new_user_session_path)
+            -#= link_to('Log in', new_user_session_path)
+            = link_to_function('Log in', "$('.login').toggle()")
           %h3 Create an account
-          = render(:partial => 'registrations/services', :locals => {:redirect_to => new_test_path})
-          
+          %div
+            .show_twitter{:style => 'width:210px; float:left; text-align:left;'}
+              =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
+            .show_twitter{:style => 'width:140px; float:left; text-align:left;'}
+              =link_to_function('or sign up using Twitter', "$('.show_twitter').toggle()")
+            .show_twitter{:style => 'display:none;'}
+              %div{:style => 'padding:0 0 4px 0;'}
+                Enter your email then click
+                %strong Sign in with Twitter
+              %input#email{:type => 'text', :name => 'email', :value => 'your email', :onclick => "this.value=''; $('#email').css('color','#000');", :style => 'width:150px; height:12px; color:#777'}
+
+              .twitter{:style => 'padding-top:20px;'}
+                =link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter), :id => 'twitter-link')
+                %a{:onclick => "$('.show_twitter').toggle();", :style => 'font-size:.9em;'} cancel
           .clearfix
           %div{:style => 'padding-top:20px;', :class => 'show_twitter'}>
             Don't have a Facebook or Twitter account?
@@ -108,23 +122,41 @@
           %h4 Create an account
           = form_for(@user, :url => registration_path(@user)) do |f|
             -#= devise_error_messages!
-            = f.label :email
-            = f.text_field :email
-            
-            = f.label :display_name, "Display name (Best to use your real name)"
-            = f.text_field :display_name
-            
+            = f.label :display_name, "Full name (will appear on you public profile)"
+            = f.text_field :display_name, :style => 'width:80%;'
             = f.label :password
-            = f.password_field :password
-            
+            = f.password_field :password, :style => 'width:80%;'
+            = f.label :email
+            = f.text_field :email, :style => 'width:80%;'
             %div
               %div{:style => 'float:right; padding-top:15px;'}
                 = link_to_function('Cancel', "$('.account').toggle()")
               .submit
                 = f.submit "Sign up", :class => 'btn'
-            
                 -#{f.check_box :email_list, {}, 'true', 'false'} Get email updates from Testeroni
-        .caption{:style => 'padding-top:25px;'}
+        .login{:style => 'display:none;'}
+          %p
+            Haven't signed up yet?
+            = link_to_function('Create a new account', "$('.login').toggle()")
+          %h3 Log in
+          =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0 10px 0 0; margin:0;'), user_omniauth_authorize_path(:facebook))
+          =link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter))
+          
+          %div{:style => 'padding:15px 0 0 0;'} Or if you created your account directly on Testeroni, log in below:
+          = form_for(@user, :url => session_path(@user)) do |f|
+            = f.label :email, 'email'
+            = f.email_field(:email, :style => 'width:300px;')
+            = f.label :password
+            = f.password_field(:password, :style => 'width:300px;')
+            -#- if devise_mapping.rememberable?
+              %p
+                = f.check_box :remember_me
+                = f.label :remember_me, :style => 'display:inline;'
+            %p{:style => 'padding-bottom:15px;'}= f.submit "Sign in"
+
+          -#= render :partial => "devise/shared/links"
+          
+        .caption.login{:style => 'padding-top:25px;'}
           By creating an account on Testeroni you are indicating that you
           %br have read and agree to the
           =link_to('Terms of Service', terms_path)
@@ -143,27 +175,22 @@
         g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         s.parentNode.insertBefore(g, s);
       })(document, 'script');
-
-      function signupThenGoTo(url) {
-        // redirect only works for people using the traditional signup form.
-        // need something that works with auth services too -- session? cookie?
-        $('#return_to').val(url);
-        
-        $('#signup').lightbox_me({
-            centered: true,
-            overlaySpeed:200,
-            lightboxSpeed:200,
-            overlayDisappearSpeed:200,
-            onLoad: function() { 
-              $('#user_username').focus()
-            }
-          });
-        return false;
-      }
-
+      
       $(document).ready(function() {
+      
+        $('#twitter-link').click(function() {
+          var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+          if(reg.test($('#email').val()) == false) {
+            alert('please enter a valid email address.');
+            return false;
+          } else {
+            document.cookie='email=' + $('#email').val() + '; path=/\;';
+          }
+        });
+        
         $('#use_email').click(function() {
           $('.account').toggle();
           $('#user_username').focus();
         });
+        
       });
