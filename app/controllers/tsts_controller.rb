@@ -11,7 +11,8 @@ class TstsController < ApplicationController
   end
 
   def show
-    @test = Tst.load_active_by_id(params[:id])
+    # @test = Tst.load_active_by_id(params[:id])
+    @test = Tst.find(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
     @description = "'#{@test.name}' a test on Testeroni.com"
@@ -84,6 +85,24 @@ class TstsController < ApplicationController
     #   logger.debug "@graph: #{@graph.inspect}"
     #   @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
     # end
+  end
+  
+  def enable
+    @test = Tst.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
+    @test.status = Tst::ACTIVE
+    @test.save
+    redirect_to :back
+  end
+  
+  def disable
+    @test = Tst.find(params[:id])
+    redirect_to root_path and return unless user_signed_in? && @test.user == current_user
+    
+    @test.status = Tst::DISABLED
+    @test.save
+    redirect_to :back
   end
   
   def invite

@@ -26,16 +26,13 @@
     -@tests.each do |t|
       %li
         %h3
-
           =link_to(t.name, test_url(t.id, t.to_param))
           %span
             =link_to('take me!', test_url(t.id, t.to_param), :class => 'green button sm')
-
         %div
           ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}"
           -unless t.takes.blank?
             with an average grade of #{t.grade}
-          
         -unless t.tags.empty?
           %div
             tags:

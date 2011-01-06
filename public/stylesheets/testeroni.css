@@ -211,13 +211,20 @@ textarea {
   -webkit-border-radius: 5px; }
 
 /**************** id's and classes *****************/
+body {
+  padding-top: 0;
+  margin-top: 0; }
+
 #head-wrap {
   width: 100%;
-  border-bottom: 1px solid #ddd; }
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 1px solid #c2f3ff;
+  border-bottom: 1px solid #5C4033;
+  /*background-color:#ccffff;*/
+  background-color: #c2f3ff; }
 
 #header {
-  background-repeat: no-repeat;
-  background-position: 0 0;
   width: 970px;
   height: 40px;
   padding: 10px 15px 5px 15px;
@@ -233,7 +240,7 @@ textarea {
   padding-bottom: 6px; }
 
 #q {
-  width: 120px;
+  width: 200px;
   height: 10px;
   color: #ddd; }
 
@@ -402,9 +409,11 @@ textarea {
 .gray {
   color: #999; }
 
+/* original green: 99cc33 */
 .green.button, .green.button:visited {
-  background-color: #99cc33;
-  border: 1px solid #99cc33; }
+  background-color: #ffff99;
+  border: 1px solid #ffcc00;
+  color: #1A4882; }
 
 /*.green.button:visited {
   background-color: #99cc33;

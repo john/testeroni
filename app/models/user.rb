@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :questions
   has_many :responses
   has_many :takes
+  has_many :activities
   
   FACEBOOK = 0
   TWITTER = 1

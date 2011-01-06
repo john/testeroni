@@ -2,10 +2,10 @@
 
 one:
   id: 1
-  username: john
+  display_name: john
   email: john@testeroni.com
 
 two:
   id: 2
-  username: doug
+  display_name: doug
   email: doug@testeroni.com

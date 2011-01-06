@@ -26,6 +26,8 @@ Testeroni::Application.routes.draw do
   match 'tests/new', :to => 'tsts#new', :as => 'new_test'
   match 'tests/:id/edit', :to => 'tsts#edit', :as => 'edit_test'
   match 'tests/:id/publish', :to => 'tsts#publish', :as => 'publish_test'
+  match 'tests/:id/enable', :to => 'tsts#enable', :as => 'enable_test'
+  match 'tests/:id/disable', :to => 'tsts#disable', :as => 'disable_test'
   match 'tests/:id/invite', :to => 'tsts#invite', :as => 'invite_test'
   match 'tests/:id/:permalink', :to => 'tsts#show', :as => 'test', :via => :get
   match 'tests/:id/:permalink', :to => 'tsts#destroy', :as => 'test', :via => :delete

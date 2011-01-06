@@ -6,9 +6,7 @@ class Tst < ActiveRecord::Base
   JUSTME = 1
   
   ACTIVE = 0
-  CLOSED = 1
-  ARCHIVED = 2
-  SUSPENDED = 3
+  DISABLED = 1
   
   # https://github.com/elight/acts_as_commentable_with_threading
   acts_as_commentable
@@ -27,13 +25,17 @@ class Tst < ActiveRecord::Base
   validates :user_id, :presence => true, :numericality => true
   # validation to make sure tests don't have more than 100 questions?
   
-  scope :active, where(['status=?', Tst::ACTIVE])
-  # http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/
-  # "Without the lambda the time that would be used in the query logic would be the time that the class was first evaluated, not the scope itself."
-  scope :published, lambda {
-    where("tsts.published_at IS NOT NULL AND tsts.published_at <= ?", Time.zone.now)
-  }
-  scope :recently_published, active.published.order("tsts.published_at DESC")
+  # scope :active, where(['status=?', Tst::ACTIVE])
+  # 
+  # # scope :without_feed, joins('left outer join authors_feeds on authors.id=authors_feeds.author_id').where('authors_feeds.feed_id is null')
+  # scope :non_empty, joins(:questions).where(["questions.id = id")
+  # 
+  # # http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/
+  # # "Without the lambda the time that would be used in the query logic would be the time that the class was first evaluated, not the scope itself."
+  # scope :published, lambda {
+  #   where("tsts.published_at IS NOT NULL AND tsts.published_at <= ?", Time.zone.now)
+  # }
+  # scope :recently_published, active.non_empty.published.order("tsts.published_at DESC")
   
   def self.load_active_by_id(id)
     Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? AND STATUS=? LIMIT 1', id, Tst::ACTIVE])[0]
@@ -41,6 +43,14 @@ class Tst < ActiveRecord::Base
   
   def owned_by?(some_user)
     (user_id == some_user.id)
+  end
+  
+  def active?
+    (status == Tst::ACTIVE) ? true : false
+  end
+  
+  def inactive?
+    (status == Tst::DISABLED) ? true : false
   end
   
   def published?

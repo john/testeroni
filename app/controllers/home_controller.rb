@@ -6,7 +6,12 @@ class HomeController < ApplicationController
     @home = true
     @title = "Testeroni - Make and take tests and surveys"
     @description = "Testeroni lets you make surveys and quizzes from YouTube videos."
-    @tests = Tst.recently_published
+    # @tests = Tst.recently_published
+    @tests = Tst.find_by_sql(["
+      SELECT DISTINCT t.* from tsts t, questions q
+      WHERE q.tst_id = t.id
+      AND t.published_at IS NOT NULL
+      AND t.published_at <= ? ", Time.zone.now])
   end
   
   def notes

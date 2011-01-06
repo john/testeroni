@@ -3,14 +3,28 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  # from: https://github.com/plataformatec/devise/wiki/How-To:-Redirect-to-a-specific-page-on-successful-sign-in
-  # def after_sign_in_path_for(resource_or_scope)
-  #   if resource_or_scope.is_a?(User)
-  #     person_with_name_path(resource.id, resource.slugged_display_name)
-  #   else
-  #     super
-  #   end
-  # end
+  layout 'testeroni'
+  
+  before_filter :setup_user
+  before_filter :set_return_to, :except => ['sign_in']
+  before_filter :promo
+  before_filter :log_session
+  
+  # application_controller before_filter
+  def setup_user
+    #for hidden signup form
+    @user = User.new(:email_list => true) unless user_signed_in?
+  end
+  
+  # application_controller before_filter
+  def set_return_to
+    unless request.referrer.include?('auth') || request.path.include?('questions')
+      logger.debug "set_return_to request.path: #{request.path}"
+      session[:return_to] = request.path
+    else
+      logger.debug "DID NOT set_return_to request.path: #{request.path}"
+    end
+  end
   
   # adapted from: http://groups.google.com/group/plataformatec-devise/tree/browse_frm/month/2010-06?_done=/group/plataformatec-devise/browse_frm/month/2010-06%3F&
   def stored_location_for(resource)
@@ -31,26 +45,18 @@ class ApplicationController < ActionController::Base
     super( resource )
   end
   
-  layout 'testeroni'
+  # from: https://github.com/plataformatec/devise/wiki/How-To:-Redirect-to-a-specific-page-on-successful-sign-in
+  # def after_sign_in_path_for(resource_or_scope)
+  #   if resource_or_scope.is_a?(User)
+  #     person_with_name_path(resource.id, resource.slugged_display_name)
+  #   else
+  #     super
+  #   end
+  # end
   
-  
-  before_filter :setup_user
-  before_filter :set_return_to, :except => ['sign_in']
-  before_filter :promo
-  before_filter :log_session
-  
-  def setup_user
-    #for hidden signup form
-    @user = User.new(:email_list => true) unless user_signed_in?
-  end
-  
-  def set_return_to
-    unless request.referrer.include?('auth') || request.path.include?('questions')
-      logger.debug "set_return_to request.path: #{request.path}"
-      session[:return_to] = request.path
-    else
-      logger.debug "DID NOT set_return_to request.path: #{request.path}"
-    end
+  # rails generate model Activity actor_id:integer, verb:integer, object_type:string, object_id:integer
+  def record_activity(actor, verb, object)
+    Activity.create(:actor_id => actor.id, :verb => verb, :object_type => object.class.to_s, :object_id => object.id )
   end
   
   def promo

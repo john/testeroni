@@ -29,7 +29,7 @@
           -@test.questions.each do |q|
             %li{:style => 'margin-left:20px;'}= q.name
             
-    -if @test.has_questions? && @test.published?
+    -if @test.has_questions? && @test.published? && @test.active?
       -if @question
         =render(:partial => 'questions/show')
       -else
@@ -63,6 +63,8 @@
             });
             
       -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+    -elsif @test.inactive?
+      %em Sorry, this test is currently inactive.
       
 -unless @test.videos.blank?
   #left_col

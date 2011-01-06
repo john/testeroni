@@ -3,7 +3,8 @@
     Hi,
   = @person.display_name
 
-%h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
+-if user_signed_in? && @person.id == current_user.id
+  %h3{:style => 'padding:10px 0 0 0;'}= link_to 'Create a test!', new_test_path
 
 %p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.display_name}:
 
@@ -54,6 +55,6 @@
             =link_to('overall results', test_results_url(@test.id, @test.to_param))
             ]
             
-%p{:style => 'font-style:italic;'}tests created by #{@person.display_name}'s friends:
+-#%p{:style => 'font-style:italic;'}tests created by #{@person.display_name}'s friends:
 
-%p{:style => 'font-style:italic;'}tests taken by #{@person.display_name}'s friends:
+-#%p{:style => 'font-style:italic;'}tests taken by #{@person.display_name}'s friends:

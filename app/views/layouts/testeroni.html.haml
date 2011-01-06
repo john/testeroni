@@ -103,8 +103,9 @@
           %div
             .show_twitter{:style => 'width:210px; float:left; text-align:left;'}
               =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
-            .show_twitter{:style => 'width:140px; float:left; text-align:left;'}
+            .show_twitter{:style => 'width:160px; float:left; text-align:left; vertical-align:top;'}
               =link_to_function('or sign up using Twitter', "$('.show_twitter').toggle()")
+              =link_to_function(image_tag('twitter_icon.png', :style => 'vertical-align:top;padding:0 0 0 5px;'), "$('.show_twitter').toggle()")
             .show_twitter{:style => 'display:none;'}
               %div{:style => 'padding:0 0 4px 0;'}
                 Enter your email then click
