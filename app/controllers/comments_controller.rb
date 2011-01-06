@@ -28,6 +28,7 @@ class CommentsController < ApplicationController
     
     @comment.user = current_user
     @comment.save
+    record_activity(current_user, Activity::COMMENT, @commented_on)
     
     if params[:comment][:commentable_type] == 'Tst'
       @comment = Comment.new(:commentable_type => @commented_on.class, :commentable_id => @commented_on.id)

@@ -1,12 +1,13 @@
 -if user_signed_in?
   %h2= link_to 'Create a test right now', new_test_url
+  %p or take any of these tests:
 - else
 
-  %p{:style => "padding:0; margin:0; font-size:1.2em; width:80%;float:left;"}
-    %strong< Testeroni is a free site for making and taking surveys and tests.
+  %p{:style => "font-size:1.2em;"}
+    %strong< Testeroni is a free site for making and taking tests.
     
-  %div{:style => 'width:600px; margin-top:20px; padding-top:60px;'}
-    =link_to_function('Create Account', "signupThenGoTo('')", :class => 'green button', :style => 'font-size:1.8em; font-style:italic; font-weight:bold;padding:5px 10px;')
+  %div{:style => 'margin:20px 0;'}
+    =link_to_function('Create Account', "Tstrni.viewSignup()", :class => 'green button', :style => 'font-size:1.8em; font-style:italic; font-weight:bold;padding:5px 10px;')
     Already have an account?
     =link_to 'Log in'
   .clearfix
@@ -18,9 +19,11 @@
           signupThenGoTo('#{new_test_path}');
         });
       });
-      
-      
-%p{:style => 'padding:35px 0;'} Or start right now and take any of these tests. You can sign up when you're done if you want to save your results.
+
+- unless user_signed_in?
+  %div{:style => 'padding:0 0 20px 0;'}
+    Or just start taking tests. You can sign up when you're done if you want to save your results.
+  
 -if @tests.size > 0
   %ul.bulletless.home
     -@tests.each do |t|
@@ -32,9 +35,9 @@
         %div
           ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}"
           -unless t.takes.blank?
-            with an average grade of #{t.grade}
+            with an average score of #{t.percent_correct}%
         -unless t.tags.empty?
-          %div
+          %div{:style => 'padding-top:5px;'}
             tags:
             !=t.tag_list.collect{|tag| "<span class='tag'>#{link_to(tag, tag_path(url_escape(tag)), :rel => 'tag')}</span>"}.join('&nbsp; ')
           

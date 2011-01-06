@@ -39,8 +39,6 @@ class QuestionsController < ApplicationController
   def answer
     @test = Tst.find(params[:test_id])
     
-    logger.debug "@test------------- > #{@test.inspect}"
-    
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
@@ -62,8 +60,6 @@ class QuestionsController < ApplicationController
       @response.correct = (Choice.simplify(params[:short_answer]) == @question.choices.first.simple_name) ? true : false
     end
     
-    logger.debug "@response ================> #{@response.inspect}"
-    
     @take.questions_answered = @take.questions_answered+1
     @take.questions_correct = @take.questions_correct+1 if @response.correct?
     
@@ -72,34 +68,30 @@ class QuestionsController < ApplicationController
       @response.take = @take
       @response.save
       @question.responses << @response
-      
       @response_count = @question.responses.size
       @correct_response_count = @question.number_correct
     else
-      logger.debug "ABOUT TO SAVE response for non-logged in user"
-      logger.debug "@response: #{@response.inspect}"
-      
       @response.save
-      
       @take.responses << @response
       session[:take] = @take.sessionize
-      
       @response_count = @question.responses.size + 1
       @correct_response_count = (@response.correct?) ? @question.number_correct+1 : @question.number_correct
     end
-    
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
     if @test.questions.length == @question_number
       @more = false
       @take.finished_at = Time.now if params[:take_id]
-      session[:take] = @take.sessionize
+      if user_signed_in?
+        record_activity(current_user, Activity::TAKE, @test)
+      else
+        session[:take] = @take.sessionize
+      end
     else
       @more = true
       @question_number = @question_number + 1
     end
-    
-    @take.save if @take.id
+    @take.save if user_signed_in?
     
     render :partial => 'questions/answer'
   end

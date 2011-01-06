@@ -35,7 +35,6 @@
       &#183;
       =link_to('delete')
     
-    
   %div{:id => 'share_tools', :style => 'display:none; width:520px;'}
     %label{:for => 'share_link'} Link to this test
     %input{:id => 'share_link', :type => 'text', :value => test_url(@test.id, @test.to_param)}
@@ -44,11 +43,11 @@
         =link_to_function('[x] close', "$('#share_tools').toggle()")
       fb like, tweet, txt, mail, etc.
     
-  %div{:id => 'embed_header', :style => 'display:none; padding-top:10px;'}
+  %div{:id => 'embed_header', :style => 'display:none; padding-top:10px; width:520px;'}
     %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
     .caption
       After making your selection, copy and paste the embed code above. The code changes based on your selection.
-      %div{:style => 'padding:5px 0 0 0;'}= link_to_function('[x] close', "$('#embed_header').toggle()")
+      %div{:style => 'padding:5px 0 0 0; float:right;'}= link_to_function('[x] close', "$('#embed_header').toggle()")
 %h1
   -if params[:a]
     =@test.name

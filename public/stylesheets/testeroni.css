@@ -222,7 +222,8 @@ body {
   border-top: 1px solid #c2f3ff;
   border-bottom: 1px solid #5C4033;
   /*background-color:#ccffff;*/
-  background-color: #c2f3ff; }
+  /*background-color:#c2f3ff;*/
+  background-color: #E0FFFF; }
 
 #header {
   width: 970px;
@@ -346,10 +347,11 @@ body {
 
 .bulletless li {
   margin: 0;
-  padding: 0 0 8px 0; }
+  padding: 5px 0 33px 0;
+  border-bottom: 1px solid #ddd; }
 
 .bulletless.home li {
-  padding-bottom: 25px; }
+  padding: 15px 0; }
 
 .bulletless li span {
   font-size: .9em;

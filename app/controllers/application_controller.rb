@@ -55,8 +55,13 @@ class ApplicationController < ActionController::Base
   # end
   
   # rails generate model Activity actor_id:integer, verb:integer, object_type:string, object_id:integer
-  def record_activity(actor, verb, object)
-    Activity.create(:actor_id => actor.id, :verb => verb, :object_type => object.class.to_s, :object_id => object.id )
+  def record_activity(user, verb, object)
+    if object.class == Tst
+      otype = Activity::TST
+    elsif object.class == User
+      otype = Activity::USER
+    end
+    Activity.create(:user_id => user.id, :verb => verb, :object_type => otype, :object_id => object.id)
   end
   
   def promo

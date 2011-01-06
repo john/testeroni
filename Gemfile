@@ -21,8 +21,13 @@ gem 'thumbs_up'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
-  gem 'ruby_parser'
-  gem 'sqlite3-ruby', :require => 'sqlite3'
+  gem 'bullet'
+  gem 'ruby-growl'
   gem 'rails3-generators'
-  gem "shoulda"
+end
+
+group :test do
+  gem 'shoulda'
+  gem 'sqlite3-ruby', :require => 'sqlite3'
+  gem 'ruby_parser'
 end

@@ -66,6 +66,7 @@ class TstsController < ApplicationController
     end
 
     if @test.save
+      record_activity(current_user, Activity::CREATE, @test)
       redirect_to( new_question_path(:test_id => @test.id), :notice => 'Test was successfully created.')
     else
       render :action => "new"

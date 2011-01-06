@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ActivityTest < ActiveSupport::TestCase
   
-  should "be true" do
+  should_eventually "test activity shit" do
     assert_equal true, true
   end
   
