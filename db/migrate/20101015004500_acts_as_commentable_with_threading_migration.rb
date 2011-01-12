@@ -12,7 +12,7 @@ class ActsAsCommentableWithThreadingMigration < ActiveRecord::Migration
       t.integer :parent_id, :lft, :rgt
       t.timestamps
       
-      t.string :username, :default => ""
+      t.string :display_name, :default => ""
     end
     
     add_index :comments, :user_id

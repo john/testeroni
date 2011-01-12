@@ -2,6 +2,12 @@
   -if @owner
     Hi,
   = @person.display_name
+  -if user_signed_in? && !@owner
+    %span{:id => 'follow'}
+      -if current_user.is_following?(@person)
+        =render :partial => 'follow'
+      -else
+        =render :partial => 'unfollow'
   
   
 %div{:style => 'float:left; width:550px; padding:10px 0 0 0; border:0px solid red;'}

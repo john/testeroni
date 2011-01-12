@@ -1,7 +1,5 @@
 # coding: utf-8
 
-# require "base64"
-
 class PeopleController < ApplicationController
 
   def show
@@ -22,13 +20,10 @@ class PeopleController < ApplicationController
     unless user_signed_in? && @person == current_user
       redirect_to root_path and return
     else
-      if params[:object_type] == 'Tst'
-        ftype = Follow::TST
-      elsif params[:object_type] == 'User'
-        ftype = Follow::USER
-      end
-      Follow.create(:user_id => @person.id, :follow_type => ftype, :follow_id => params[:object_id])
-      render :text => 'success!'
+      followee = Object.const_get(params[:object_type]).find(params[:object_id])
+      @person.follow(followee)
+      
+      render :partial => 'follow'
     end
   end
   
@@ -37,9 +32,12 @@ class PeopleController < ApplicationController
     @person = User.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @person == current_user
     
-    the_follow = Follow.where(["follow_type = ? AND follow_id = ?", params[:object_type], params[:object_id]])[0]
-    the_follow.delete
-    render :text => 'success!'
+    if the_follow = Follow.where(["follow_type = ? AND follow_id = ?", params[:object_type], params[:object_id]])
+      the_follow[0].delete
+      render :partial => 'unfollow'
+    else
+      render :text => 'fail!'
+    end
   end
 
 end

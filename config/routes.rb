@@ -18,8 +18,8 @@ Testeroni::Application.routes.draw do
   
   match 'people/:id', :to => 'people#show', :as => 'person'
   match 'people/:id/:display_name', :to => 'people#show', :as => 'person_with_name' #, :constraints => {:username => /[^\/]+/}
-  match 'people/:id/follow/:object_type/:object_id', :to => 'people#follow', :as 'follow'
-  match 'people/:id/unfollow/:object_type/:object_id', :to => 'people#unfollow', :as 'follow'
+  match 'people/:id/follow/:object_type/:object_id', :to => 'people#follow', :as => 'follow'
+  match 'people/:id/unfollow/:object_type/:object_id', :to => 'people#unfollow', :as => 'unfollow'
   
   resources :users
   

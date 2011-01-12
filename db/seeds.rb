@@ -105,6 +105,11 @@
 @test.published_at = Time.now
 @test.save
 
+@test = Tst.create(:name => 'What does it all mean?', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
+@test.tag_list = "words, language, games"
+@test.published_at = Time.now
+@test.save
+
 @test = Tst.create(:name => 'Nobel Prize winners', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
 @test.tag_list = "Nobel, prizes, history"
 @test.published_at = Time.now

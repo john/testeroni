@@ -17,6 +17,9 @@ gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nes
 gem 'acts_as_commentable_with_threading'
 gem 'thumbs_up'
 
+gem "mongoid", "2.0.0.beta.20"
+gem "bson_ext", "1.1.5"
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:

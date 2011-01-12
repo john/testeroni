@@ -10,16 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110106002814) do
+ActiveRecord::Schema.define(:version => 20110106195117) do
 
   create_table "activities", :force => true do |t|
     t.integer  "user_id"
     t.integer  "verb"
-    t.string   "object_type"
+    t.integer  "object_type"
     t.integer  "object_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "activities", ["object_id"], :name => "index_activities_on_object_id"
+  add_index "activities", ["object_type"], :name => "index_activities_on_object_type"
+  add_index "activities", ["user_id"], :name => "index_activities_on_user_id"
 
   create_table "choices", :force => true do |t|
     t.integer  "question_id"
@@ -49,11 +53,23 @@ ActiveRecord::Schema.define(:version => 20110106002814) do
     t.integer  "rgt"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username",                       :default => ""
+    t.string   "display_name",                   :default => ""
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "follows", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "follow_type"
+    t.integer  "follow_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "follows", ["follow_id"], :name => "index_follows_on_follow_id"
+  add_index "follows", ["follow_type"], :name => "index_follows_on_follow_type"
+  add_index "follows", ["user_id"], :name => "index_follows_on_user_id"
 
   create_table "questions", :force => true do |t|
     t.integer  "tst_id"

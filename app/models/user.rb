@@ -78,4 +78,35 @@ class User < ActiveRecord::Base
     end
   end
   
+  def follow(thing)
+    if follow = Follow.create(:user_id => id, :follow_type => thing.class.to_s, :follow_id => thing.id)
+      true
+    else
+      false
+    end
+  end
+  
+  def is_following?(thing)
+    followee = Object.const_get(thing.class.to_s).find(thing.id)
+    if the_follow = Follow.where(["follow_type = ? AND follow_id = ?", followee.class.to_s, followee.id])
+      if the_follow.size > 0
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end
+  
+  def get_follow_activity
+    # get people you follow
+    @user_follows = Follow.where(["user_id=? AND object_type=", id])
+    # get their activities
+    
+    # get tests you follow
+    # get activity of those tests
+    user_activities = Activity.where([""])
+  end
+  
 end

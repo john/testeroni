@@ -23,7 +23,7 @@ class Comment < ActiveRecord::Base
     c.commentable_type = obj.class.name 
     c.body = comment 
     c.user_id = user_id
-    c.username = User.find(user_id).username
+    c.display_name = User.find(user_id).display_name
     c
   end
   

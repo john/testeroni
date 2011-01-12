@@ -68,9 +68,20 @@
       
 -unless @test.videos.blank?
   #left_col
-  -@test.videos.each do |v|
+  -@test.videos.each_with_index do |v,i|
+    %div{:id => "ytplayer_#{i}"}
+    
     %div
-      "<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/#{v.provider_id}"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/#{v.provider_id}" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>"
+      =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
+      =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
+      =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
+    
+    :javascript
+    
+      $(document).ready(function(){
+        var params = { allowScriptAccess: "always" };
+        swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
+      });
 
 #pusher>
   &nbsp;
