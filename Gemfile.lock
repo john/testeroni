@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: fb4ec6e9da702aba77e536027a24aacada94ccd2
+  revision: 692f7b27ffb3e8e1cf4600a6d75ae451e1e61247
   specs:
     devise (1.2.rc)
       bcrypt-ruby (~> 2.1.2)
@@ -51,20 +51,22 @@ GEM
       moretea-awesome_nested_set
     addressable (2.2.2)
     arel (2.0.6)
-    babosa (0.2.0)
+    babosa (0.2.1)
     bcrypt-ruby (2.1.4)
-    bson (1.1.5)
-    bson_ext (1.1.5)
     builder (2.1.2)
     bullet (2.0.1)
       uniform_notifier (~> 1.0.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    faraday (0.5.3)
+    faraday (0.5.4)
       addressable (~> 2.2.2)
-      multipart-post (~> 1.0.1)
+      multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
     flutie (1.1.4)
+    formtastic (1.1.0)
+      actionpack (>= 2.3.0)
+      activesupport (>= 2.3.0)
+      i18n (>= 0.4.0)
     friendly_id (3.1.8)
       babosa (~> 0.2.0)
     haml (3.0.25)
@@ -82,17 +84,10 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
-    mongo (1.1.5)
-      bson (>= 1.1.5)
-    mongoid (2.0.0.beta.20)
-      activemodel (~> 3.0)
-      mongo (~> 1.1)
-      tzinfo (~> 0.3.22)
-      will_paginate (~> 3.0.pre)
     moretea-awesome_nested_set (1.4.3.1)
       activerecord (~> 3.0.0)
     multi_json (0.0.5)
-    multipart-post (1.0.1)
+    multipart-post (1.1.0)
     nokogiri (1.4.4)
     oa-core (0.1.6)
       rack (~> 1.1)
@@ -103,7 +98,7 @@ GEM
       oauth (~> 0.4.0)
       oauth2 (~> 0.1.0)
     oauth (0.4.4)
-    oauth2 (0.1.0)
+    oauth2 (0.1.1)
       faraday (~> 0.5.0)
       multi_json (~> 0.0.4)
     orm_adapter (0.0.4)
@@ -121,7 +116,7 @@ GEM
       activesupport (= 3.0.3)
       bundler (~> 1.0)
       railties (= 3.0.3)
-    rails3-generators (0.17.0)
+    rails3-generators (0.17.1)
       railties (>= 3.0.0)
     railties (3.0.3)
       actionpack (= 3.0.3)
@@ -144,7 +139,6 @@ GEM
     uniform_notifier (1.0.1)
     warden (1.0.3)
       rack (>= 1.0.0)
-    will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
@@ -153,16 +147,15 @@ DEPENDENCIES
   acts-as-taggable-on
   acts_as_commentable_with_threading
   awesome_nested_set!
-  bson_ext (= 1.1.5)
   bullet
   devise!
   flutie
+  formtastic (~> 1.1.0)
   friendly_id
   haml
   hpricot
   jquery-rails
   koala
-  mongoid (= 2.0.0.beta.20)
   oa-oauth
   rails
   rails3-generators

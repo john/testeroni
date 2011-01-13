@@ -15,10 +15,12 @@ gem 'friendly_id'
 gem 'acts-as-taggable-on'
 gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nested_set.git'
 gem 'acts_as_commentable_with_threading'
+
+# TODO: for upvoting shit.
 gem 'thumbs_up'
 
-gem "mongoid", "2.0.0.beta.20"
-gem "bson_ext", "1.1.5"
+# TODO: for better forms
+gem 'formtastic', '~> 1.1.0'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
