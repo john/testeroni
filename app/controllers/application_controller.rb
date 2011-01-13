@@ -5,10 +5,21 @@ class ApplicationController < ActionController::Base
   
   layout 'testeroni'
   
+  USER, PASSWORD = 'testeroni', 'besteroni'
+  
   before_filter :setup_user
   before_filter :set_return_to, :except => ['sign_in']
   before_filter :promo
+  before_filter :auth_in_prod
   # before_filter :log_session
+  
+  def auth_in_prod
+    if Rails.env == 'production'
+      authenticate_or_request_with_http_basic do |user, password|
+        user == USER && password == PASSWORD
+      end
+    end
+  end
   
   # application_controller before_filter
   def setup_user
