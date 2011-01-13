@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :setup_user
   before_filter :set_return_to, :except => ['sign_in']
   before_filter :promo
-  before_filter :log_session
+  # before_filter :log_session
   
   # application_controller before_filter
   def setup_user
@@ -45,15 +45,6 @@ class ApplicationController < ActionController::Base
     super( resource )
   end
   
-  # from: https://github.com/plataformatec/devise/wiki/How-To:-Redirect-to-a-specific-page-on-successful-sign-in
-  # def after_sign_in_path_for(resource_or_scope)
-  #   if resource_or_scope.is_a?(User)
-  #     person_with_name_path(resource.id, resource.slugged_display_name)
-  #   else
-  #     super
-  #   end
-  # end
-  
   # rails generate model Activity actor_id:integer, verb:integer, object_type:string, object_id:integer
   def record_activity(user, verb, object)
     if object.class == Tst
@@ -76,12 +67,12 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def log_session
-    logger.debug '--'
-    logger.debug "session: #{session.inspect}"
-    logger.debug "user_session: #{user_session.inspect}"
-    logger.debug '--'
-  end
+  # def log_session
+  #   logger.debug '--'
+  #   logger.debug "session: #{session.inspect}"
+  #   logger.debug "user_session: #{user_session.inspect}"
+  #   logger.debug '--'
+  # end
   
   
   # manages the session info for promo. don't call this directly. (see get_promo)
