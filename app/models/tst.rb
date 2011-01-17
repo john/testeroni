@@ -41,6 +41,14 @@ class Tst < ActiveRecord::Base
     Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? AND STATUS=? LIMIT 1', id, Tst::ACTIVE])[0]
   end
   
+  
+  def pause_points
+    # pausePoints array is hashes of form {second => question_id}
+    # {'testId' => id, 'pausePoints' => [{4 => 1}, {8 => 2}, {12 => 3}]}
+    @pause_points = questions.map{|q| {q.id => q.pause_at}}
+    {'testId' => id, 'pausePoints' => @pause_points}
+  end
+  
   def owned_by?(some_user)
     (user_id == some_user.id)
   end

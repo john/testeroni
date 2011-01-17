@@ -76,11 +76,13 @@ ActiveRecord::Schema.define(:version => 20110106195117) do
     t.integer  "user_id"
     t.string   "name"
     t.string   "description"
+    t.string   "hint"
     t.integer  "status",           :limit => 1
     t.string   "image_url"
     t.string   "explanation"
     t.integer  "kind"
     t.integer  "correct_response"
+    t.integer  "pause_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

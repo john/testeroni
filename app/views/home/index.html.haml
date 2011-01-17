@@ -1,6 +1,5 @@
 -if user_signed_in?
-  %h2= link_to 'Create a test right now', new_test_url
-  %p or take any of these tests:
+  %h2{:style => 'padding:10px 0 25px 0;'} #{link_to('Create a test right now', new_test_url, :class => 'green button')} or take any of these tests:
 - else
 
   %p{:style => "font-size:1.2em;"}
@@ -26,29 +25,8 @@
   
 -if @tests.size > 0
   %ul.bulletless.home
-    -@tests.each do |t|
+    -@tests.each do |test|
       %li
-        %h3
-          =link_to(t.name, test_url(t.id, t.to_param))
-          %span
-            =link_to('take me!', test_url(t.id, t.to_param), :class => 'green button sm')
-        %div
-          ="Has #{pluralize(t.questions.size, 'question')} and has been taken #{pluralize(t.takes.size, 'time')}"
-          -unless t.takes.blank?
-            with an average score of #{t.percent_correct}%
-        -unless t.tags.empty?
-          %div{:style => 'padding-top:5px;'}
-            tags:
-            !=t.tag_list.collect{|tag| "<span class='tag'>#{link_to(tag, tag_path(url_escape(tag)), :rel => 'tag')}</span>"}.join('&nbsp; ')
-          
-          -#
-            =link_to('View questions', test_questions_path(t.id, t.to_param))
-            |
-            =link_to('View results', test_results_path(t.id, t.to_param))
-            -if user_signed_in?
-              -if t.user == current_user || t.contributors == Tst::ANYONE
-                |
-                =link_to('Edit this test', edit_test_url(t.id))
-            
+        =render(:partial => 'shared/test_listing', :locals => {:test => test})
 - else
   %div{:style => 'font-style:italic;'} No tests created yet.

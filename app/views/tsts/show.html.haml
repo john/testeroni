@@ -1,5 +1,32 @@
 =render(:partial => 'tsts/header')
 
+-unless @test.videos.blank?
+  %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
+    -@test.videos.each_with_index do |v,i|
+      %div{:id => "ytplayer_#{i}"}
+      
+      -#%div
+        =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
+        &#183;
+        =link_to_function('playAndPause', "Tstrni.playAndPause('ytplayer_#{i}')")
+        &#183;
+        =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
+        &#183;
+        =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
+        &#183;
+        
+      :javascript
+      
+        $(document).ready(function(){
+        
+          // get stop points from test (tst#stop_points), put in an object in the Tstrni object
+          // data structure: {'testId':3, 'pausePoints':[{stopAtSecond: displayQuestionId}]}
+          // Tstrni.pausePointsForTest = #{@test.pause_points.to_json}
+        
+          var params = { allowScriptAccess: "always" };
+          swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
+        });
+        
 .questions
   #question_pane
     -if @owner
@@ -9,13 +36,13 @@
         #added.notice{:style => 'font-size:1.2em;'}
           %a{:id => "close-added", :style => 'float:right;'}>
             [x]
-          %h4{:style => 'padding-bottom:10px;'} Question successfully added
+          %h4{:style => 'padding-bottom:10px;'} Question added
           %p{:style => 'padding-bottom:10px;'}
             #{link_to('Add another question', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}
             
             -unless @test.published?
-              or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')} when you're done adding questions.
-              %p Once it's published you can let your friends know about it, and people can start taking it.
+              or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')}
+              %p{:style => 'font-size:.9em;'} Once it's published people can start taking it.
 
           :javascript
             $(document).ready(function(){
@@ -65,23 +92,6 @@
       -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
     -elsif @test.inactive?
       %em Sorry, this test is currently inactive.
-      
--unless @test.videos.blank?
-  #left_col
-  -@test.videos.each_with_index do |v,i|
-    %div{:id => "ytplayer_#{i}"}
-    
-    %div
-      =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
-      =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
-      =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
-    
-    :javascript
-    
-      $(document).ready(function(){
-        var params = { allowScriptAccess: "always" };
-        swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
-      });
 
 #pusher>
   &nbsp;

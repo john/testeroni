@@ -1,7 +1,8 @@
-%h1 Tests tagged #{params[:id]}
+%h1
+  %span{:style => 'font-weight:normal;font-size:.6em;'} Tests tagged
+  =params[:id]
 
-%ul.bulletless{:style => 'font-size:1.4em;padding:20px 0 0 0;'}
-  -@tests.each do |t|
-    %li{:style => 'padding:0; margin:0;'}
-      =link_to(t.name, test_path(t.id, t.to_param))
-      ="(#{pluralize(t.questions.size, 'question')})"
+%ul.bulletless.home{:style => 'padding-top:15px;'}
+  -@tests.each do |test|
+    %li
+      =render(:partial => 'shared/test_listing', :locals => {:test => test})

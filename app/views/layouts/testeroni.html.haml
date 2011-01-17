@@ -40,12 +40,9 @@
       #promo{:style => 'display:none;'}
         .notice
           .promo_close
-            = link_to_function('x', "Tstrni.promo.hide();")
-          = @promo[:message]
-      :javascript
-        $(document).ready(function(){
-          setTimeout(Tstrni.promo.show, 1000);
-        })
+            -#= link_to_function('x', "Tstrni.promo.hide();")
+            = link_to_function('x', "Tstrni.hide_promo();")
+          != @promo[:message]
         
     #head-wrap
       #header
@@ -168,6 +165,13 @@
     =javascript_include_tag('jquery.ba-bbq.min.js')
     =javascript_include_tag('tstrni.js')
     
+    -if @promo
+      :javascript
+        google.setOnLoadCallback(function() {
+          //setTimeout('Tstrni.promo.show', 500);
+          setTimeout('Tstrni.show_promo()', 1500);
+        })
+      
     :javascript
     
       var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];

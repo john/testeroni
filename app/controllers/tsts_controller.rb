@@ -11,7 +11,6 @@ class TstsController < ApplicationController
   end
 
   def show
-    # @test = Tst.load_active_by_id(params[:id])
     @test = Tst.find(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
@@ -32,7 +31,7 @@ class TstsController < ApplicationController
     end
     
     @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
-      
+    
     render :layout => 'embed' if request.path =~ /embed/
   end
 
@@ -86,6 +85,31 @@ class TstsController < ApplicationController
     #   logger.debug "@graph: #{@graph.inspect}"
     #   @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
     # end
+    # flash[:notice]
+    
+    flash[:notice] = 'Congratulations, your test has been published! That means anyone can now take it.'
+    
+    @owner = true if user_signed_in? && @test.owned_by?(current_user)
+    @title = "#{@test.name} - Testeroni"
+    @description = "'#{@test.name}' a test on Testeroni.com"
+    @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
+    
+    @question_number = 1
+    if params[:question_id]
+      @question = Question.find(params[:question_id])
+      
+      # is there a way to get the question_number without having to loop?
+      @test.questions.each_with_index do |q, i|
+        if q.id == @question.id
+          @question_number = i+1
+          break
+        end
+      end
+    end
+    
+    @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+    
+    render :template => 'tsts/show'
   end
   
   def enable
@@ -127,7 +151,7 @@ class TstsController < ApplicationController
   def individual_results
     @test = Tst.load_active_by_id(params[:id])
     #redirect_to root_path and return unless user_signed_in? && @test.user == current_user
-    @user = User.find(params[:username])
+    @user = User.find(params[:user_id])
     @take = Take.find(params[:take])
     
   end

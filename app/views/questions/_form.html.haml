@@ -1,5 +1,5 @@
 -if @test
-  %p{:style => "padding:0 0 20px 0;"}
+  %p{:style => "padding:0 0 10px 0;"}
     For the test
     %strong= link_to @test.name, test_path(@test.id, @test.to_param)
 
@@ -66,8 +66,13 @@
       =f.label :image_url, 'Image URL (optional)'
       =f.text_field :image_url
       =f.label :explanation, 'Explanation (shown after the question is answered)'
-      = f.text_area :explanation, :style => 'height:60px;display:block;'
-      =f.submit(:style => 'clear:both;margin-top:5px;')
+      =f.text_area :explanation, :style => 'height:60px;display:block;'
+      -#-unless @test.videos.blank?
+        Ask this question
+        =f.text_field :pause_at, :style => 'width:20px;'
+        seconds into the video.
+      %div
+        =f.submit(:style => 'clear:both;margin-top:5px;')
 
 :javascript
   $(document).ready(function(){

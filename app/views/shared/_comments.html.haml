@@ -36,7 +36,7 @@
       -comments.each do |c|
         %li{:style => 'padding:0 0 15px 0'}
           %div{:id => c.id}
-            #{time_ago_in_words(c.created_at)} ago #{link_to(c.username, people_path(c.user))} said:
+            #{time_ago_in_words(c.created_at)} ago #{link_to(c.display_name, person_path(c.user))} said:
           %div= c.body
 :javascript
   $(document).ready(function(){

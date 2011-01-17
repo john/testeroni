@@ -1,22 +1,24 @@
-%p You just published the test
-%h1= link_to(@test.name, test_path(@test.id, @test.to_param))
-
--#
-  / %p{:style => 'padding:10px 0;'} But nobody knows about it yet. Invite your friends to take the test.
-  / 
-  / %div{:style => 'height:320px;'}
-  /   %div{:style => 'float:left; width:38%'}
-  /     = form_tag(invite_test_url(@test)) do
-  /       %ul.bulletless.scrollable
-  /         - @friends.each do |f|
-  /           %li
-  /             %input{:type => 'checkbox', :name => 'invite[]', :value => f['id']}= f['name']
-  /       %input{:type => 'submit', :value => 'Invite your friends to take the test!'}
-  /   
-  /   %div{:style => 'float:right; width:58%;'}
-  /     %textarea{:style => 'width:100%'} Check the box next to the name of each friend you want to message about this test.
-      
-%ul.bulletless{:style => 'padding-top:20px;'}
-  %li= link_to('Create another test', new_test_path)
-  %li= link_to('View the results of this test (needs an rss feed)', test_results_path(@test.id, @test.to_param))
-  %li Ask if they want to tweet it, send invite emails, or post to fb wall (only offer if they're fb connected, ajax a call to the graph api)
+/ =render(:partial => 'tsts/header')
+/ 
+/ %p You just published the test
+/ %h1= link_to(@test.name, test_path(@test.id, @test.to_param))
+/ 
+/ -#
+/   / %p{:style => 'padding:10px 0;'} But nobody knows about it yet. Invite your friends to take the test.
+/   / 
+/   / %div{:style => 'height:320px;'}
+/   /   %div{:style => 'float:left; width:38%'}
+/   /     = form_tag(invite_test_url(@test)) do
+/   /       %ul.bulletless.scrollable
+/   /         - @friends.each do |f|
+/   /           %li
+/   /             %input{:type => 'checkbox', :name => 'invite[]', :value => f['id']}= f['name']
+/   /       %input{:type => 'submit', :value => 'Invite your friends to take the test!'}
+/   /   
+/   /   %div{:style => 'float:right; width:58%;'}
+/   /     %textarea{:style => 'width:100%'} Check the box next to the name of each friend you want to message about this test.
+/       
+/ %ul.bulletless{:style => 'padding-top:20px;'}
+/   %li= link_to('Create another test', new_test_path)
+/   %li= link_to('View the results of this test (needs an rss feed)', test_results_path(@test.id, @test.to_param))
+/   %li Ask if they want to tweet it, send invite emails, or post to fb wall (only offer if they're fb connected, ajax a call to the graph api)

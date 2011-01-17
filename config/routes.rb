@@ -37,7 +37,7 @@ Testeroni::Application.routes.draw do
   match 'tests/:id/:permalink/questions/:question_id/:qpermalink', :to => 'tsts#show', :as => 'test_question', :via => :get
   match 'tests/:id/:permalink/questions/:question_id', :to => 'tsts#show', :via => :get
   match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
-  match 'tests/:id/:permalink/results/:username/:take', :to => 'tsts#individual_results', :as => 'individual_test_results'
+  match 'tests/:id/:permalink/results/:user_id/:take', :to => 'tsts#individual_results', :as => 'individual_test_results'
   match 'tests/:id/:permalink/results', :to => 'tsts#results', :as => 'test_results'
   resources :tsts
 

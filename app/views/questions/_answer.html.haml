@@ -40,8 +40,8 @@
 - unless @more
   %h5
     -if user_signed_in?
-      -#= link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.username, @take.id))
-      = link_to('View your results')
+      = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.id, @take.id))
+      -#= link_to('View your results')
     -else
       To save the results of this test,
       = link_to_function('sign up', "Tstrni.viewSignup()")

@@ -1,29 +1,87 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
-
 var Tstrni = new function(){
   
+  /*** to show and hide the promo bar at the top of the page ***/
+  // this.promo = function() {
+  //   this.show = function() {
+  //     $('#promo').slideDown(800, 'easeOutElastic');
+  //   }
+  //   this.hide = function(){
+  //     $('#promo').slideUp();
+  //     $('#top-band').removeClass('with_promo');
+  //     $.post('/hide_promo');
+  //   }
+  // }
+  
+  this.show_promo = function() {
+    $('#promo').slideDown(800, 'easeOutElastic');
+  }
+  
+  this.hide_promo = function(){
+    $('#promo').slideUp();
+    $('#top-band').removeClass('with_promo');
+    $.post('/hide_promo');
+  }
+  
+  this.pausePoints;
+  
   /*** to control the youtube player ***/
-  this.play = function(id){
-    if(id){
-      player = document.getElementById(id);
-      player.playVideo();
+  this.play = function(playerId){
+    if(playerId){
+      document.getElementById(playerId).playVideo();
+    }
+  }
+  
+  this.pause = function(playerId){
+    if(playerId){
+      document.getElementById(playerId).pauseVideo();
+    }
+  }
+  
+  this.stop = function(playerId){
+    if(playerId){
+      document.getElementById(playerId).stopVideo();
+    }
+  }
+  
+  this.playAndPause = function(playerId){
+    Tstrni.play(playerId);
+    //alert(Tstrni.pausePointsForTest.testId);
+    
+    // {'testId' => id, 'pausePoints' => [{4 => 1}, {8 => 2}, {12 => 3}]}
+    stopTime = Tstrni.pausePointsForTest.pausePoints[0]
+    alert("typeof stopTime: " + typeof stopTime);
+    alert("stopTime: " + stopTime);
+    if(playerId){
+      if(document.getElementById(playerId).getCurrentTime() <= stopTime) {
+        // every second, call pauseAt, which will check the time and pause if appropriate
+        pauseIntervalId = setInterval("Tstrni.pauseAt('" + playerId + "', " + stopTime + ")", 1000);
+      }
+    }
+    return pauseIntervalId;
+  }
+  
+  // is it possible to pass in the pauseIntervalId to be cleared? not good that it's an externality
+  this.pauseAt = function(playerId, stopAtSecond){
+    player = document.getElementById(playerId)
+    currentTime = player.getCurrentTime()
+    if(player.getPlayerState() == 1) {
+      if(currentTime >= stopAtSecond) {
+        Tstrni.pause(playerId);
+        clearInterval ( pauseIntervalId );
+      }
       
-      var stopTime = 4;
-      
-      if(player.getCurrentTime() <= stopTime) {
-        pauseIntervalId = setInterval ( "Tstrni.pauseAt('" + id + "', " + stopTime + ")", 1000 );
+      // if there's another pause point farther on, set it
+      // pausePointsForTest needs to check test id, in case there's more than one floating around
+      // also needs to get cleaned up if they stop the test
+      if(Tstrni.pausePointsForTest){
+        
       }
     }
   }
-  this.pause = function(id){
+  
+  this.seekTo = function(id, seconds){
     if(id){
-      document.getElementById(id).pauseVideo();
-    }
-  }
-  this.stop = function(id){
-    if(id){
-      document.getElementById(id).stopVideo();
+      document.getElementById(id).seekTo(seconds, true);
     }
   }
   
@@ -46,34 +104,6 @@ var Tstrni = new function(){
   
   // call like this:
   // pauseIntervalId = setInterval ( "Tstrni.pauseAt('ytplayer', 4)", 1000 );
-  
-  this.pauseAt = function(id, stopAtSecond){
-    player = document.getElementById(id)
-    if(player.getPlayerState() == 1) {
-      if(player.getCurrentTime() >= stopAtSecond) {
-        Tstrni.pause(id);
-        clearInterval ( pauseIntervalId );
-      }
-    }
-  }
-  
-  this.seekTo = function(id, seconds){
-    if(id){
-      document.getElementById(id).seekTo(seconds, true);
-    }
-  }
-  
-  /*** to show and hide the promo bar at the top of the page ***/
-  this.promo = function() {
-    this.show = function() {
-      $('#promo').slideDown(800, 'easeOutElastic');
-    }
-    this.hide = function(){
-      $('#promo').slideUp();
-      $('#top-band').removeClass('with_promo');
-      $.post('/hide_promo');
-    }
-  }
   
   
   /*** to follow and unfollow people ***/

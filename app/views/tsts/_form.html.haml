@@ -23,10 +23,9 @@
     %p
       =f.label :tag_list, 'Tags (comma separated)'
       =f.text_field :tag_list
-    %h6{:style => 'padding:15px 0 0 0;'} Media (all optional):
     -if @test.id.blank?
       %p
-        =f.label :video_url, 'Video (add a YouTube URL)'
+        =f.label :video_url, 'Video (add an optional YouTube URL)'
         =f.text_field :video_url
     -unless @test.id.blank?
       %p Videos associated with this test:

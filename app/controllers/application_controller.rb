@@ -67,8 +67,8 @@ class ApplicationController < ActionController::Base
   end
   
   def promo
-    if promo = false
-      msg = "THIS IS AN ALPHA VERSION of Testeroni. Data might not stick around."
+    if promo = true
+      msg = "<span style='color:red;'>ALPHA ALERT!</span> This is a test server, don't rely on data sticking around (but <a href='mailto:john@wordie.org'>email me</a> if it needs to)"
       set_promo(msg, DateTime.new(y=2010, m=11, d=05))
       if (session[:promo][:dismissed_at].nil? || (session[:promo][:dismissed_at] < session[:promo][:created_at]))
         @promo = session[:promo]

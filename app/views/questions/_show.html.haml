@@ -38,7 +38,7 @@
             %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
     -if @question_number == 1 || (@take && @take.questions_answered > 0)
       =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
-      -if @question_number < @test.questions.length
+      -#-if @question_number < @test.questions.length
         (<a href="#" id="skip">skip</a>)
     -else
       %div{:style => 'padding-top:20px;'}

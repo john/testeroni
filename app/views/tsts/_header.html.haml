@@ -9,9 +9,10 @@
       
     
 %div{:style => 'padding:0 0 10px 0;'}
-  %a #{pluralize(@test.questions.size, 'question')}
-  &#183;
-  %a #{pluralize(@test.responses.size, 'response')}
+  -#%a #{pluralize(@test.questions.size, 'question')}
+  =pluralize(@test.questions.size, 'question')
+  &#183; taken
+  =pluralize(@test.takes.size, 'time')
   &#183;
   =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
   -if @test.published?
