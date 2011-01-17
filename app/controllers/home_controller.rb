@@ -26,5 +26,8 @@ class HomeController < ApplicationController
     session[:promo][:dismissed_at] = DateTime.now if session[:promo]
     render :nothing => true
   end
+  
+  def blohg
+  end
 
 end

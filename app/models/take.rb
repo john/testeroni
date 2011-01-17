@@ -20,15 +20,21 @@ class Take < ActiveRecord::Base
   
   def self.desessionize(session)
     tk = session[:take]
+    
+    logger.debug "TK from session is: #{tk.inspect}"
+    
     take = Take.new(  :user_id => tk[:u],
                       :tst_id => tk[:te],
                       :started_at => Time.at(tk[:s]/1000.0),
                       :questions_answered => tk[:a],
                       :questions_correct => tk[:c],
                       :question_order => tk[:qo])
-    take.id = tk[:ta] if tk.has_key?(:ta)
+    take.id = tk[:ta] if tk.has_key?(:ta) && tk[:ta] != nil
     responses = tk[:r].map {|r| Response.new(:id => r[:id], :tst_id => tk[:te], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
     take.responses = responses
+    
+    logger.debug "ABOUT TO desessionize this take: #{take.inspect}"
+    
     take
   end
   

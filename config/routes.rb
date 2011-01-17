@@ -55,6 +55,7 @@ Testeroni::Application.routes.draw do
   
   match 'hide_promo', :to => 'home#hide_promo', :as => 'hide_promo'
   
+  match 'blohg', :to => 'home#blohg', :as => 'blohg'
   match 'about', :to => 'home#about', :as => 'about'
   match 'contact', :to => 'home#contact', :as => 'contact'
   match 'terms', :to => 'home#terms', :as => 'terms'

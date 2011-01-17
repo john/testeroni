@@ -3,4 +3,8 @@
 -if signed_in?
   =render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
 -else
-  != "Please #{link_to('sign in', new_user_session_path)} or #{link_to('sign up', new_user_registration_path)} to post comments."
+  Please
+  = link_to_function('sign up', "Tstrni.viewSignup()")
+  or
+  = link_to_function('sign in', "Tstrni.viewLogin()")
+  -#!= "Please #{link_to('sign in', new_user_session_path)} or #{link_to('sign up', new_user_registration_path)} to post comments."

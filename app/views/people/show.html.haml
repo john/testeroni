@@ -16,9 +16,9 @@
 %div{:style => 'float:left; width:420px; padding:10px 0 0 0; border:0px solid green;'}
 
   -if user_signed_in? && @person.id == current_user.id
-    %h3= link_to 'Create a test!', new_test_path
+    %h3{:style => 'margin-bottom:20px;'}= link_to('Create a test!', new_test_path, :class => 'green button')
 
-  %p{:style => 'padding:20px 0 0 0;'}tests created by #{@person.display_name}:
+  %p{:style => 'padding:20px 0 0 0; font-style:italic;'}tests created by #{@person.display_name}:
 
   -if @person.tsts.blank?
     %p
@@ -28,8 +28,8 @@
   -else
     %ul.bulletless
       -@person.tsts.each do |t|
-        %li
-          =link_to t.name, test_path(t.id, t.to_param)
+        %li{:style => 'padding:5px 0; margin:5px 0'}
+          =link_to(t.name, test_path(t.id, t.to_param))
           -if t.user == current_user
             %span
               -unless t.published?
@@ -47,7 +47,7 @@
               =link_to('delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.')
               ]
 
-  %p{:style => 'padding:20px 0 0 0;'}tests taken by #{@person.display_name}:
+  %p{:style => 'padding:20px 0 0 0; font-style:italic;'}tests taken by #{@person.display_name}:
 
   -if @person.takes.blank?
     %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
@@ -55,7 +55,7 @@
     %ul.bulletless
       -@person.takes.each do |t|
         -@test = Tst.find(t.tst_id)
-        %li
+        %li{:style => 'padding:5px 0; margin:5px 0'}
           =link_to @test.name, test_path(@test.id, @test.to_param)
           -if t.user == current_user
             &nbsp;

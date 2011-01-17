@@ -87,7 +87,7 @@ class TstsController < ApplicationController
     # end
     # flash[:notice]
     
-    flash[:notice] = 'Congratulations, your test has been published! That means anyone can now take it.'
+    flash[:notice] = 'Congratulations, your test has been published and can now be taken.'
     
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
