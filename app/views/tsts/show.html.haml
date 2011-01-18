@@ -57,6 +57,7 @@
             %li{:style => 'margin-left:20px;'}= q.name
             
     -if @test.has_questions? && @test.published? && @test.active?
+    
       -if @question
         =render(:partial => 'questions/show')
       -else
@@ -66,15 +67,16 @@
             =check_box_tag(:randomize)
             =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
           
-          -#  
+          -if request.path.include?('start')
             :javascript
               $(document).ready(function(){
-                $('#start_form').submit(function() {
-                  $(this).serialize();
-                  return false;
+                url = '#{@next_question_url}&randomize=1'
+                  
+                $.get(url, function(data) {
+                  #{render :partial => 'shared/scroll'}
                 });
               });
-            
+          
           :javascript
             $(document).ready(function(){
               $('#start').bind('click', function() {
@@ -98,6 +100,9 @@
 
 :javascript
   $(document).ready(function(){
+    
+    
+    
     question = $.bbq.getState( 'question', true ) || '';
     if( question != '') {
       $.get('/questions/'+question+'?test_id=#{@test.to_param}', function(data) {

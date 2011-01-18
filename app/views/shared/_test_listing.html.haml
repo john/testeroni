@@ -1,7 +1,7 @@
 %h3
-  =link_to(test.name, test_url(test.id, test.to_param))
+  =link_to(test.name, start_test_url(test.id, test.to_param))
   %span
-    =link_to('take me!', test_url(test.id, test.to_param), :class => 'green button sm')
+    =link_to('take me!', start_test_url(test.id, test.to_param), :class => 'green button sm')
 %div
   ="Has #{pluralize(test.questions.size, 'question')} and has been taken #{pluralize(test.takes.size, 'time')}"
   -unless test.takes.blank?
