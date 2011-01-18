@@ -1,10 +1,9 @@
 #answer
-  %h2
-    -if @response.correct
-      Correct!
-    - else
-      Wrong :-(
-  %p><
+  -if @response.correct
+    %h2{:style => 'color:green; font-size:3em;'} Correct!
+  - else
+    %h2{:style => 'color:red; font-size:3em;'}Wrong :-(
+  %p{:style => 'padding-bottom:15px;'}><
     = "The answer to the question "
     %strong<= @question.name
     is
@@ -17,9 +16,9 @@
         = @question.correct_choice.name
     -if @question.explanation
       %p{:style => 'padding:10px 0;'}= @question.explanation
-  %p= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
-  
-  %p
+      
+  %div= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
+  %div{:style => 'padding-bottom:10px;'}
     = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
     -if @more
       = "have #{pluralize((@test.questions.size+1-@question_number), 'question')} left."

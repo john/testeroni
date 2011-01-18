@@ -67,15 +67,17 @@
 @q = Question.create(:name => "Is Honolulu the capital of Hawaii?", :kind => Question::TRUEFALSE, :tst => @test,
 :user => @user, :correct_response => false, :explanation => 'The capital of Hawaii is Honolulu.')
 
-@q = Question.create(:name => "What is the capital of Idaho?", :image_url => 'http://3.bp.blogspot.com/_SNSoiGhOsCY/TLcMn-4E_eI/AAAAAAAAAH0/-ZTiAJjoFPo/s400/A-Tidal-Wave-Of-Distressed-Properties-In-The-Tallahassee-Real-Estate-Market.jpg',
-:kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user, :explanation => "The capital of Idaho is Boise. Helena isn't even in Idaho--it's the capital of Montana. And Russett isn't a place at all. It's a potato.")
+@q = Question.create(:name => "What is the capital of Idaho?",
+    :image_url => 'http://en.wikipedia.org/wiki/File:Russet_potato_cultivar_with_sprouts.jpg',
+    :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user, :explanation => "The capital of Idaho is Boise. Helena isn't even in Idaho--it's the capital of Montana. And Russett isn't a place at all. It's a potato.")
 @qc1 = Choice.create(:name => 'Twin Falls', :question_id => @q.id, :correct => false)
 @qc2 = Choice.create(:name => 'Boise', :question_id => @q.id, :correct => true)
 @qc3 = Choice.create(:name => 'Helena', :question_id => @q.id, :correct => false)
 @qc4 = Choice.create(:name => 'Russett', :question_id => @q.id, :correct => false)
 
-@q = Question.create(:name => "What is the capital of Illinois?", :image_url => 'http://3.bp.blogspot.com/_SNSoiGhOsCY/TLcMn-4E_eI/AAAAAAAAAH0/-ZTiAJjoFPo/s400/A-Tidal-Wave-Of-Distressed-Properties-In-The-Tallahassee-Real-Estate-Market.jpg',
-:kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user, :explanation => 'Springfield is both the home of the Simpsons, and the capital of Illinois.')
+@q = Question.create(:name => "What is the capital of Illinois?",
+    :image_url => 'http://www.8notes.com/wiki/images/300px-BluesBrothers.jpg',
+    :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user, :explanation => 'Springfield is both the home of the Simpsons, and the capital of Illinois.')
 @qc1 = Choice.create(:name => 'Joliet', :question_id => @q.id, :correct => false)
 @qc2 = Choice.create(:name => 'Chicago', :question_id => @q.id, :correct => false)
 @qc3 = Choice.create(:name => 'Rockfield', :question_id => @q.id, :correct => false)

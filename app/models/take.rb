@@ -29,7 +29,9 @@ class Take < ActiveRecord::Base
                       :questions_answered => tk[:a],
                       :questions_correct => tk[:c],
                       :question_order => tk[:qo])
+                      
     take.id = tk[:ta] if tk.has_key?(:ta) && tk[:ta] != nil
+    
     responses = tk[:r].map {|r| Response.new(:id => r[:id], :tst_id => tk[:te], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
     take.responses = responses
     
@@ -68,14 +70,9 @@ class Take < ActiveRecord::Base
     @take.save
     
     @responses.each do |r|
-      logger.debug "r: #{r.inspect}"
-      logger.debug "r.created_at: #{r.created_at}"
       updated_response = Response.find(r.id)
-      logger.debug "updated response: #{updated_response.inspect}"
-      
       updated_response.user_id = @take.user_id
       updated_response.take_id = @take.id
-      logger.debug "IN TAKE, about to save response: #{updated_response.inspect}"
       updated_response.save
     end
     session[:take] = nil
