@@ -3,7 +3,20 @@
     %h2{:style => 'color:green; font-size:3em;'} Correct!
   - else
     %h2{:style => 'color:red; font-size:3em;'}Wrong :-(
-    
+  %p{:style => 'padding-bottom:15px;'}><
+    = "The answer to the question "
+    %strong<= @question.name
+    is
+    %strong
+      - if @question.correct_response == Choice::TRUE
+        true.
+      - elsif @question.correct_response == Choice::FALSE
+        false.
+      - elsif @question.is_multiple_choice || @question.is_short_answer
+        = @question.correct_choice.name
+    -if @question.explanation
+      %p{:style => 'padding:10px 0;'}= @question.explanation
+      
   %div= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
   %div{:style => 'padding-bottom:10px;'}
     = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
@@ -16,10 +29,10 @@
 
     #next
       %a.question_link.green.button{:href => '#', :style => 'float:none; text-align:left;'}Next question &gt;
-
+    
     :javascript
       #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
-
+  
   -# %div{:style => 'border: 1px solid red;'}
     =link_to('comments', test_comments_path(@test.id, @test.to_param))
 
@@ -33,13 +46,13 @@
       = link_to_function('sign up', "Tstrni.viewSignup()")
       or
       = link_to_function('log in', "Tstrni.viewLogin()")
-
+      
     %label{:for => 'link_to_test'} Link to this test
     %input{:id => 'link_to_test', :type => 'text', :value => test_path(@test.id, @test.to_param)}
-
+    
     %label{:for => 'embed_test'} Embed this test
     %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
-
+      
 -if user_signed_in?
   -#=render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
 -else

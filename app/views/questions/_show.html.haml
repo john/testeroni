@@ -37,9 +37,10 @@
             %input{:type => "radio", :name => "choice_id", :id => "choice_#{i}", :value => choice.id}
             %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
     -if @question_number == 1 || (@take && @take.questions_answered > 0)
-      =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
-      -#-if @question_number < @test.questions.length
-        (<a href="#" id="skip">skip</a>)
+      #submit_wrap
+        =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
+        -#-if @question_number < @test.questions.length
+          (<a href="#" id="skip">skip</a>)
     -else
       %div{:style => 'padding-top:20px;'}
         Want to take this test? Then
@@ -48,8 +49,6 @@
     -# %div{:style => 'border: 1px solid red;'}
       =link_to('comments', test_comments_path(@test.id, @test.to_param))
       
-      
-
 -if @question_number <= @test.questions.length
 
   :javascript
@@ -68,7 +67,7 @@
           url: '#{answer_path}',
           data: $('#theForm').serialize(),
           success: function(data) {
-            #{render :partial => 'shared/scroll'}
+            $('#submit_wrap').html(data);
           },
           error: function(data) {
             alert('fail!');
