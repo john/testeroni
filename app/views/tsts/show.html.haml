@@ -100,14 +100,10 @@
 
 :javascript
   $(document).ready(function(){
-    
-    
-    
     question = $.bbq.getState( 'question', true ) || '';
     if( question != '') {
       $.get('/questions/'+question+'?test_id=#{@test.to_param}', function(data) {
         #{render :partial => 'shared/scroll'}
       });
     }
-
   });

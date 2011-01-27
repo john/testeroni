@@ -379,9 +379,26 @@ body {
   width:80%;
 }
 
+#answer h2 {
+  font-size:3em;
+  padding:10px 0 0 0;
+}
+
 #answer #next {
   font-size: 1.5em;
   padding:20px 0;
+}
+
+#answer #explanation {
+  padding:5px 0 20px 0;
+}
+
+#answer #progress {
+  padding:5px 0 10px 0;
+}
+
+#results {
+  padding:10px 0;
 }
 
 .bulletless {

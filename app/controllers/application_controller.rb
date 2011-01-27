@@ -78,12 +78,12 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # def log_session
-  #   logger.debug '--'
-  #   logger.debug "session: #{session.inspect}"
-  #   logger.debug "user_session: #{user_session.inspect}"
-  #   logger.debug '--'
-  # end
+  def log_session
+    logger.debug '--'
+    logger.debug "session: #{session.inspect}"
+    logger.debug "user_session: #{user_session.inspect}"
+    logger.debug '--'
+  end
   
   
   # manages the session info for promo. don't call this directly. (see get_promo)
@@ -101,9 +101,7 @@ class ApplicationController < ActionController::Base
   
   # IF a user has taken tests but wasn't logged in, they'll be in the session. Check for those and persist them if they're there.
   def save_take_and_set_flash(user)
-    logger.debug "INSIDE save_take_and_set_flash"
     if session[:take]
-      logger.debug "ABOUT to do: Take.save_from_session_for_user(session, user)"
       Take.save_from_session_for_user(session, user)
       flash[:notice] = "Signed in successfully and saved the results of your last test."
     else

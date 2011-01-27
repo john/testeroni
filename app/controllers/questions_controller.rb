@@ -8,24 +8,31 @@ class QuestionsController < ApplicationController
     @test = Tst.find(params[:test_id])
     @take = Take.find_from_session_or_params(params, session)
     
-    if params[:randomize] # this is only ever passed in when it's the start of a test
-      @question_ids = @test.questions.collect{|q| q.id}.shuffle
-      @question = Question.find(@question_ids[0])
-    else
-      @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
-      @question = Question.find(params[:id])
-    end
+    # if params[:randomize] # this is only ever passed in when it's the start of a test
+    #   @question_ids = @test.questions.collect{|q| q.id}.shuffle
+    #   # @question_ids.delete(@question.id)
+    #   @question = Question.find(@question_ids[0])
+    # else
+    #   @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
+    #   @question = Question.find(params[:id])
+    # end
+    
+    @question_ids = @take.question_ids
+    @question = Question.find(params[:id])
+    
+    logger.debug "IN QUESTION#SHOW, @question_ids: #{@question_ids.inspect}"
+    
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
-    if @take.nil?
-      @take = Take.new( :tst_id => @test.id,
-                        :user_id => (user_signed_in?) ? current_user.id : nil,
-                        :started_at => Time.now,
-                        :questions_answered => 0,
-                        :questions_correct => 0,
-                        :question_order => @question_ids.join(',') )
-      (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
-    end
+    # if @take.nil?
+    #   @take = Take.new( :tst_id => @test.id,
+    #                     :user_id => (user_signed_in?) ? current_user.id : nil,
+    #                     :started_at => Time.now,
+    #                     :questions_answered => 0,
+    #                     :questions_correct => 0,
+    #                     :question_order => @question_ids.join(',') )
+    #   (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
+    # end
     
     # to save a lookup pass in the question number when practical, but if it's not present, figure it out.
     if params[:question_number]
@@ -33,6 +40,7 @@ class QuestionsController < ApplicationController
     else
       @question_number = @question.get_nonzero_position_in_id_array(@question_ids)      
     end
+    
     render :partial => 'show'
   end
   

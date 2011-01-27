@@ -30,7 +30,25 @@ class TstsController < ApplicationController
       end
     end
     
-    @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+    # if params[:randomize] # this is only ever passed in when it's the start of a test
+      @question_ids = @test.questions.collect{|q| q.id}.shuffle
+      # @question_ids.delete(@question.id)
+      @question = Question.find(@question_ids[0])
+    # else
+    #   @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
+    #   @question = Question.find(params[:id])
+    # end
+    
+    @take = Take.new( :tst_id => @test.id,
+                      :user_id => (user_signed_in?) ? current_user.id : nil,
+                      :started_at => Time.now,
+                      :questions_answered => 0,
+                      :questions_correct => 0,
+                      :question_order => @question_ids.join(',') )
+    (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
+    
+    @next_question = Question.find(@question_ids[@question_number-1])
+    @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @question_number)
     
     render :layout => 'embed' if request.path =~ /embed/
   end

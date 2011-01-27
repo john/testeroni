@@ -14,15 +14,14 @@ class Take < ActiveRecord::Base
   validates :tst_id, :presence => true, :numericality => true
   
   def sessionize
+    logger.debug "IN SESSIONIZE"
     responses_hash = responses.map{|r| {:id => r.id, :q => r.question_id, :c => r.choice_id, :a => r.answer, :cr => r.correct, :n => r.name}}
     {:ta => id, :u => user_id, :te => tst_id, :s => started_at.to_i, :f => finished_at.to_i, :a => questions_answered, :c => questions_correct, :r => responses_hash, :qo => question_order}
   end
   
   def self.desessionize(session)
+    logger.debug "IN DE-SESSIONIZE"
     tk = session[:take]
-    
-    logger.debug "TK from session is: #{tk.inspect}"
-    
     take = Take.new(  :user_id => tk[:u],
                       :tst_id => tk[:te],
                       :started_at => Time.at(tk[:s]/1000.0),
@@ -31,21 +30,20 @@ class Take < ActiveRecord::Base
                       :question_order => tk[:qo])
                       
     take.id = tk[:ta] if tk.has_key?(:ta) && tk[:ta] != nil
-    
     responses = tk[:r].map {|r| Response.new(:id => r[:id], :tst_id => tk[:te], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
     take.responses = responses
-    
-    logger.debug "ABOUT TO desessionize this take: #{take.inspect}"
-    
     take
   end
   
   def self.find_from_session_or_params(params, session)
     if !params[:take_id].blank?
+      logger.debug "TAKE FROM PARAMS (find)"
       Take.find(params[:take_id])
     elsif session[:take]
+      logger.debug "TAKE FROM SESSION (dessessionize)"
       Take.desessionize(session)
     else
+      logger.debug "TAKE IS NIL"
       nil
     end
   end
