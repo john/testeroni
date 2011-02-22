@@ -17,18 +17,24 @@ class TstsController < ApplicationController
     @description = "'#{@test.name}' a test on Testeroni.com"
     @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
     
+    # THIS IS THE FUCKING PROBLEM, or one of them. it's based on the natural order of the questions,
+    # not the randomized one created below and passed to the Take. This probabalby
+    # needs to be below the block beneath this, and it probably needs other adjustment.
     @question_number = 1
-    if params[:question_id]
-      @question = Question.find(params[:question_id])
-      
-      # is there a way to get the question_number without having to loop?
-      @test.questions.each_with_index do |q, i|
-        if q.id == @question.id
-          @question_number = i+1
-          break
-        end
-      end
-    end
+    # if params[:question_id]
+    #   @question = Question.find(params[:question_id])
+    #   
+    #   # is there a way to get the question_number without having to loop?
+    #   @test.questions.each_with_index do |q, i|
+    #     if q.id == @question.id
+    #       @question_number = i+1
+    #       break
+    #     end
+    #   end
+    # end
+    
+    
+    
     
     # if params[:randomize] # this is only ever passed in when it's the start of a test
       @question_ids = @test.questions.collect{|q| q.id}.shuffle
@@ -45,10 +51,16 @@ class TstsController < ApplicationController
                       :questions_answered => 0,
                       :questions_correct => 0,
                       :question_order => @question_ids.join(',') )
-    (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
-    
-    @next_question = Question.find(@question_ids[@question_number-1])
-    @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @question_number)
+    logger.debug "SAVING NEW TAKE: #{@take.inspect}"
+    if user_signed_in?
+      logger.debug "ABOUT to save take"
+      @take.save
+    else
+      logger.debug "ABOUT to sessionize take"
+      session[:take] = @take.sessionize
+    end
+    @next_question = Question.find(@question_ids[@question_number])
+    @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @question_number+1)
     
     render :layout => 'embed' if request.path =~ /embed/
   end

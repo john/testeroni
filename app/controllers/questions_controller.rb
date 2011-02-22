@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     
     logger.debug "IN QUESTION#SHOW, @question_ids: #{@question_ids.inspect}"
+    logger.debug "TAKE: #{@take.inspect}"
     
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
@@ -41,6 +42,8 @@ class QuestionsController < ApplicationController
       @question_number = @question.get_nonzero_position_in_id_array(@question_ids)      
     end
     
+    logger.debug "IN Q#SHOW, just before render, session is:"
+    logger.debug "session.inspect"
     render :partial => 'show'
   end
   
@@ -50,7 +53,11 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:question_id])
     @question_number = params[:question_number].to_i
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
+    
+    logger.debug "ABOUT to get take from session or db"
     @take = Take.find_from_session_or_params(params, session)
+    logger.debug "SHOULD have a take now: #{@take.inspect}"
+    
     @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
     @response.take_id = @take.id if @take.id
     

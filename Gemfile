@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
 # bundle install after modifying this
-gem 'rails'
+# gem 'rails', '3.0.4'
+gem 'rails', '3.0.3'
 gem 'ruby-mysql'
 gem 'jquery-rails'
 gem 'hpricot'
@@ -9,7 +10,7 @@ gem 'haml'
 gem 'flutie'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 # gem "devise", "1.2.rc"
-gem "oa-oauth", :require => "omniauth/oauth"
+gem 'oa-oauth', :require => 'omniauth/oauth'
 gem 'koala'
 gem 'friendly_id'
 gem 'acts-as-taggable-on'
@@ -26,6 +27,7 @@ gem 'formtastic', '~> 1.1.0'
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
 group :development, :test do
+  # gem 'ruby-debug'
   gem 'bullet'
   gem 'ruby-growl'
   gem 'rails3-generators'

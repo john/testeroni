@@ -1,5 +1,19 @@
 =render(:partial => 'tsts/header')
 
+%hr
+%div
+  Question number: #{@question_number}
+%div
+  Question ids:
+  =@question_ids.inspect
+%div
+  @next_question_url:
+  =@next_question_url
+%div
+  @next_question.id:
+  =@next_question.id
+%hr
+
 -unless @test.videos.blank?
   %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
     -@test.videos.each_with_index do |v,i|
@@ -70,7 +84,8 @@
           -if request.path.include?('start')
             :javascript
               $(document).ready(function(){
-                url = '#{@next_question_url}&randomize=1'
+                //url = '#{@next_question_url}&randomize=1'
+                url = '#{@next_question_url}'
                   
                 $.get(url, function(data) {
                   #{render :partial => 'shared/scroll'}
@@ -80,11 +95,11 @@
           :javascript
             $(document).ready(function(){
               $('#start').bind('click', function() {
-                if( $('#randomize').is(':checked') ) {
-                  url = '#{@next_question_url}&randomize=1'
-                } else {
+                //if( $('#randomize').is(':checked') ) {
+                //  url = '#{@next_question_url}&randomize=1'
+                //} else {
                   url = '#{@next_question_url}'
-                }
+                //}
                 $.get(url, function(data) {
                   #{render :partial => 'shared/scroll'}
                 });

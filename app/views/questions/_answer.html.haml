@@ -35,14 +35,15 @@
         or
         = link_to_function('log in', "Tstrni.viewLogin()")
 
-    %label{:for => 'link_to_test'} Link to this test
-    %input{:id => 'link_to_test', :type => 'text', :value => test_path(@test.id, @test.to_param)}
+    -#
+      %label{:for => 'link_to_test'} Link to this test
+      %input{:id => 'link_to_test', :type => 'text', :value => test_path(@test.id, @test.to_param)}
 
-    %label{:for => 'embed_test'} Embed this test
-    %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
+      %label{:for => 'embed_test'} Embed this test
+      %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
 
   -if user_signed_in?
-    -#=render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
+    =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
   -else
     %p
       = link_to_function('Sign up', "signupThenGoTo('')")

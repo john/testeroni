@@ -5,7 +5,7 @@ development:
   database: testeroni_development
   pool: 2
   username: root
-  password: 4Bcd3fg
+  password: 
   socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and

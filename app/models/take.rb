@@ -36,6 +36,10 @@ class Take < ActiveRecord::Base
   end
   
   def self.find_from_session_or_params(params, session)
+    logger.debug ' ---------------------------- '
+    logger.debug " IN find_from_session_or_params, session is: "
+    logger.debug session.inspect
+    logger.debug ' ---------------------------- '
     if !params[:take_id].blank?
       logger.debug "TAKE FROM PARAMS (find)"
       Take.find(params[:take_id])
