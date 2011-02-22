@@ -7,57 +7,27 @@ class QuestionsController < ApplicationController
   def show
     @test = Tst.find(params[:test_id])
     @take = Take.find_from_session_or_params(params, session)
-    
-    # if params[:randomize] # this is only ever passed in when it's the start of a test
-    #   @question_ids = @test.questions.collect{|q| q.id}.shuffle
-    #   # @question_ids.delete(@question.id)
-    #   @question = Question.find(@question_ids[0])
-    # else
-    #   @question_ids = (@take.nil?) ? @test.questions.collect{|q| q.id} : @take.question_ids
-    #   @question = Question.find(params[:id])
-    # end
-    
     @question_ids = @take.question_ids
     @question = Question.find(params[:id])
-    
-    logger.debug "IN QUESTION#SHOW, @question_ids: #{@question_ids.inspect}"
-    logger.debug "TAKE: #{@take.inspect}"
-    
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-
-    # if @take.nil?
-    #   @take = Take.new( :tst_id => @test.id,
-    #                     :user_id => (user_signed_in?) ? current_user.id : nil,
-    #                     :started_at => Time.now,
-    #                     :questions_answered => 0,
-    #                     :questions_correct => 0,
-    #                     :question_order => @question_ids.join(',') )
-    #   (user_signed_in?) ? @take.save : session[:take] = @take.sessionize
-    # end
     
     # to save a lookup pass in the question number when practical, but if it's not present, figure it out.
     if params[:question_number]
       @question_number = params[:question_number].to_i
     else
-      @question_number = @question.get_nonzero_position_in_id_array(@question_ids)      
+      @question_number = @question.get_nonzero_position_in_id_array(@question_ids)
     end
     
-    logger.debug "IN Q#SHOW, just before render, session is:"
-    logger.debug "session.inspect"
-    render :partial => 'show'
+    render(:partial => 'show', :locals => {:question_number => @question_number})
   end
+  
   
   def answer
     @test = Tst.find(params[:test_id])
-    
     @question = Question.find(params[:question_id])
-    @question_number = params[:question_number].to_i
+    @next_question_number = params[:question_number].to_i + 1
     @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-    
-    logger.debug "ABOUT to get take from session or db"
     @take = Take.find_from_session_or_params(params, session)
-    logger.debug "SHOULD have a take now: #{@take.inspect}"
-    
     @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
     @response.take_id = @take.id if @take.id
     
@@ -94,7 +64,7 @@ class QuestionsController < ApplicationController
     end
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
     
-    if @test.questions.length == @question_number
+    if @test.questions.length == params[:question_number].to_i
       @more = false
       @take.finished_at = Time.now if params[:take_id]
       if user_signed_in?
@@ -104,10 +74,11 @@ class QuestionsController < ApplicationController
       end
     else
       @more = true
-      @question_number = @question_number + 1
+      @question_ids = @take.question_ids
+      @next_question = Question.find(@question_ids[params[:question_number].to_i])
+      @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @next_question_number, :take_id => @take.id)
     end
     @take.save if user_signed_in?
-    
     render :partial => 'questions/answer'
   end
 

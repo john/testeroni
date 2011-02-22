@@ -1,19 +1,5 @@
 =render(:partial => 'tsts/header')
 
-%hr
-%div
-  Question number: #{@question_number}
-%div
-  Question ids:
-  =@question_ids.inspect
-%div
-  @next_question_url:
-  =@next_question_url
-%div
-  @next_question.id:
-  =@next_question.id
-%hr
-
 -unless @test.videos.blank?
   %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
     -@test.videos.each_with_index do |v,i|
@@ -73,7 +59,7 @@
     -if @test.has_questions? && @test.published? && @test.active?
     
       -if @question
-        =render(:partial => 'questions/show')
+        =render(:partial => 'questions/show', :locals => {:question_number => 1})
       -else
         %div
           =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
@@ -95,12 +81,7 @@
           :javascript
             $(document).ready(function(){
               $('#start').bind('click', function() {
-                //if( $('#randomize').is(':checked') ) {
-                //  url = '#{@next_question_url}&randomize=1'
-                //} else {
-                  url = '#{@next_question_url}'
-                //}
-                $.get(url, function(data) {
+                $.get('#{@next_question_url}', function(data) {
                   #{render :partial => 'shared/scroll'}
                 });
               });
@@ -112,13 +93,3 @@
 
 #pusher>
   &nbsp;
-
-:javascript
-  $(document).ready(function(){
-    question = $.bbq.getState( 'question', true ) || '';
-    if( question != '') {
-      $.get('/questions/'+question+'?test_id=#{@test.to_param}', function(data) {
-        #{render :partial => 'shared/scroll'}
-      });
-    }
-  });
