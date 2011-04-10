@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20110106195117) do
   add_index "choices", ["question_id"], :name => "index_choices_on_question_id"
 
   create_table "comments", :force => true do |t|
-    t.integer  "test_id",                        :default => 0
+    t.integer  "tst_id",                         :default => 0
     t.integer  "question_id",                    :default => 0
     t.integer  "commentable_id",                 :default => 0
     t.string   "commentable_type", :limit => 15, :default => ""

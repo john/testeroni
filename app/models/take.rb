@@ -77,6 +77,7 @@ class Take < ActiveRecord::Base
       updated_response.take_id = @take.id
       updated_response.save
     end
+    
     session[:take] = nil
     @take
   end

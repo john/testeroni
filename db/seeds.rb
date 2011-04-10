@@ -182,9 +182,9 @@
 
 @q = Question.create(:name => "Which of these people did not win a Nobel Prize?", :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user,
             :explanation => 'This is kind of a trick question, in that Sartre was awarded the prize, but refused it. Kissinger won in 1973, Obama in 2009. Gandhi was nominated five times, but never won.')
-@qc1 = Choice.create(:name => 'Henry Kissinger', :question_id => @q.id, :correct => true)
+@qc1 = Choice.create(:name => 'Henry Kissinger', :question_id => @q.id, :correct => false)
 @qc2 = Choice.create(:name => 'Barack Obama', :question_id => @q.id, :correct => false)
-@qc3 = Choice.create(:name => 'Mohandas Gandhi', :question_id => @q.id, :correct => false)
+@qc3 = Choice.create(:name => 'Mohandas Gandhi', :question_id => @q.id, :correct => true)
 @qc4 = Choice.create(:name => 'Jean Paul Sartre', :question_id => @q.id, :correct => false)
 
 @test.published_at = Time.now

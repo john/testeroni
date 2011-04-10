@@ -19,8 +19,8 @@
         document.write('<script type="text/javascript" src = "/javascripts/jquery-ui.min.js"><\/script>');
         document.write('<script type="text/javascript" src = "/javascripts/swfobject.js"><\/script>');
       } else {
-        google.load("jquery", "1.4.4");
-        google.load("jqueryui", "1.8.7");
+        google.load("jquery", "1.5.1");
+        google.load("jqueryui", "1.8.11");
         google.load("swfobject", "2.2");
       }
       
@@ -34,6 +34,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     
+    -# for the stackoverflow-based text editor.
     -# combine all these in prod, plus the shit at the bottom of this template too
     =javascript_include_tag("/wmd/wmd.js")
     =javascript_include_tag("/wmd/showdown.js")
@@ -71,6 +72,8 @@
           -else
             %a{:href => '/'}<
               Testeroni
+          %span{:style => 'font-size:.4em'}
+            a free site for making and taking tests
               
     #container
       =render(:partial => 'shared/flash', :locals => {:flash => flash})
@@ -107,12 +110,17 @@
             = link_to_function('Log in', "$('.login').toggle()")
           %h3 Create an account
           %div
-            .show_twitter{:style => 'width:210px; float:left; text-align:left;'}
-              =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
-            .show_twitter{:style => 'width:160px; float:left; text-align:left; vertical-align:top;'}
-              =link_to_function('or sign up using Twitter', "$('.show_twitter').toggle()")
-              =link_to_function(image_tag('twitter_icon.png', :style => 'vertical-align:top;padding:0 0 0 5px;'), "$('.show_twitter').toggle()")
-            .show_twitter{:style => 'display:none;'}
+          
+          
+          
+            .show_oauth{:style => 'width:210px; float:left; text-align:left;'}
+              =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Sign in with Facebook", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
+            -# TODO: signup via twitter is borked, it needs to be passed an email. Comment out for now.
+            -#.show_oauth{:style => 'width:160px; float:left; text-align:left; vertical-align:top;'}
+              =link_to_function('or sign up using Twitter', "$('.show_oauth').toggle()")
+              =link_to_function(image_tag('twitter_icon.png', :style => 'vertical-align:top;padding:0 0 0 5px;'), "$('.show_oauth').toggle()")
+              
+            .show_oauth{:style => 'display:none;'}
               %div{:style => 'padding:0 0 4px 0;'}
                 Enter your email then click
                 %strong Sign in with Twitter
@@ -120,10 +128,14 @@
 
               .twitter{:style => 'padding-top:20px;'}
                 =link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter), :id => 'twitter-link')
-                %a{:onclick => "$('.show_twitter').toggle();", :style => 'font-size:.9em;'} cancel
+                %a{:onclick => "$('.show_oauth').toggle();", :style => 'font-size:.9em;'} cancel
+                
+                
+                
+                
           .clearfix
-          %div{:style => 'padding-top:20px;', :class => 'show_twitter'}>
-            Don't have a Facebook or Twitter account?
+          #no_oauth.show_oauth>
+            Don't have a Facebook account?
             %a#use_email{:href =>"#"} Use your email
         .account{:style => 'display:none;'}
           %h4 Create an account
@@ -147,9 +159,9 @@
             = link_to_function('Create a new account', "$('.login').toggle()")
           %h3 Log in
           =link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Twitter", :style => 'padding:0 10px 0 0; margin:0;'), user_omniauth_authorize_path(:facebook))
-          =link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter))
+          -#=link_to(image_tag("twitter_signin.png", :size => "151x24", :alt => "Twitter", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:twitter))
           
-          %div{:style => 'padding:15px 0 0 0;'} Or if you created your account directly on Testeroni, log in below:
+          %div{:style => 'padding:15px 0 0 0;'} Or if you created your account with you email, log in below:
           = form_for(@user, :url => session_path(@user)) do |f|
             = f.label :email, 'email'
             = f.email_field(:email, :style => 'width:300px;')
@@ -165,8 +177,7 @@
           
         .caption.login{:style => 'padding-top:25px;'}
           By creating an account on Testeroni you are indicating that you
-          %br have read and agree to the
-          =link_to('Terms of Service', terms_path)
+          %br have read and agree to the #{link_to('Terms of Service', terms_path)}
     =javascript_include_tag('rails')
     =javascript_include_tag 'jquery.lightbox_me.js'
     =javascript_include_tag('jquery.ba-bbq.min.js')

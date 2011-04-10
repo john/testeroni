@@ -1,9 +1,18 @@
 #answer
+
   -if @response.correct
-    %h2{:style => 'color:green;'} Correct!
+    %h2{:style => 'color:green; float:left;'} Correct!
   - else
-    %h2{:style => 'color:red;'} Wrong :-(
+    %h2{:style => 'color:red; float:left;'} Wrong :-(
     
+  -if @more
+    #next
+      %a.question_link.green.button{:href => '#', :style => 'text-align:left; margin-left:20px;'}Next question &gt;
+  -else
+    %div{:style => 'float:left; padding:0px 0 20px 20px; margin:15px 0 20px 20px; font-size:2.5em; font-weight:bold;'}
+      Finished!
+  .clearfix
+  
   #explanation= @question.explanation
     
   %div= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
@@ -15,14 +24,10 @@
       done with the test.
   -if @more
     
-    #next
-      %a.question_link.green.button{:href => '#', :style => 'float:none; text-align:left;'}Next question &gt;
-      
     :javascript
       #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
 
-  -# %div{:style => 'border: 1px solid red;'}
-    =link_to('comments', test_comments_path(@test.id, @test.to_param))
+    =link_to('all comments', test_comments_path(@test.id, @test.to_param))
 
   - unless @more
     %h5#results

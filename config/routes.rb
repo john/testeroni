@@ -65,6 +65,7 @@ Testeroni::Application.routes.draw do
   match 'terms', :to => 'home#terms', :as => 'terms'
   match 'notes', :to => 'home#notes', :as => 'notes'
   match 'deck', :to => 'home#deck', :as => 'deck'
+  match 'clear', :to => 'home#clear', :as => 'clear'
   # match 'test', :to => 'home#test', :as => 'test'
 
 end

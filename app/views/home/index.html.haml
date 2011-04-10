@@ -2,10 +2,7 @@
   %h2{:style => 'padding:10px 0 25px 0;'} #{link_to('Create a test right now', new_test_url, :class => 'green button')} or take any of these tests:
 - else
 
-  %p{:style => "font-size:1.2em;"}
-    %strong< Testeroni is a free site for making and taking tests.
-    
-  %div{:style => 'margin:20px 0;'}
+  %div{:style => 'padding:20px 0;'}
     =link_to_function('Create Account', "Tstrni.viewSignup()", :class => 'green button', :style => 'font-size:1.8em; font-style:italic; font-weight:bold;padding:5px 10px;')
     Already have an account?
     =link_to 'Log in'

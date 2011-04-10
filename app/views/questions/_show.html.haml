@@ -12,6 +12,8 @@
     %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
     %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
     %input{:type => 'hidden', :name => 'question_number', :value => question_number}
+    %input{:type => 'hidden', :name => 'authenticity_token', :id => 'authenticity_token', :value => ''}
+    
     -if @take
       %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
   
@@ -63,6 +65,15 @@
       
       $('#submit_button').click(function() {
         // validate. if valid...
+        
+        // Fetch the CSRF meta tag data
+        var csrf_token = $('meta[name=csrf-token]').attr('content');
+        //var csrf_param = $('meta[name=csrf-param]').attr('content');
+
+        // add the CSRF vars above to the form data. Need to do this because Rails 3.0.4 requires
+        // an authenticity token for all non-GET requests. TODO: there's probably a better way to do it.
+        $('#authenticity_token').val(csrf_token);
+        
         $.ajax({
           type: 'POST',
           url: '#{answer_path}',
@@ -71,7 +82,7 @@
             $('#submit_wrap').html(data);
           },
           error: function(data) {
-            alert('fail!');
+            alert('fail! fail! FAIL!');
           }
         });
         return false;

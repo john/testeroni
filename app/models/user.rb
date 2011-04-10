@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :auth_id, :first_name, :last_name, :display_name, :timezone, :email_list
   
   validates :display_name, :presence => true
-  # validates :email, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/}
+  validates :email, :presence => true, :uniqueness => {:case_sensitive => false}, :format => {:with => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/}
   
   has_many :tsts
   has_many :questions
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
   # to allow people to log in with either email or username. see:
   # http://stackoverflow.com/questions/2997179/ror-devise-sign-in-with-username-or-email
   def self.find_for_database_authentication(conditions={})
-    self.where("username = ?", conditions[:email]).limit(1).first ||
+    # self.where("username = ?", conditions[:email]).limit(1).first ||
     self.where("email = ?", conditions[:email]).limit(1).first
   end
   

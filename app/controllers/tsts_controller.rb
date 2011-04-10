@@ -29,8 +29,10 @@ class TstsController < ApplicationController
     else
       session[:take] = @take.sessionize
     end
-    @next_question = Question.find(@question_ids[1])
-    @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => 2)
+    if @question_ids.size > 1
+      @next_question = Question.find(@question_ids[1])
+      @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => 2)
+    end
     
     # render :layout => 'embed' if request.path =~ /embed/
   end

@@ -285,6 +285,10 @@ body {
   width: 90px;
   font-size: 1em; }
 
+#signup #no_oauth {
+  font-size: 1.1em;
+  padding-top: 20px; }
+
 #container {
   width: 970px;
   padding: 0;

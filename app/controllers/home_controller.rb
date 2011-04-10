@@ -32,5 +32,11 @@ class HomeController < ApplicationController
   
   def blohg
   end
+  
+  def clear
+    reset_session
+    flash[:notice] = 'Session cleared.'
+    redirect_to(root_path)
+  end
 
 end

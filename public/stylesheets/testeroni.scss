@@ -315,6 +315,11 @@ body {
   font-size:1em;
 }
 
+#signup #no_oauth {
+  font-size:1.1em;
+  padding-top:20px;
+}
+
 #container {
   width:970px;
   padding:0;
@@ -381,12 +386,16 @@ body {
 
 #answer h2 {
   font-size:3em;
-  padding:10px 0 0 0;
+  padding:0;
+  margin:0;
 }
 
 #answer #next {
+  float:left;
   font-size: 1.5em;
-  padding:20px 0;
+  padding:20px 0 20px 20px;
+  margin:20px 0 20px 20px;
+  width:100px;
 }
 
 #answer #explanation {
@@ -512,11 +521,6 @@ padding:15px 0;
 .tag2 { font-size: 1.2em; }
 .tag3 { font-size: 1.4em; }
 .tag4 { font-size: 1.6em; }
-
-/* replace with clearfix? */
-#pusher {
-  clear:both;
-}
 
 #foot-wrap {
   width:100%;

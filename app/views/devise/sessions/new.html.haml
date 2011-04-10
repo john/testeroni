@@ -1,8 +1,7 @@
-%p If your account is connected to Facebook or Twitter, click the appropriate button to log in.
+-#= render(:partial => 'registrations/services')
+=link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Sign in with Facebook", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
 
-= render(:partial => 'registrations/services')
-
-%p Or if you created your account directly on Testeroni, use this form:
+%p{:style => 'padding-top:20px;'} Or if you created your account directly on Testeroni, use this form:
 = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   %p
     = f.label :email, 'Username or email'

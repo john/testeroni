@@ -15,11 +15,14 @@ class CommentsController < ApplicationController
     @comment = Comment.build_from(@commented_on, current_user.id, params[:comment_text] )
     
     if params[:comment][:commentable_type] == 'Tst'
-      @comment.test_id = params[:comment][:commentable_id]
+      @comment.tst_id = params[:comment][:commentable_id]
     end
     
     if params[:comment][:commentable_type] == 'Question'
       @comment.question_id = params[:comment][:commentable_id]
+      
+      @question = Question.find(params[:comment][:commentable_id])
+      @comment.tst_id = @question.tst_id
     end
     
     if params[:question_id]

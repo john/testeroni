@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :setup_user
   before_filter :set_return_to, :except => ['sign_in']
-  before_filter :promo
+  # before_filter :promo
   before_filter :auth_in_prod
   # before_filter :log_session
   
@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   
   # application_controller before_filter
   def set_return_to
-    unless request.referrer.include?('auth') || request.path.include?('questions')
+    unless request.referrer.include?('auth') || request.path.include?('questions') || request.path.include?('users')
       logger.debug "set_return_to request.path: #{request.path}"
       session[:return_to] = request.path
     else
@@ -42,12 +42,15 @@ class ApplicationController < ActionController::Base
     if current_user
       logger.debug "FOUND Current user"
       if params[:return_to]
+        logger.debug "return to: params[:return_to]"
         return params[:return_to]
       elsif session[:return_to]
+        logger.debug "return to: session[:return_to]"
         redir = session[:return_to]
         session.delete(:return_to)
         return redir
       elsif cookies[:return_to]
+        logger.debug "return to: cookies[:return_to]"
         redir = cookies[:return_to]
         cookies.delete :return_to
         return redir

@@ -34,10 +34,18 @@ class QuestionsController < ApplicationController
     if !params[:answer].blank?
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
+      
+      logger.debug "@answer: #{@answer}"
+      logger.debug "@question.correct_response: #{@question.correct_response}"
+      
       @response.correct = (@answer == @question.correct_response) ? true : false
     elsif !params[:choice_id].blank?
       @choice = Choice.find(params[:choice_id])
       @response.choice = @choice
+      
+      logger.debug "@choice.correct: #{@choice.correct}"
+      logger.debug "@choice: #{@choice.inspect}"
+      
       @response.correct = @choice.correct
     elsif !params[:short_answer].blank?
       @response.choice = @question.choices.first
@@ -48,6 +56,7 @@ class QuestionsController < ApplicationController
     @take.questions_answered = @take.questions_answered+1
     @take.questions_correct = @take.questions_correct+1 if @response.correct?
     
+    logger.debug "RESPONSE: #{@response.inspect}"
     if user_signed_in?
       @response.user = current_user
       @response.take = @take
