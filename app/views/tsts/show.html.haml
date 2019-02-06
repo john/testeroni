@@ -1,94 +1,100 @@
-=render(:partial => 'tsts/header')
+.row.mt-20.ml-10
+  .col-12.col-md-10.col-lg-8
 
--unless @test.videos.blank?
-  %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
-    -@test.videos.each_with_index do |v,i|
-      %div{:id => "ytplayer_#{i}"}
-      
-      -#%div
-        =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
-        &#183;
-        =link_to_function('playAndPause', "Tstrni.playAndPause('ytplayer_#{i}')")
-        &#183;
-        =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
-        &#183;
-        =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
-        &#183;
-        
-      :javascript
-      
-        $(document).ready(function(){
-        
-          // get stop points from test (tst#stop_points), put in an object in the Tstrni object
-          // data structure: {'testId':3, 'pausePoints':[{stopAtSecond: displayQuestionId}]}
-          // Tstrni.pausePointsForTest = #{@test.pause_points.to_json}
-        
-          var params = { allowScriptAccess: "always" };
-          swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
-        });
-        
-.questions
-  #question_pane
-    -if @owner
-      -if !@test.has_questions?
-        %h2= link_to('Add the first question', new_question_path(:test_id => @test.to_param))
-      -elsif params[:a]
-        #added.notice{:style => 'font-size:1.2em;'}
-          %a{:id => "close-added", :style => 'float:right;'}>
-            [x]
-          %h4{:style => 'padding-bottom:10px;'} Question added
-          %p{:style => 'padding-bottom:10px;'}
-            #{link_to('Add another question', new_question_path(:test_id => @test.id), :style => 'text-decoration:underline;font-weight:bold;')}
-            
-            -unless @test.published?
-              or #{link_to('publish the test', publish_test_path(@test), :style => 'text-decoration:underline;font-weight:bold;')}
-              %p{:style => 'font-size:.9em;'} Once it's published people can start taking it.
+    =render(:partial => 'tsts/header')
+
+    -unless @test.videos.blank?
+      %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
+        -@test.videos.each_with_index do |v,i|
+          %div{:id => "ytplayer_#{i}"}
+
+          -#%div
+            =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
+            &#183;
+            =link_to_function('playAndPause', "Tstrni.playAndPause('ytplayer_#{i}')")
+            &#183;
+            =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
+            &#183;
+            =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
+            &#183;
 
           :javascript
-            $(document).ready(function(){
-              $('#close-added').bind('click', function() {
-                $('#added').effect('fade');
-              });
-            });
-        
-        %p Thee questions so far:
-        %ol
-          -@test.questions.each do |q|
-            %li{:style => 'margin-left:20px;'}= q.name
-            
-    -if @test.has_questions? && @test.published? && @test.active?
-    
-      -if @question
-        =render(:partial => 'questions/show', :locals => {:question_number => 1})
-      -else
-        %div
-          =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
-          -if @test.questions.size > 1
-            =check_box_tag(:randomize)
-            =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
-          
-          -if request.path.include?('start')
-            :javascript
-              $(document).ready(function(){
-                //url = '#{@next_question_url}&randomize=1'
-                url = '#{@next_question_url}'
-                  
-                $.get(url, function(data) {
-                  #{render :partial => 'shared/scroll'}
-                });
-              });
-          
-          :javascript
-            $(document).ready(function(){
-              $('#start').bind('click', function() {
-                $.get('#{@next_question_url}', function(data) {
-                  #{render :partial => 'shared/scroll'}
-                });
-              });
-            });
-            
-      -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
-    -elsif @test.inactive?
-      %em Sorry, this test is currently inactive.
 
-.clearfix
+            $(document).ready(function(){
+
+              // get stop points from test (tst#stop_points), put in an object in the Tstrni object
+              // data structure: {'testId':3, 'pausePoints':[{stopAtSecond: displayQuestionId}]}
+              // Tstrni.pausePointsForTest = #{@test.pause_points.to_json}
+
+              var params = { allowScriptAccess: "always" };
+              swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
+            });
+
+    .questions
+      #question_pane
+        -if @owner
+          -if !@test.has_questions?
+            %h2= link_to('Add the first question', new_question_path(:test_id => @test.to_param))
+          -elsif params[:a]
+
+            .alert.alert-success.mt-20{role: "alert"}
+
+              %button#closer{type: "button", class: "close", "aria-label": "Close"}
+                %span{"aria-hidden": "true"}
+                  &times;
+              :javascript
+                  $("#closer").click(function(){
+                    $(".alert").fadeToggle();
+                  })
+
+              %b{:style => 'padding-bottom:10px;'}
+                Question added.
+              #{link_to 'Add another question', new_question_path(test_id: @test.id)}
+
+              -unless @test.published?
+                or #{link_to 'publish the test', publish_test_path(@test)}
+
+            %p
+              Questions:
+            %ol
+              -@test.questions.each do |q|
+                %li{style: 'margin-left:20px;'}= q.name
+
+        -if @test.has_questions? && @test.published? && @test.active?
+
+          -if @question
+            =render(:partial => 'questions/show', :locals => {:question_number => 1})
+
+          -else
+            %div
+              =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
+
+              -if @test.questions.size > 1
+                =check_box_tag(:randomize)
+                =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
+
+              -if request.path.include?('start')
+                :javascript
+                  $(document).ready(function(){
+                    //url = '#{@next_question_url}&randomize=1'
+                    url = '#{@next_question_url}'
+
+                    $.get(url, function(data) {
+                      #{render :partial => 'application/scroll'}
+                    });
+                  });
+
+              :javascript
+                $(document).ready(function(){
+                  $('#start').bind('click', function() {
+                    $.get('#{@next_question_url}', function(data) {
+                      #{render :partial => 'shared/scroll'}
+                    });
+                  });
+                });
+
+          -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+        -elsif @test.inactive?
+          %em Sorry, this test is currently inactive.
+
+    .clearfix

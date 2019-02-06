@@ -1,0 +1,14 @@
+.row.mt-50.ml-10
+  .col-12.col-md-10.col-lg-8
+    %h2
+      #{current_user.name} has created:
+
+    - if @tests.present?
+      %ul
+        - @tests.each do |test|
+          %li
+            = link_to test.name, test_path(test)
+
+    - else
+      %i
+        Nothing whatsoever!

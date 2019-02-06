@@ -4,14 +4,15 @@
     %strong= link_to @test.name, test_path(@test.id, @test.to_param)
 
 =form_for(@question) do |f|
-  =render(:partial => 'shared/errors', :locals => {:errors => @question.errors})
+
+  =render(:partial => 'application/errors', :locals => {:errors => @question.errors})
   -if params[:test_id]
     %input{:type => "hidden", :name => "test_id", :value => params[:test_id]}
 
   .actions
-    %p
+    .field
       =f.label :name, 'Question'
-      =f.text_field :name
+      =f.text_field :name, autofocus: true, class: 'form-control'
 
       %p{:style => "padding:10px 0; margin:3px 0; vertical-align:middle"}
         %p The answer to this question is:
@@ -27,13 +28,20 @@
         %p
           =f.radio_button :correct_response, Choice::MULTIPLE, :class => 'multiple_choice', :checked => (@multiple_choice) ? 'checked' : 'false'
           =f.label "correct_response_#{Choice::MULTIPLE}", 'multiple choice', :style => 'display:inline;'
+
+
         #short_answers{:style => (@short_answer) ? '' : 'display:none;'}
           %div{:style => 'padding-bottom:10px; margin-bottom:10px; border-bottom: 1px solid #ddd;'}
-            %label{:for => 'short_answer'} Enter a short (less than 10 words) answer
-            %input{:id => 'short_answer', :name => 'short_answer', :type => 'text', :value => (@short_answer) ? @question.choices.first.name : ''}
+
+            .field.mt-20
+              %label{for: 'short_answer'}
+                Enter a short (less than 10 words) answer
+              %input{id: 'short_answer', name: 'short_answer', type: 'text', class: 'form-control', value: (@short_answer) ? @question.choices.first.name : ''}
+
             %p{:style => 'font-style:italic; padding:5px 0 0 0; width: 70%;'}
               If there is more than one possible correct answer (ie, 'Obama' and 'Barack Obama') you can
-              = link_to_function('add alternate correct answers.')
+              = link_to 'add alternate correct answers.', "#"
+
         #multiple_choices{:style => (@multiple_choice) ? '' : 'display:none;'}
           %div
             Enter two or more possible answers, and make sure to say which one is correct.
@@ -58,21 +66,26 @@
                   -# @multiple_choice
                   %input{:name => "correct_answer", :class => 'correct_answer', :type => "radio", :value => "choice_#{i}"}
                   correct answer?
-                    
-                    
-    %p
+
+
+    .field.mt-20
       =f.label :description, 'Description (shown when the question is asked)'
-      =f.text_area :description, :style => 'height:60px;'
+      =f.text_area :description, style: 'height:60px;', class: 'form-control'
+
+    .field.mt-20
       =f.label :image_url, 'Image URL (optional)'
-      =f.text_field :image_url
+      =f.text_field :image_url, class: 'form-control'
+
+    .field.mt-20
       =f.label :explanation, 'Explanation (shown after the question is answered)'
-      =f.text_area :explanation, :style => 'height:60px;display:block;'
+      =f.text_area :explanation, style: 'height:60px;display:block;', class: 'form-control'
       -#-unless @test.videos.blank?
         Ask this question
         =f.text_field :pause_at, :style => 'width:20px;'
         seconds into the video.
-      %div
-        =f.submit(:style => 'clear:both;margin-top:5px;')
+
+      .actions
+        =f.submit style: 'clear:both;margin-top:5px;', class: 'btn btn-outline-dark'
 
 :javascript
   $(document).ready(function(){
@@ -110,7 +123,7 @@
       $('#short_answers').show('900');
       $('#short_answer').focus();
     });
-    
+
     $('.multiple_choice').click(function() {
       $('#short_answers').hide();
       $('#multiple_choices').show('900');

@@ -1,12 +1,10 @@
-# coding: utf-8
+class Video < ApplicationRecord
 
-class Video < ActiveRecord::Base
-  
   belongs_to :tst
   belongs_to :question
-  
+
   validates :url, :presence => true
-  
+
   def get_provider_id_from_url
     @providerid = nil
     if url =~ /youtube/
@@ -15,5 +13,5 @@ class Video < ActiveRecord::Base
     end
     @providerid
   end
-  
+
 end

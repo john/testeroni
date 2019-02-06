@@ -1,20 +1,25 @@
--#= render(:partial => 'registrations/services')
-=link_to(image_tag("fbconnect_194x25.gif", :size => "194x25", :alt => "Sign in with Facebook", :style => 'padding:0; margin:0;'), user_omniauth_authorize_path(:facebook))
+.row.sign_in
+  .col-12.col-sm-10.col-md-8.col-lg-6.offset-lg-2
+    %h2
+      Sign in
 
-%p{:style => 'padding-top:20px;'} Or if you created your account directly on Testeroni, use this form:
-= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
-  %p
-    = f.label :email, 'Username or email'
-    %br/
-    = f.email_field :email
-  %p
-    = f.label :password
-    %br/
-    = f.password_field :password
-  - if devise_mapping.rememberable?
-    %p
-      = f.check_box :remember_me
-      = f.label :remember_me, :style => 'display:inline;'
-  %p{:style => 'padding-bottom:15px;'}= f.submit "Sign in"
-  
-= render :partial => "devise/shared/links"
+    = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+
+      .field.mt-20
+        = f.label :email
+        = f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control'
+
+      .field.mt-20
+        = f.label :password
+        = f.password_field :password, autocomplete: "current-password", class: 'form-control'
+
+      - if devise_mapping.rememberable?
+        .mt-20
+          = f.check_box :remember_me
+          = f.label :remember_me, :style => 'display:inline;'
+
+      .actions
+        = f.submit "Sign in", class: 'btn btn-outline-dark'
+
+    .links
+      = render :partial => "devise/shared/links"

@@ -1,5 +1,5 @@
-@user = User.create(:display_name => 'Testeroni', :password => 'besteroni', :password_confirmation => 'besteroni', :email => 'john@testeroni.com')
-@user2 = User.create(:display_name => 'resteroni', :password => 'noodle', :password_confirmation => 'noodle', :email => 'john@resteroni.com')
+@user = User.create(:name => 'John', :password => '1234abcd', :password_confirmation => '1234abcd', :email => 'john@fnnny.com')
+@user2 = User.create(:name => 'Kristy', :password => '1234abcd', :password_confirmation => '1234abcd', :email => 'kristina.a.dahl@gmail.com')
 
 ###### MCDONALDS ####
 @test = Tst.create(:name => 'How Much Do You Really Know About McDonalds?',
@@ -11,7 +11,7 @@
 @test = Tst.create( :name => 'US State Capitals',
                     :description => "Test your knowledge of US geography with this test about state capitals.",
                     :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "U.S., geography, states, capitals"
+# @test.tag_list = "U.S., geography, states, capitals"
 
 @q = Question.create( :name => "What is the capital of Alabama?", :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user, :explanation => 'The capital of Alabama is Montgomery.')
 @qc1 = Choice.create(:name => 'Birmingham', :question_id => @q.id, :correct => false)
@@ -88,7 +88,7 @@
 
 ###### SHAKESPEARE CHARACTERS ####
 @test = Tst.create(:name => 'Characters in Shakespeare', :user_id => @user.id, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
-@test.tag_list = "Shakespeare, literature, english, drama"
+# @test.tag_list = "Shakespeare, literature, english, drama"
 
 @q = Question.create( :name => "Who is the protagonist of 'Hamlet'?",:kind => Question::SHORTANSWER, :tst => @test,:user => @user)
 @qc1 = Choice.create(:name => 'Hamlet', :simple_name => 'hamlet', :question_id => @q.id, :correct => true)
@@ -98,13 +98,13 @@
 
 ###### CLIMATE CHANGE ####
 @test = Tst.create(:name => 'Facts About Climate Change', :user_id => @user.id, :contributors => Tst::JUSTME, :status => Tst::ACTIVE)
-@test.tag_list = "climate, climate change, science"
+# @test.tag_list = "climate, climate change, science"
 @test.published_at = Time.now
 @test.save
 
 ###### SIMPSONS ####
 @test = Tst.create(:name => 'The Ultimate Simpsons Trivia Test', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "Simpsons, Matt Groening, animation, tv, pop culture"
+# @test.tag_list = "Simpsons, Matt Groening, animation, tv, pop culture"
 
 @q = Question.create( :name => "What is the origin of Maggie's pacifier?",:kind => Question::MULTIPLECHOICE, :tst => @test,:user => @user,
         :hint => "This was revealed after Homer told the story about Lisa's saxaphone.")
@@ -160,25 +160,25 @@
 
 ###### PRESIDENTS ####
 @test = Tst.create(:name => 'U.S. Presidents', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "United States, history, presidents"
+# @test.tag_list = "United States, history, presidents"
 @test.published_at = Time.now
 @test.save
 
 ###### SHATNER ####
 @test = Tst.create(:name => 'Shatner', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "Shatner, pop culture"
+# @test.tag_list = "Shatner, pop culture"
 @test.published_at = Time.now
 @test.save
 
 ###### WORD DEFINITIONS ####
 @test = Tst.create(:name => 'What does it all mean?', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "words, language, games"
+# @test.tag_list = "words, language, games"
 @test.published_at = Time.now
 @test.save
 
 ###### NOBEL WINNERS ####
 @test = Tst.create(:name => 'Nobel Prize winners', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "Nobel, prizes, history"
+# @test.tag_list = "Nobel, prizes, history"
 
 @q = Question.create(:name => "Which of these people did not win a Nobel Prize?", :kind => Question::MULTIPLECHOICE, :tst => @test, :user => @user,
             :explanation => 'This is kind of a trick question, in that Sartre was awarded the prize, but refused it. Kissinger won in 1973, Obama in 2009. Gandhi was nominated five times, but never won.')
@@ -192,7 +192,7 @@
 
 ###### OSCAR WINNERS ####
 @test = Tst.create(:name => 'Oscar winners', :user_id => @user.id, :contributors => Tst::ANYONE, :status => Tst::ACTIVE)
-@test.tag_list = "Oscars, prizes, movies, pop culture, history"
+# @test.tag_list = "Oscars, prizes, movies, pop culture, history"
 @test.published_at = Time.now
 @test.save
 

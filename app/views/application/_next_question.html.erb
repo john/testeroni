@@ -1,0 +1,7 @@
+$(document).ready(function(){
+  $('<%= bound_link %>').bind('click', function() {
+    $.get('<%= url %>', function(data) {
+      <%= render :partial => 'application/scroll' %>
+    });
+  });
+});

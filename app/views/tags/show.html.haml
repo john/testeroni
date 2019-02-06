@@ -5,4 +5,4 @@
 %ul.bulletless.home{:style => 'padding-top:15px;'}
   -@tests.each do |test|
     %li
-      =render(:partial => 'shared/test_listing', :locals => {:test => test})
+      =render(:partial => 'application/test_listing', :locals => {:test => test})

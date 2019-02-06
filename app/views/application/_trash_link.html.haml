@@ -1,0 +1,4 @@
+- size = 'xs' if local_assigns[:size].nil?
+= link_to path, method: :delete, "data-confirm": confirmation   do
+  %button.btn.btn-outline-secondary.border{type: "button", 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Delete', class: "btn-#{size}"}
+    %i.fas.fa-trash.fa-xs

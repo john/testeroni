@@ -1,7 +1,7 @@
 =render(:partial => 'tsts/header')
 
 -if signed_in?
-  =render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
+  =render :partial => 'application/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
 -else
   Please
   = link_to_function('sign up', "Tstrni.viewSignup()")

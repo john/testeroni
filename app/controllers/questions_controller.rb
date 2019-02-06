@@ -1,8 +1,8 @@
 # coding: utf-8
 
 class QuestionsController < ApplicationController
-  
-  before_filter :authenticate_user!, :except => [:index, :show, :answer]
+
+  before_action :authenticate_user!, :except => [:index, :show, :answer]
 
   def show
     @test = Tst.find(params[:test_id])
@@ -10,52 +10,52 @@ class QuestionsController < ApplicationController
     @question_ids = @take.question_ids
     @question = Question.find(params[:id])
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-    
+
     # to save a lookup pass in the question number when practical, but if it's not present, figure it out.
     if params[:question_number]
       @question_number = params[:question_number].to_i
     else
       @question_number = @question.get_nonzero_position_in_id_array(@question_ids)
     end
-    
+
     render(:partial => 'show', :locals => {:question_number => @question_number})
   end
-  
-  
+
+
   def answer
     @test = Tst.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @next_question_number = params[:question_number].to_i + 1
-    @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
+    # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
     @take = Take.find_from_session_or_params(params, session)
     @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
     @response.take_id = @take.id if @take.id
-    
+
     if !params[:answer].blank?
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
-      
+
       logger.debug "@answer: #{@answer}"
       logger.debug "@question.correct_response: #{@question.correct_response}"
-      
+
       @response.correct = (@answer == @question.correct_response) ? true : false
     elsif !params[:choice_id].blank?
       @choice = Choice.find(params[:choice_id])
       @response.choice = @choice
-      
+
       logger.debug "@choice.correct: #{@choice.correct}"
       logger.debug "@choice: #{@choice.inspect}"
-      
+
       @response.correct = @choice.correct
     elsif !params[:short_answer].blank?
       @response.choice = @question.choices.first
       @response.name = params[:short_answer]
       @response.correct = (Choice.simplify(params[:short_answer]) == @question.choices.first.simple_name) ? true : false
     end
-    
+
     @take.questions_answered = @take.questions_answered+1
     @take.questions_correct = @take.questions_correct+1 if @response.correct?
-    
+
     logger.debug "RESPONSE: #{@response.inspect}"
     if user_signed_in?
       @response.user = current_user
@@ -72,7 +72,7 @@ class QuestionsController < ApplicationController
       @correct_response_count = (@response.correct?) ? @question.number_correct+1 : @question.number_correct
     end
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
-    
+
     if @test.questions.length == params[:question_number].to_i
       @more = false
       @take.finished_at = Time.now if params[:take_id]
@@ -94,7 +94,7 @@ class QuestionsController < ApplicationController
   def new
     @test = Tst.find(params[:test_id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
-    
+
     @question = Question.new
     @title = "New question for '#{@test.name}' - Test"
     @description = "New question for '#{@test.name}' - Test"
@@ -104,29 +104,29 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
-    
+
     if @question.kind == Question::SHORTANSWER
       @short_answer = true
     end
-    
+
     if @question.kind == Question::MULTIPLECHOICE
       @multiple_choice = true
     end
   end
 
   def create
-    @question = Question.new(params[:question])
+    @question = Question.new(question_params)
     @test = Tst.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
-    
+
     @question.tst = @test
     @question.user = current_user
-    
+
     if params[:question][:correct_response].to_i == Choice::MULTIPLE
       @question.kind = Question::MULTIPLECHOICE
       @question.correct_response = nil
       @saved = @question.save
-      
+
       # TODO: Dry this; it's repeated in 'update'
       1.upto(Choice::MAX_ALLOWED_CHOICES) do |num|
         @choice = Choice.new
@@ -139,7 +139,7 @@ class QuestionsController < ApplicationController
       @question.kind = Question::SHORTANSWER
       @question.correct_response = nil
       @saved = @question.save
-      
+
       @choice = Choice.new
       @choice.question = @question
       @choice.name = params[:short_answer]
@@ -150,7 +150,7 @@ class QuestionsController < ApplicationController
       @question.kind = Question::TRUEFALSE
       @saved = @question.save
     end
-    
+
     if @saved
       if @test
         redirect_to(test_path(@test.id, @test.to_param, :a => 'a'))
@@ -168,7 +168,7 @@ class QuestionsController < ApplicationController
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     if @question.update_attributes(params[:question])
-      
+
       # handle short answer
       if @question.kind == Question::SHORTANSWER
         @choice = @question.choices.first
@@ -176,7 +176,7 @@ class QuestionsController < ApplicationController
         @choice.simple_name = Choice.simplify(params[:short_answer])
         @choice.save
       end
-      
+
       # handle multiple choice
       params.each do |param|
         if param[0].include?('choiceupdate_')
@@ -186,7 +186,7 @@ class QuestionsController < ApplicationController
           choice.save
         end
       end
-      
+
       if @test
         redirect_to(@test, :notice => 'Question was successfully updated.')
       else
@@ -200,8 +200,35 @@ class QuestionsController < ApplicationController
   def destroy
     @question = Question.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @question.user == current_user
-    
+
     @question.destroy
     redirect_to(test_path(params[:test_id]), :notice => 'Question was permanently deleted.')
   end
+
+  private
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def question_params
+      # params.require(:tst).permit(:name, :description, :status, :contributors)
+      params.require(:question).permit(:name, :description, :status, :hint, :image_url, :explanation, :kind, :correct_response, :pause_at)
+    end
+
+    # t.integer "tst_id"
+    # t.integer "user_id"
+    # t.string "name"
+    # t.string "description"
+    # t.string "hint"
+    # t.integer "status", limit: 2
+    # t.string "image_url"
+    # t.string "explanation"
+    # t.integer "kind"
+    # t.integer "correct_response"
+    # t.integer "pause_at"
+    # t.datetime "created_at", null: false
+    # t.datetime "updated_at", null: false
+    # t.string "slug"
+    # t.index ["slug"], name: "index_questions_on_slug", unique: true
+    # t.index ["tst_id"], name: "index_questions_on_tst_id"
+    # t.index ["user_id"], name: "index_questions_on_user_id"
+
 end

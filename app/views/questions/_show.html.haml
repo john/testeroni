@@ -6,17 +6,17 @@
 -if @question.image_url && !@question.image_url.blank?
   %div
     %img{:src => @question.image_url}
-  
+
 %div{:style => "padding:0;"}
   %form#theForm
     %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
     %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
     %input{:type => 'hidden', :name => 'question_number', :value => question_number}
     %input{:type => 'hidden', :name => 'authenticity_token', :id => 'authenticity_token', :value => ''}
-    
+
     -if @take
       %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
-  
+
     -# PARTIALS for all this shit?
     -if @question.kind == Question::TRUEFALSE
       %div{:style => 'padding:10px 0 5px 0;'}
@@ -38,34 +38,35 @@
           %li>
             %input{:type => "radio", :name => "choice_id", :id => "choice_#{i}", :value => choice.id}
             %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
-            
+
     -if question_number == 1 || (@take && @take.questions_answered > 0)
       #submit_wrap
-        =submit_tag('Submit answer', :id => 'submit_button', :style => 'margin:10px 0 0 0;')
+        =submit_tag('Submit answer', id: 'submit_button', class: "btn btn-primary" )
+
         -#-if question_number < @test.questions.length
           (<a href="#" id="skip">skip</a>)
     -else
       %div{:style => 'padding-top:20px;'}
         Want to take this test? Then
         %a{:href => '', :style => 'font-weight:bold;'}Go to the first question
-    
+
     -# %div{:style => 'border: 1px solid red;'}
       =link_to('comments', test_comments_path(@test.id, @test.to_param))
-      
+
 -if question_number <= @test.questions.length
 
   :javascript
     $(document).ready(function(){
-      
+
       var state = $.bbq.getState();
       state['question'] = '#{@question.to_param}';
       $.bbq.pushState(state);
-      
+
       $('#question_comment_link').attr( "href", '#{test_comments_path(@test.id, @test.to_param)}?question=#{@question.to_param}');
-      
+
       $('#submit_button').click(function() {
         // validate. if valid...
-        
+
         // Fetch the CSRF meta tag data
         var csrf_token = $('meta[name=csrf-token]').attr('content');
         //var csrf_param = $('meta[name=csrf-param]').attr('content');
@@ -73,7 +74,7 @@
         // add the CSRF vars above to the form data. Need to do this because Rails 3.0.4 requires
         // an authenticity token for all non-GET requests. TODO: there's probably a better way to do it.
         $('#authenticity_token').val(csrf_token);
-        
+
         $.ajax({
           type: 'POST',
           url: '#{answer_path}',
@@ -87,5 +88,5 @@
         });
         return false;
       });
-      
+
     });

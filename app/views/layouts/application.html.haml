@@ -1,0 +1,51 @@
+!!! 5
+%html
+  = render partial: "layouts/head"
+
+  %body
+    -# = render partial: "application/promo"
+    = render partial: "layouts/nav"
+
+    .container-fluid
+      =render(:partial => 'application/flash', :locals => {:flash => flash})
+
+      =yield
+
+    = render partial: "application/footer"
+
+    -if @promo
+      :javascript
+        google.setOnLoadCallback(function() {
+          //setTimeout('Tstrni.promo.show', 500);
+          setTimeout('Tstrni.show_promo()', 1500);
+        })
+
+    :javascript
+
+      var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+      (function(d, t) {
+        var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+        g.async = true;
+        g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g, s);
+      })(document, 'script');
+
+      $(document).ready(function() {
+
+        $('#twitter-link').click(function() {
+          var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+          if(reg.test($('#email').val()) == false) {
+            alert('please enter a valid email address.');
+            return false;
+          } else {
+            document.cookie='email=' + $('#email').val() + '; path=/\;';
+          }
+        });
+
+        $('#use_email').click(function() {
+          $('.account').toggle();
+          $('#user_username').focus();
+        });
+
+      });

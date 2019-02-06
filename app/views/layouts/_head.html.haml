@@ -1,0 +1,62 @@
+%head
+  %meta{:charset => 'utf-8'}
+  %meta{'http-equiv' => 'X-UA-Compatible', :content => 'IE=edge,chrome=1'}
+
+  %title= @title ||= 'Testeroni'
+
+  %meta{:name => 'description', :content => 'A platform for casual and fun learning. Make your own tests and share, take . Answers can be multiple choice or true/false, and tests can be shared and embedded.'}
+  %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
+
+  %link{href: "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css", rel: "stylesheet", integrity: "sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS", crossorigin: "anonymous"}
+
+  =javascript_include_tag('http://use.typekit.com/jxe0dey.js')
+  %script{:type => "text/javascript"} try{Typekit.load();}catch(e){}
+
+  =javascript_include_tag('http://www.google.com/jsapi?key=ABQIAAAAnohM6sqTs6drjmtNvnIyhBQX4KEUxjBL_ZDpzqYIgEd3Cy73NxTBwcj0akdZnV23u8exfLERTanWEw')
+
+  %link{crossorigin: "anonymous", href: "https://use.fontawesome.com/releases/v5.7.1/css/all.css", integrity: "sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr", rel: "stylesheet"}
+
+
+.alert
+
+  %script{:crossorigin => "anonymous", :integrity => "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", :src => "https://code.jquery.com/jquery-3.3.1.min.js"}
+
+
+  %script{src: "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js", integrity: "sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k", crossorigin: "anonymous"}
+
+  = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+  = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+
+  :javascript
+    // if(typeof google === 'undefined') {
+    //   document.write('<script type="text/javascript" src = "/javascripts/jquery.min.js"><\/script>');
+    //   document.write('<script type="text/javascript" src = "/javascripts/jquery-ui.min.js"><\/script>');
+    //   document.write('<script type="text/javascript" src = "/javascripts/swfobject.js"><\/script>');
+    // } else {
+    //   google.load("jquery", "1.5.1");
+    //   google.load("jqueryui", "1.8.11");
+    //   google.load("swfobject", "2.2");
+    // }
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-20111813-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  -# for the stackoverflow-based text editor.
+  -# combine all these in prod, plus the shit at the bottom of this template too
+  = javascript_include_tag("/wmd/wmd.js")
+  = javascript_include_tag("/wmd/showdown.js")
+  -# = javascript_include_tag('/javascripts/rails.js')
+  = javascript_include_tag '/javascripts/jquery.lightbox_me.js'
+  = javascript_include_tag('/javascripts/jquery.ba-bbq.min.js')
+  = javascript_include_tag('/javascripts/tstrni.js')
+
+  -#= stylesheet_link_tag("/stylesheets/testeroni.css")
+
+  =csrf_meta_tag

@@ -1,6 +1,7 @@
 =render(:partial => 'tsts/header')
 
-%p{:style => 'padding-bottom:20px;'} Test results for: #{@user.display_name}, taken #{@take.finished_at}
+%p{:style => 'padding-bottom:20px;'}
+  Test results for: #{@user.name}, taken #{@take.finished_at}
 
 %ul.bulletless
 
@@ -36,7 +37,7 @@
             -else
               %strong
                 Sorry, wrong.
-              The correct answer is: 
+              The correct answer is:
               -if r.question.kind == Question::TRUEFALSE
                 =(r.question.correct_response == 1) ? 'true' : 'false'
               -else

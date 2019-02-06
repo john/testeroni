@@ -1,29 +1,19 @@
--if user_signed_in?
-  %h2{:style => 'padding:10px 0 25px 0;'} #{link_to('Create a test right now', new_test_url, :class => 'green button')} or take any of these tests:
-- else
+.row.mt-40
+  .col-12.col-md-10.col-lg-8
+    %h3.mb-0
+      Testeroni is for social tests.
+    %div
+      Take them, make them, invite friends, see how you stack up.
 
-  %div{:style => 'padding:20px 0;'}
-    =link_to_function('Create Account', "Tstrni.viewSignup()", :class => 'green button', :style => 'font-size:1.8em; font-style:italic; font-weight:bold;padding:5px 10px;')
-    Already have an account?
-    =link_to 'Log in'
-  .clearfix
-  
-    -# put this in a content_for so that it's at the bottom of the template and doesn't slow page rendering
-    :javascript
-      $(document).ready(function() {
-        $('#signup_link').click(function() {
-          signupThenGoTo('#{new_test_path}');
-        });
-      });
+    %h5.mt-30
+      -# #{link_to 'Create a test now', new_user_registration_path}
+      Yours for the taking:
 
-- unless user_signed_in?
-  %div{:style => 'padding:0 0 20px 0;'}
-    Or just start taking tests. You can sign up when you're done if you want to save your results.
-  
--if @tests.size > 0
-  %ul.bulletless.home
-    -@tests.each do |test|
-      %li
-        =render(:partial => 'shared/test_listing', :locals => {:test => test})
-- else
-  %div{:style => 'font-style:italic;'} No tests created yet.
+
+    -if @tests.size > 0
+      %ul.list-group.mt-30
+        -@tests.each do |test|
+          %li.list-group-item.list-group-item-action
+            =render(:partial => 'application/test_listing', :locals => {:test => test})
+    - else
+      %div{:style => 'font-style:italic;'} No tests created yet.

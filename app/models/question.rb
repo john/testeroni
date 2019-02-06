@@ -1,27 +1,27 @@
-# coding: utf-8
+class Question < ApplicationRecord
 
-class Question < ActiveRecord::Base
-  
   TRUEFALSE = 1
   MULTIPLECHOICE = 2
   SHORTANSWER = 3
-  
-  has_friendly_id :name, :use_slug => true
-  
+
+  # has_friendly_id :name, :use_slug => true
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
   # https://github.com/elight/acts_as_commentable_with_threading
-  acts_as_commentable
-  
+  # acts_as_commentable
+
   belongs_to :tst
   belongs_to :user
   has_many :choices
   has_many :responses
   has_many :videos
-    
+
   validates :name, :presence => true
   validates :kind, :presence => true
   validates :tst_id, :presence => true, :numericality => true
   validates :user_id, :presence => true, :numericality => true
-  
+
   # total number of times this question has been answered correctly,
   # across all takes. this should probably be stored in the question, so
   # this it doesn't have to do the calculation every time
@@ -32,7 +32,7 @@ class Question < ActiveRecord::Base
     end
     @correct
   end
-  
+
   # if it's a multiple choice question, get the correct one
   def correct_choice
     @_correct_choice ||= begin
@@ -41,19 +41,19 @@ class Question < ActiveRecord::Base
       end
     end
   end
-  
+
   def is_multiple_choice
     (kind == Question::MULTIPLECHOICE) ? true : false
   end
-  
+
   def is_short_answer
     (kind == Question::SHORTANSWER) ? true : false
   end
-  
+
   def get_nonzero_position_in_id_array(question_ids)
     question_ids.each_with_index do |qid, i|
       return i+1 if qid == id
     end
   end
-  
+
 end

@@ -1,57 +1,54 @@
+%h1
+  =@test.name
+
 %div
-  Created #{time_ago_in_words(@test.created_at)} ago by
-  =profile_link(@test.user)
-    
+  Created #{time_ago_in_words(@test.created_at)} ago by #{profile_link(@test.user)}
+
 %div{:style => 'padding:0 0 10px 0;'}
-  -#%a #{pluralize(@test.questions.size, 'question')}
   =pluralize(@test.questions.size, 'question')
-  &#183; taken
+  · taken
   =pluralize(@test.takes.size, 'time')
-  &#183;
-  
+
   -if @test.takes.size > 0
+    ·
     average score #{@test.percent_correct}
-    &#183;
-    
-  =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
+
+  -# =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
+  ·
   -if @test.published?
-    &#183;
     -if @test.active?
-      =link_to_function('share', "$('#share_tools').toggle()")
-      &#183;
-      =link_to_function('embed', "$('#embed_header').toggle()")
+      = link_to 'share', "#", onclick: "$('#share_tools').toggle()"
+      ·
+      = link_to 'embed', "#", onclick: "$('#embed_header').toggle()"
       -if @owner
-        &#183;
+        ·
         =link_to('disable', disable_test_path(@test))
     -elsif @owner
       =link_to('enable', enable_test_path(@test))
   -else
-    |
     %em
       this test is not yet published
     -if @owner
-      &#183;
+      ·
       =link_to('publish')
-      &#183;
-      =link_to('delete')
-    
-  %div{:id => 'share_tools', :style => 'display:none; width:520px;'}
-    %label{:for => 'share_link'} Link to this test
-    %input{:id => 'share_link', :type => 'text', :value => test_url(@test.id, @test.to_param)}
-    %p
-      %div{:style => 'float:right;'}
-        =link_to_function('[x] close', "$('#share_tools').toggle()")
-      fb like, tweet, txt, mail, etc.
-    
-  %div{:id => 'embed_header', :style => 'display:none; padding-top:10px; width:520px;'}
-    %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
-    .caption
-      After making your selection, copy and paste the embed code above. The code changes based on your selection.
-      %div{:style => 'padding:5px 0 0 0; float:right;'}= link_to_function('[x] close', "$('#embed_header').toggle()")
-%h1
-  -if params[:a]
-    =@test.name
-  -else
-    =link_to(@test.name, test_path(@test.id, @test.to_param))
-    
+      ·
+      = edit_link(edit_test_path(@test))
+      = trash_link(test_path(@test), "Are you sure you want to delete the test #{@test.name}?")
+
+  -#
+    / %div{:id => 'share_tools', :style => 'display:none; width:520px;'}
+    /   %label{:for => 'share_link'} Link to this test
+    /   %input{:id => 'share_link', :type => 'text', :value => test_url(@test.id, @test.to_param)}
+    /   %p
+    /     %div{:style => 'float:right;'}
+    /       =link_to '[x] close', "#", onclick: "$('#share_tools').toggle()"
+    /     fb like, tweet, txt, mail, etc.
+
+    / %div{:id => 'embed_header', :style => 'display:none; padding-top:10px; width:520px;'}
+    /   %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
+    /   .caption
+    /     After making your selection, copy and paste the embed code above. The code changes based on your selection.
+    /     %div{:style => 'padding:5px 0 0 0; float:right;'}
+    /       = link_to '[x] close', "#", onclick: "$('#embed_header').toggle()"
+
 %div{:style => 'padding:0; margin:0px 0 0 0'}= @test.description

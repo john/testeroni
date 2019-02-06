@@ -1,4 +1,4 @@
-class CreateVideos < ActiveRecord::Migration
+class CreateVideos < ActiveRecord::Migration[6.0]
   def self.up
     create_table :videos do |t|
       t.integer :tst_id

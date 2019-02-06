@@ -1,42 +1,52 @@
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   host: 127.0.0.1
+#   username: postgres
+#   password: <%= ENV['OVERRIDE_DB_PASS'] || 'admin' %>
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#
+#
+# development:
+#   <<: *default
+#   database: testeroni_development
+#
+# # Warning: The database defined as "test" will be erased and
+# # re-generated from your development database when you run "rake".
+# # Do not set this db to the same as development or production.
+# test: &test
+#   <<: *default
+#   database: testeroni_test
+#
+# production:
+#   <<: *default
+#   database: testeroni_production
+#
+#
 development:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  adapter: postgresql
+  encoding: unicode
+  host: 127.0.0.1
+  username: postgres
+  password: admin
+  pool: 5
   database: testeroni_development
-  pool: 2
-  username: root
-  password: 4Bcd3fg
-  socket: /tmp/mysql.sock
-
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test: &test
-  # adapter: sqlite3
-  # database: db/test.sqlite3
-  # pool: 5
-  # timeout: 5000
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  
+test:
+  adapter: postgresql
+  encoding: unicode
+  host: 127.0.0.1
+  username: postgres
+  password: admin
+  pool: 5
   database: testeroni_test
-  pool: 2
-  username: root
-  password: 4Bcd3fg
-  socket: /tmp/mysql.sock
-
+  
 production:
-  # adapter: sqlite3
-  # database: db/production.sqlite3
-  # pool: 5
-  # timeout: 5000
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  adapter: postgresql
+  encoding: unicode
+  host: 127.0.0.1
+  username: postgres
+  password: admin
+  pool: 5
   database: testeroni_production
-  pool: 2
-  username: root
-  password: 4Bcd3fg
-  socket: /tmp/mysql.sock
-cucumber:
-  <<: *test
+  

@@ -4,7 +4,7 @@
     %h2{:style => 'color:green; float:left;'} Correct!
   - else
     %h2{:style => 'color:red; float:left;'} Wrong :-(
-    
+
   -if @more
     #next
       %a.question_link.green.button{:href => '#', :style => 'text-align:left; margin-left:20px;'}Next question &gt;
@@ -12,9 +12,9 @@
     %div{:style => 'float:left; padding:0px 0 20px 20px; margin:15px 0 20px 20px; font-size:2.5em; font-weight:bold;'}
       Finished!
   .clearfix
-  
+
   #explanation= @question.explanation
-    
+
   %div= "#{@correct_response_count} of #{@response_count} people (#{@percentage_correct} percent) answered this correctly"
   #progress
     = "You're #{@take.questions_correct} for #{@take.questions_answered}, and "
@@ -23,9 +23,9 @@
     -else
       done with the test.
   -if @more
-    
+
     :javascript
-      #{render :partial => 'shared/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
+      #{render :partial => 'application/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
 
     =link_to('all comments', test_comments_path(@test.id, @test.to_param))
 
@@ -35,9 +35,9 @@
         = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.id, @take.id))
       -else
         To save the results of this test,
-        = link_to_function('sign up', "Tstrni.viewSignup()")
+        = link_to 'sign up', "#", onclick: "Tstrni.viewSignup();"
         or
-        = link_to_function('log in', "Tstrni.viewLogin()")
+        = link_to 'log in', "#", onclick: "Tstrni.viewLogin();"
 
     -#
       %label{:for => 'link_to_test'} Link to this test
@@ -47,10 +47,10 @@
       %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
 
   -if user_signed_in?
-    =render :partial => 'shared/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
+    =render :partial => 'application/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
   -else
     %p
-      = link_to_function('Sign up', "signupThenGoTo('')")
+      = link_to 'Sign up', new_user_session_path
       or
-      = link_to('sign in', new_user_session_path)
+      = link_to 'sign in', new_user_session_path
       to leave comments on questions.

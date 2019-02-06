@@ -1,4 +1,4 @@
-class CreateActivities < ActiveRecord::Migration
+class CreateActivities < ActiveRecord::Migration[6.0]
   def self.up
     create_table :activities do |t|
       t.integer :user_id

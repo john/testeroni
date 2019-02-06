@@ -1,0 +1,8 @@
+-# TODO: add controller and style support for this
+-if @promo
+  #promo{:style => 'display:none;'}
+    .notice
+      .promo_close
+        = link_to 'x', "#", onclick: "Tstrni.promo.hide();"
+        = link_to 'x', "#", onclick: "Tstrni.hide_promo();"
+      != @promo[:message]

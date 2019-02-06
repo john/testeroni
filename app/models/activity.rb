@@ -1,5 +1,5 @@
-class Activity < ActiveRecord::Base
-  
+class Activity < ApplicationRecord
+
   # verbs
   FAVORITE = 0
   FOLLOW = 1
@@ -9,11 +9,11 @@ class Activity < ActiveRecord::Base
   CREATE = 5
   UPDATE = 6
   TAKE = 7
-  
+
   # objects
   USER = 0
   TST = 1
-  
+
   belongs_to :user
-  
+
 end

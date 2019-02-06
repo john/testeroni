@@ -1,8 +1,8 @@
 -if params[:source]
   %h2{:style => 'padding-bottom:5px;'} One last step
-  
+
   %img{:src => @picture, :style => 'float:left; padding-right:15px;'}
-  
+
   %p
     ="This will connect the #{params[:source].titleize} account for"
     %strong= "#{@username}"
@@ -11,11 +11,11 @@
     -#(Wrong account? Please
     -#= link_to_function('Click here', "FB.logout()", :style => 'font-weight:bold;')
     -#to log out of Facebook)
-    
+
     -#= "You'll be able to sign in using #{params[:source].titleize}."
-    
+
     %div.clearfix
-    
+
     -if params[:source] == 'facebook'
       Please select a username to finish creating your account.
     -else
@@ -28,7 +28,7 @@
 
   -unless params[:source]
     =devise_error_messages!
-  
+
   -if params[:return_to]
     %div= "return to: #{params[:return_to]}"
     %input{:type => 'hidden', :name => 'return_to', :value => params[:return_to] }
@@ -37,16 +37,16 @@
     -if params[:source]
       %label{:for => 'username'} Username
       %input{:type => 'text', :id => 'username', :name => "user[username]", :value => @username }
-      
+
       -if resource.email.blank?
         %label{:for => 'email'} Email
         %input{:type => 'email', :id => 'email', :name => "user[email]", :value => resource.email }
       -else
         = f.hidden_field :email
     -else
-      =f.label :display_name
-      =f.text_field :display_name
-      
+      =f.label :name
+      =f.text_field :name
+
       =f.label :email
       =f.email_field :email
 

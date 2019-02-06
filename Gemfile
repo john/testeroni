@@ -1,40 +1,53 @@
 source 'http://rubygems.org'
 
+ruby "2.6.0"
+
+# gem 'protected_attributes'
+
 # bundle install after modifying this
-gem 'rails', '3.0.5'
-gem 'mysql2', '0.2.7'
-gem 'jquery-rails', '0.2.7'
-gem 'hpricot', '0.8.4'
-gem 'haml', '3.0.25'
-gem 'flutie', '1.1.5'
-gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
-
-gem 'oa-oauth', :require => 'omniauth/oauth', :git => 'https://github.com/intridea/omniauth.git'
-
-gem 'koala', '0.10.0'
-gem 'friendly_id', '3.2.1.1'
-gem 'acts-as-taggable-on', '2.0.6'
-gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nested_set.git'
-gem 'acts_as_commentable_with_threading', '1.1.1'
-
-# TODO: for upvoting shit.
+gem 'rails', '6.0.0.beta1'
+gem 'bootsnap', '>= 1.1.0', require: false
+gem 'devise'
+gem 'friendly_id'
+gem 'haml-rails', git: 'https://github.com/indirect/haml-rails'
+# gem 'jquery-rails'
+gem 'jbuilder', '~> 2.5'
+gem 'pg'
+gem 'puma', '~> 3.11'
+gem 'sass-rails', '~> 5.0'
 gem 'thumbs_up'
+gem 'turbolinks', '~> 5'
+gem 'uglifier'
+gem 'webpacker', '>= 4.0.0.rc.3'
 
-# TODO: for better forms
-# gem 'formtastic', '1.1.0'
+gem 'hpricot', '0.8.6'
+# gem 'flutie'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
 group :development, :test do
-  # gem 'ruby-debug'
-  gem 'bullet', '2.0.1'
-  gem 'ruby-growl', '3.0'
-  gem 'rails3-generators', '0.17.4'
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec-rails'
+end
+
+group :development do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem 'web-console', '>= 3.3.0'
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :test do
-  gem 'shoulda'
-  gem 'sqlite3-ruby', :require => 'sqlite3'
-  gem 'ruby_parser'
+  # Adds support for Capybara system testing and selenium driver
+  gem 'capybara', '>= 2.15'
+  gem 'factory_girl_rails', require: false
+  gem 'rails-controller-testing'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem 'chromedriver-helper'
 end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
