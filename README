@@ -1,3 +1,3 @@
-Testeroni is a site for social testing. Make tests for you and your friends, take tests made by everyone else.
+Testeroni is a site for social tests and quizzes. Make quizzes for you and your friends, take quizzes made by anyone else else.
 
-You can use it now at http://testeroni.heroku.com/, though it's still pretty raw. In the not-too-distant future I hope to add better YouTube integration, among other things. I started this to familiarize myself with Rails 3/Ruby 1.9, but I plan on improving and maintaining it as time permits--if you have feedback or suggestions, please send them to john@wordie.org.
+Questions can be true/false, multiple choice, or to some degree shorts answers.
