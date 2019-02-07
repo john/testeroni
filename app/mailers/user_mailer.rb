@@ -1,6 +1,6 @@
 class UserMailer < ApplicationMailer
   default from: "#{ENV['SITE_NAME']} <#{ENV['SITE_EMAIL']}>"
-  track open: true, click: true
+  # track open: true, click: true
 
   # NOTE: @user should be set to support tracking by the `ahoy_email` gem
 
