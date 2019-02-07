@@ -74,17 +74,17 @@ class ApplicationController < ActionController::Base
     Activity.create(:user_id => user.id, :verb => verb, :object_type => otype, :object_id => object.id)
   end
 
-  def promo
-    if promo = true
-      msg = "<span style='color:red;'>ALPHA ALERT!</span> This is a test server, don't rely on data sticking around (but <a href='mailto:john@wordie.org'>email me</a> if it needs to)"
-      set_promo(msg, DateTime.new(y=2010, m=11, d=05))
-      if (session[:promo][:dismissed_at].nil? || (session[:promo][:dismissed_at] < session[:promo][:created_at]))
-        @promo = session[:promo]
-      end
-    else
-      clear_promo
-    end
-  end
+  # def promo
+  #   if promo == true
+  #     msg = "<span style='color:red;'>ALPHA ALERT!</span> This is a test server, don't rely on data sticking around (but <a href='mailto:john@wordie.org'>email me</a> if it needs to)"
+  #     set_promo(msg, DateTime.new(y=2010, m=11, d=05))
+  #     if (session[:promo][:dismissed_at].nil? || (session[:promo][:dismissed_at] < session[:promo][:created_at]))
+  #       @promo = session[:promo]
+  #     end
+  #   else
+  #     clear_promo
+  #   end
+  # end
 
   def log_session
     logger.debug '--'
@@ -94,18 +94,18 @@ class ApplicationController < ActionController::Base
   end
 
 
-  # manages the session info for promo. don't call this directly. (see get_promo)
-  def set_promo(msg, display_after)
-    session[:promo] ||= {}
-    session[:promo][:message] = msg
-    session[:promo][:created_at] = display_after
-    session[:promo][:dismissed_at] ||= nil
-  end
-
-  # clear the promo. don't call this directly. (see get_promo)
-  def clear_promo
-    session[:promo] = @promo = nil
-  end
+  # # manages the session info for promo. don't call this directly. (see get_promo)
+  # def set_promo(msg, display_after)
+  #   session[:promo] ||= {}
+  #   session[:promo][:message] = msg
+  #   session[:promo][:created_at] = display_after
+  #   session[:promo][:dismissed_at] ||= nil
+  # end
+  #
+  # # clear the promo. don't call this directly. (see get_promo)
+  # def clear_promo
+  #   session[:promo] = @promo = nil
+  # end
 
   # IF a user has taken tests but wasn't logged in, they'll be in the session. Check for those and persist them if they're there.
   def save_take_and_set_flash(user)

@@ -13,12 +13,12 @@
 
     = render partial: "application/footer"
 
-    -if @promo
-      :javascript
-        google.setOnLoadCallback(function() {
-          //setTimeout('Tstrni.promo.show', 500);
-          setTimeout('Tstrni.show_promo()', 1500);
-        })
+    -# if @promo
+      // :javascript
+      //   google.setOnLoadCallback(function() {
+      //     //setTimeout('Tstrni.promo.show', 500);
+      //     setTimeout('Tstrni.show_promo()', 1500);
+      //   })
 
     :javascript
 
