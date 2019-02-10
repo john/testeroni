@@ -28,12 +28,11 @@
   -else
     %em
       this test is not yet published
-    -if @owner
-      ·
-      =link_to('publish')
-      ·
-      = edit_link(edit_test_path(@test))
-      = trash_link(test_path(@test), "Are you sure you want to delete the test #{@test.name}?")
+      = link_to 'publish', "#", class: "btn btn-xs btn-secondary ml-20"
+
+  -if @owner
+    = edit_link(edit_test_path(@test))
+    = trash_link(test_path(@test), "Are you sure you want to delete the test #{@test.name}?")
 
   -#
     / %div{:id => 'share_tools', :style => 'display:none; width:520px;'}

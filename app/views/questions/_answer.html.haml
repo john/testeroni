@@ -27,7 +27,7 @@
     :javascript
       #{render :partial => 'application/next_question', :locals => {:url => @next_question_url, :bound_link => '.question_link'}}
 
-    =link_to('all comments', test_comments_path(@test.id, @test.to_param))
+    =link_to('all comments', comments_test_path(@test))
 
   - unless @more
     %h5#results
@@ -35,9 +35,10 @@
         = link_to('View your results', individual_test_results_path(@test.id, @test.to_param, current_user.id, @take.id))
       -else
         To save the results of this test,
-        = link_to 'sign up', "#", onclick: "Tstrni.viewSignup();"
+        = link_to 'sign up', new_user_registration_path
         or
-        = link_to 'log in', "#", onclick: "Tstrni.viewLogin();"
+        = link_to 'log in', new_user_session_path
+
 
     -#
       %label{:for => 'link_to_test'} Link to this test
@@ -47,7 +48,9 @@
       %textarea{:id => 'embed_test', :style => 'height:50px;'}= embed_code(@test)
 
   -if user_signed_in?
-    =render :partial => 'application/comments', :locals => {:commentable => @question, :comment => @comment, :comments => @question.root_comments}
+    -#=render partial: 'application/comments', locals: {commentable: @question, comment: @comment, comments: @question.root_comments}
+    COMMENTS BELONG HERE
+
   -else
     %p
       = link_to 'Sign up', new_user_session_path

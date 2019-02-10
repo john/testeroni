@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, :except => [:index, :show, :answer]
 
   def show
-    @test = Tst.find(params[:test_id])
+    @test = Tst.friendly.find(params[:test_id])
     @take = Take.find_from_session_or_params(params, session)
     @question_ids = @take.question_ids
     @question = Question.find(params[:id])
@@ -23,7 +23,7 @@ class QuestionsController < ApplicationController
 
 
   def answer
-    @test = Tst.find(params[:test_id])
+    @test = Tst.friendly.find(params[:test_id])
     @question = Question.find(params[:question_id])
     @next_question_number = params[:question_number].to_i + 1
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
@@ -88,11 +88,11 @@ class QuestionsController < ApplicationController
       @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @next_question_number, :take_id => @take.id)
     end
     @take.save if user_signed_in?
-    render :partial => 'questions/answer'
+    render partial: 'questions/answer'
   end
 
   def new
-    @test = Tst.find(params[:test_id])
+    @test = Tst.friendly.find(params[:test_id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @question = Question.new
@@ -102,7 +102,7 @@ class QuestionsController < ApplicationController
 
   def edit
     @question = Question.find(params[:id])
-    @test = Tst.find(params[:test_id]) if params[:test_id]
+    @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     if @question.kind == Question::SHORTANSWER
@@ -116,7 +116,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-    @test = Tst.find(params[:test_id]) if params[:test_id]
+    @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @question.tst = @test
@@ -153,7 +153,8 @@ class QuestionsController < ApplicationController
 
     if @saved
       if @test
-        redirect_to(test_path(@test.id, @test.to_param, :a => 'a'))
+        flash[:notice] = 'Session cleared.'
+        redirect_to(test_path(@test, :a => 'a'))
       else
         redirect_to(@question, :notice => 'Question was successfully created.')
       end
@@ -164,7 +165,7 @@ class QuestionsController < ApplicationController
 
   def update
     @question = Question.find(params[:id])
-    @test = Tst.find(params[:test_id]) if params[:test_id]
+    @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     if @question.update_attributes(params[:question])

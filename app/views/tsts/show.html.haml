@@ -1,7 +1,7 @@
 .row.mt-20.ml-10
   .col-12.col-md-10.col-lg-8
 
-    =render(:partial => 'tsts/header')
+    =render partial: 'tsts/header'
 
     -unless @test.videos.blank?
       %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
@@ -19,7 +19,6 @@
             &#183;
 
           :javascript
-
             $(document).ready(function(){
 
               // get stop points from test (tst#stop_points), put in an object in the Tstrni object
@@ -34,44 +33,46 @@
       #question_pane
         -if @owner
           -if !@test.has_questions?
-            %h2= link_to('Add the first question', new_question_path(:test_id => @test.to_param))
-          -elsif params[:a]
+            %h2
+              = link_to 'Add the first question', new_question_path(:test_id => @test.to_param)
 
-            .alert.alert-success.mt-20{role: "alert"}
-
-              %button#closer{type: "button", class: "close", "aria-label": "Close"}
-                %span{"aria-hidden": "true"}
-                  &times;
-              :javascript
-                  $("#closer").click(function(){
-                    $(".alert").fadeToggle();
-                  })
-
-              %b{:style => 'padding-bottom:10px;'}
-                Question added.
-              #{link_to 'Add another question', new_question_path(test_id: @test.id)}
-
-              -unless @test.published?
-                or #{link_to 'publish the test', publish_test_path(@test)}
-
-            %p
-              Questions:
-            %ol
-              -@test.questions.each do |q|
-                %li{style: 'margin-left:20px;'}= q.name
+          -#
+            / -elsif params[:a]
+            /
+            /   .alert.alert-success.mt-20{role: "alert"}
+            /     %button#closer{type: "button", class: "close", "aria-label": "Close"}
+            /       %span{"aria-hidden": "true"}
+            /         &times;
+            /     :javascript
+            /         $("#closer").click(function(){
+            /           $(".alert").fadeToggle();
+            /         })
+            /
+            /     %b{:style => 'padding-bottom:10px;'}
+            /       Question added.
+            /     #{link_to 'Add another question', new_question_path(test_id: @test.id)}
+            /
+            /     -unless @test.published?
+            /       or #{link_to 'publish the test', publish_test_path(@test)}
+            /
+            /   %p
+            /     Questions:
+            /   %ol
+            /     -@test.questions.each do |q|
+            /       %li{style: 'margin-left:20px;'}= q.name
 
         -if @test.has_questions? && @test.published? && @test.active?
 
           -if @question
-            =render(:partial => 'questions/show', :locals => {:question_number => 1})
+            = render partial: 'questions/show', locals: {question_number: 1}
 
           -else
             %div
-              =submit_tag('Start the test!', :class => 'green button', :style => 'height:35px; font-size:1.3em;', :id => 'start')
+              = submit_tag('Start the test!', class: 'btn btn-primary', id: 'start')
 
               -if @test.questions.size > 1
-                =check_box_tag(:randomize)
-                =label_tag(:randomize, 'Questions in random order?', :style => 'display:inline;')
+                = check_box_tag :randomize, 0, false, class: "ml-20"
+                = label_tag :randomize, 'Questions in random order?', style: 'display:inline;'
 
               -if request.path.include?('start')
                 :javascript
@@ -88,7 +89,7 @@
                 $(document).ready(function(){
                   $('#start').bind('click', function() {
                     $.get('#{@next_question_url}', function(data) {
-                      #{render :partial => 'shared/scroll'}
+                      = render partial: 'application/scroll'}
                     });
                   });
                 });

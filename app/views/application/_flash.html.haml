@@ -1,17 +1,13 @@
 - flash.each do |key, msg|
-  #flash{:class => key}
-    %a{:id => "close-#{key}", :style => 'float:right;'}>
-      [xfff]
-
-    %button{type: "button", class: "close float-right", "aria-label": "Close"}
+  - alerttype = (key == "alert" || key == "error") ? "danger" : "primary"
+  .alert.mt-20{role: "alert", class: "alert-#{alerttype}"}
+    %button#closer{type: "button", class: "close", "aria-label": "Close"}
       %span{"aria-hidden": "true"}
         &times;
 
     != msg
+
   :javascript
-    $(document).ready(function(){
-      $('#close-#{key}').bind('click', function() {
-        $('#flash').effect('fade');
-      });
-      //setTimeout("$('#flash').effect('fade', {}, 400);", 7000);
-    });
+      $("#closer").click(function(){
+        $(".alert").fadeToggle();
+      })

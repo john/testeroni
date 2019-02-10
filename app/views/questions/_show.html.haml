@@ -62,7 +62,7 @@
       state['question'] = '#{@question.to_param}';
       $.bbq.pushState(state);
 
-      $('#question_comment_link').attr( "href", '#{test_comments_path(@test.id, @test.to_param)}?question=#{@question.to_param}');
+      $('#question_comment_link').attr( "href", '#{comments_test_path(@test.id, @test.to_param)}?question=#{@question.to_param}');
 
       $('#submit_button').click(function() {
         // validate. if valid...

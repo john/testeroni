@@ -45,7 +45,6 @@ class TstsController < ApplicationController
   end
 
   def new
-
     # god there are better ways to do this
     redirect_to root_path and return unless user_signed_in?
 
@@ -56,7 +55,7 @@ class TstsController < ApplicationController
   end
 
   def edit
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
   end
 
@@ -76,8 +75,6 @@ class TstsController < ApplicationController
       @video.save
     end
 
-    logger.debug "-----------------> @test: #{@test.inspect}"
-
     out = @test.save
 
     if @test.save
@@ -89,47 +86,41 @@ class TstsController < ApplicationController
   end
 
   def publish
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
+
+    # put auth above this somewehre
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @test.published_at = Time.now
-    @test.save
 
-    # if @token = current_user.facebook_token
-    #   logger.debug "@token: #{@token}"
-    #   @graph = Koala::Facebook::GraphAPI.new(@token)
-    #   logger.debug "@graph: #{@graph.inspect}"
-    #   @friends = @graph.get_connections("me", "friends").sort{|a,b| a['name'] <=> b['name']}
-    # end
-    # flash[:notice]
-
-    flash[:notice] = 'Congratulations, your test has been published and can now be taken.'
-
-    @owner = true if user_signed_in? && @test.owned_by?(current_user)
-    @title = "#{@test.name} - Testeroni"
-    @description = "'#{@test.name}' a test on Testeroni.com"
-    @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
-
-    @question_number = 1
-    if params[:question_id]
-      @question = Question.find(params[:question_id])
-
+    if @test.save
+      @owner = true if user_signed_in? && @test.owned_by?(current_user)
+      @title = "#{@test.name} - Testeroni"
+      @description = "'#{@test.name}' a test on Testeroni.com"
+      @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
+      @question_number = 1
       # is there a way to get the question_number without having to loop?
-      @test.questions.each_with_index do |q, i|
-        if q.id == @question.id
-          @question_number = i+1
-          break
+      if params[:question_id]
+        @question = Question.find(params[:question_id])
+        @test.questions.each_with_index do |q, i|
+          if q.id == @question.id
+            @question_number = i+1
+            break
+          end
         end
       end
+      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+      flash[:notice] = 'Congratulations, your test has been published and can now be taken.'
+      redirect_to test_path @test
+
+    else
+      flash[:alert] = 'There was a problem publishing.'
+      redirect_back(fallback_location: root_path)
     end
-
-    @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
-
-    render :template => 'tsts/show'
   end
 
   def enable
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @test.status = Tst::ACTIVE
@@ -138,7 +129,7 @@ class TstsController < ApplicationController
   end
 
   def disable
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @test.status = Tst::DISABLED
@@ -147,7 +138,7 @@ class TstsController < ApplicationController
   end
 
   def invite
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     if params[:invite].blank?
@@ -180,27 +171,27 @@ class TstsController < ApplicationController
     @test = Tst.load_active_by_id(params[:id])
   end
 
-  def comments
-    @test = Tst.load_active_by_id(params[:id])
-    @title = "Comments on #{@test.name} - Testeroni"
-    @description = "Comments on '#{@test.name}' a test on Testeroni.com"
-
-    @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
-  end
+  # def comments
+  #   @test = Tst.load_active_by_id(params[:id])
+  #   @title = "Comments on #{@test.name} - Testeroni"
+  #   @description = "Comments on '#{@test.name}' a test on Testeroni.com"
+  #
+  #   @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
+  # end
 
   def update
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
-    if @Tst.update_attributes(params[:tst])
-      redirect_to(@test, :notice => 'Test was successfully updated.')
+    if @test.update(tst_params)
+      redirect_to(test_path(@test), :notice => 'Test was successfully updated.')
     else
       render :action => "edit"
     end
   end
 
   def destroy
-    @test = Tst.find(params[:id])
+    @test = Tst.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
     @test.destroy

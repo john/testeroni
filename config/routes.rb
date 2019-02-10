@@ -10,11 +10,22 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registration: 'registrations', session: 'sessions' }
 
+  # match 'tests/:id/:slug/start', :to => 'tsts#show', :as => 'start_test', :via => :get
   resources :tsts, path: :tests, as: :tests do
+    member do
+      get :publish
+      get :enable
+      get :disable
+      get :comments
+    end
     resources :questions
   end
-  # match 'tests/:id/:slug/start', :to => 'tsts#show', :as => 'start_test', :via => :get
-  match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
+  # match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
+
+
+
+
+  # match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
 
   match 'people/:id/tests', :to => 'people#tests', :as => 'person_tests', :via => :get
   match 'people/:id/:slug', :to => 'people#show', :as => 'person', :via => :get
@@ -28,7 +39,7 @@ Rails.application.routes.draw do
 
   # # match 'tests/new', :to => 'tsts#new', :as => 'new_test', :via => :get
   # # match 'tests/:id/edit', :to => 'tsts#edit', :as => 'edit_test', :via => :get
-  # match 'tests/:id/publish', :to => 'tsts#publish', :as => 'publish_test', :via => :get
+
   # match 'tests/:id/enable', :to => 'tsts#enable', :as => 'enable_test', :via => :get
   # match 'tests/:id/disable', :to => 'tsts#disable', :as => 'disable_test', :via => :get
   # match 'tests/:id/invite', :to => 'tsts#invite', :as => 'invite_test', :via => :get
