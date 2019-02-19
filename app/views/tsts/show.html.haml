@@ -4,19 +4,19 @@
     =render partial: 'tsts/header'
 
     -unless @test.videos.blank?
-      %div{:style => 'float:left; border: 0px solid red; padding-right:20px;'}
+      %div{style: 'float:left; border: 0px solid red; padding-right:20px;'}
         -@test.videos.each_with_index do |v,i|
-          %div{:id => "ytplayer_#{i}"}
+          %div{id: "ytplayer_#{i}"}
 
           -#%div
-            =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
-            &#183;
-            =link_to_function('playAndPause', "Tstrni.playAndPause('ytplayer_#{i}')")
-            &#183;
-            =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
-            &#183;
-            =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
-            &#183;
+            / =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
+            / &#183;
+            / =link_to_function('playAndPause', "Tstrni.playAndPause('ytplayer_#{i}')")
+            / &#183;
+            / =link_to_function('pause', "Tstrni.pause('ytplayer_#{i}')")
+            / &#183;
+            / =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
+            / &#183;
 
           :javascript
             $(document).ready(function(){
@@ -29,73 +29,33 @@
               swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
             });
 
+    -if @show_start_button
+      .mt-10
+        - if user_signed_in?
+          = link_to 'Take the test!', test_question_path(@test, @test.questions.first), class: "btn btn-secondary btn-lg mb-10"
+        -else
+          = link_to 'Take the test!', new_user_registration_path, class: "btn btn-secondary btn-lg mb-10"
+
+
     .questions
-      #question_pane
-        -if @owner
-          -if !@test.has_questions?
-            %h2
-              = link_to 'Add the first question', new_question_path(:test_id => @test.to_param)
+      -if @owner
+        -if !@test.has_questions?
+          %h2
+            = link_to 'Add the first question', new_question_path(:test_id => @test.to_param)
 
-          -#
-            / -elsif params[:a]
-            /
-            /   .alert.alert-success.mt-20{role: "alert"}
-            /     %button#closer{type: "button", class: "close", "aria-label": "Close"}
-            /       %span{"aria-hidden": "true"}
-            /         &times;
-            /     :javascript
-            /         $("#closer").click(function(){
-            /           $(".alert").fadeToggle();
-            /         })
-            /
-            /     %b{:style => 'padding-bottom:10px;'}
-            /       Question added.
-            /     #{link_to 'Add another question', new_question_path(test_id: @test.id)}
-            /
-            /     -unless @test.published?
-            /       or #{link_to 'publish the test', publish_test_path(@test)}
-            /
-            /   %p
-            /     Questions:
-            /   %ol
-            /     -@test.questions.each do |q|
-            /       %li{style: 'margin-left:20px;'}= q.name
+      -if @test.has_questions? && @test.published? && @test.active?
+        - @test.questions.each_with_index do |q, i|
+          - if @question == q
+            = render partial: 'questions/show', locals: {add_class: 'active'}
+          - else
+            .card
+              .card-body
+                #{q.name}
 
-        -if @test.has_questions? && @test.published? && @test.active?
+        -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
 
-          -if @question
-            = render partial: 'questions/show', locals: {question_number: 1}
-
-          -else
-            %div
-              = submit_tag('Start the test!', class: 'btn btn-primary', id: 'start')
-
-              -if @test.questions.size > 1
-                = check_box_tag :randomize, 0, false, class: "ml-20"
-                = label_tag :randomize, 'Questions in random order?', style: 'display:inline;'
-
-              -if request.path.include?('start')
-                :javascript
-                  $(document).ready(function(){
-                    //url = '#{@next_question_url}&randomize=1'
-                    url = '#{@next_question_url}'
-
-                    $.get(url, function(data) {
-                      #{render :partial => 'application/scroll'}
-                    });
-                  });
-
-              :javascript
-                $(document).ready(function(){
-                  $('#start').bind('click', function() {
-                    $.get('#{@next_question_url}', function(data) {
-                      = render partial: 'application/scroll'}
-                    });
-                  });
-                });
-
-          -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
-        -elsif @test.inactive?
-          %em Sorry, this test is currently inactive.
+      -elsif @test.inactive?
+        %em
+          Sorry, this test is currently inactive.
 
     .clearfix

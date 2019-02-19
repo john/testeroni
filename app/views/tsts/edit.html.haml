@@ -3,26 +3,31 @@
     %h2
       Editing
       %em
-        = @test.name
+        = link_to @test.name, test_path(@test)
 
     = render partial: 'form', locals: {form_url: test_path(@test)}
 
     .questions
       %h4{:style => 'padding:40px 0 5px 0;'}>
-        This test's questions
-        = link_to 'Add question', new_question_path(:test_id => @test.to_param), class: "btn btn-primary"
+        Questions
+        = link_to 'Add question', new_test_question_path(@test), class: "btn btn-primary ml-10 mr-10 btn-sm"
+        %span
+          = link_to 'Done', test_path(@test)
 
       -unless @test.questions.blank?
-        %ol#questions
-          -@test.questions.each do |q|
-            %li
-              %em
-                "#{q.name}"
-              %span
-                [
-                = link_to('Edit', edit_question_path(q, :test_id => @test.to_param))
-                |
-                = link_to('Delete', question_path(q, :test_id => @test.to_param), :method => :delete, :confirm => "For sure? That's permanente.")
-                ]
-              -unless q.description.blank?
-                %div= q.description
+        -# previous data-update-=url: update_positions_lists_items_path(@list)
+        - question_attributes = { class: 'sortable-items', 'data-role': 'sortable_items', 'data-update-url': update_positions_test_questions_path(@test) }
+
+        .list-group{ question_attributes }
+          -@test.questions.each do |question|
+            .list-group-item.list-group-item-action.has-hover-items.sortable-item{ 'data-item-id': question.id }
+              .float-right
+                %span.hover-item
+                  = edit_link(edit_test_question_path(@test, question))
+                  = trash_link(test_question_path(@test, question), "Are you sure you want to delete the question #{question.name}?")
+
+              = question.name
+
+              -unless question.description.blank?
+                %div
+                  = question.description

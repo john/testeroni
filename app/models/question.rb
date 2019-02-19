@@ -22,6 +22,30 @@ class Question < ApplicationRecord
   validates :tst_id, :presence => true, :numericality => true
   validates :user_id, :presence => true, :numericality => true
 
+  def first?
+    ids = tst.questions.pluck(:id)
+    (ids.first == self.id) ? true : false
+  end
+
+  def last?
+    ids = tst.questions.pluck(:id)
+    (ids.last == self.id) ? true : false
+  end
+
+  def remaining_in_test
+    (tst.questions.length - current_position) - 1
+  end
+
+  def current_position
+    ids = tst.questions.pluck(:id)
+    ids.index(self.id)
+  end
+
+  def next_question
+    return nil if last?
+    tst.questions[current_position + 1]
+  end
+
   # total number of times this question has been answered correctly,
   # across all takes. this should probably be stored in the question, so
   # this it doesn't have to do the calculation every time
@@ -50,10 +74,10 @@ class Question < ApplicationRecord
     (kind == Question::SHORTANSWER) ? true : false
   end
 
-  def get_nonzero_position_in_id_array(question_ids)
-    question_ids.each_with_index do |qid, i|
-      return i+1 if qid == id
-    end
-  end
+  # def get_nonzero_position_in_id_array(question_ids)
+  #   question_ids.each_with_index do |qid, i|
+  #     return i+1 if qid == id
+  #   end
+  # end
 
 end

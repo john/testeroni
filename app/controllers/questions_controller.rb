@@ -4,90 +4,93 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, :except => [:index, :show, :answer]
 
+  def update_positions
+    question_ids = params[:item_ids].map(&:to_i)
+    question_ids_positions = Hash[question_ids.map.with_index.to_a]
+    questions = current_user.questions.where(id: question_ids)
+    questions.each do |question|
+      question.position = question_ids_positions[question.id]
+      question.save!
+    end
+    head :no_content
+  end
+
   def show
     @test = Tst.friendly.find(params[:test_id])
-    @take = Take.find_from_session_or_params(params, session)
-    @question_ids = @take.question_ids
-    @question = Question.find(params[:id])
+    @owner = true if user_signed_in? && @test.owned_by?(current_user)
+    @title = "#{@test.name} - Testeroni"
+    @description = "'#{@test.name}' a test on Testeroni.com"
+
+    @question = Question.friendly.find(params[:id])
     # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
 
-    # to save a lookup pass in the question number when practical, but if it's not present, figure it out.
-    if params[:question_number]
-      @question_number = params[:question_number].to_i
-    else
-      @question_number = @question.get_nonzero_position_in_id_array(@question_ids)
+    if session[:take_id].present?
+      @take = Take.find(session[:take_id])
+      @response = Response.where(user: current_user, tst: @test, question: @question, take: @take).first
+      @already_taken = Response.where(question: @question, take: @take).present?
     end
 
-    render(:partial => 'show', :locals => {:question_number => @question_number})
+    render "tsts/show"
   end
 
 
   def answer
     @test = Tst.friendly.find(params[:test_id])
-    @question = Question.find(params[:question_id])
-    @next_question_number = params[:question_number].to_i + 1
-    # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
-    @take = Take.find_from_session_or_params(params, session)
-    @response = Response.new(:tst_id => @test.id, :question_id => @question.id)
-    @response.take_id = @take.id if @take.id
+    @question = Question.friendly.find(params[:id])
 
-    if !params[:answer].blank?
+    # @comment = Comment.new(:commentable_type => @question.class, :commentable_id => @question.id)
+    # @take = Take.find_from_session_or_params(params, session)
+
+    if @question.first?
+      @take = Take.create!(user: current_user, tst: @test, started_at: Time.now, question_order: @test.questions.pluck(:id))
+    elsif session[:take_id].present?
+      @take = Take.find(session[:take_id])
+    else
+      @take = Take.create!(user: current_user, tst: @test, started_at: Time.now, question_order: @test.questions.pluck(:id))
+    end
+
+    session[:take_id] = @take.id
+    @response = Response.new(user: current_user, tst: @test, question: @question, take: @take)
+    # @response.take_id = @take.id if @take.id
+
+    if @question.kind == Question::TRUEFALSE
       @answer = (params[:answer] == 'true') ? 1 : 0
       @response.answer = @answer
-
-      logger.debug "@answer: #{@answer}"
-      logger.debug "@question.correct_response: #{@question.correct_response}"
-
       @response.correct = (@answer == @question.correct_response) ? true : false
-    elsif !params[:choice_id].blank?
+    elsif @question.kind == Question::MULTIPLECHOICE
       @choice = Choice.find(params[:choice_id])
       @response.choice = @choice
-
-      logger.debug "@choice.correct: #{@choice.correct}"
-      logger.debug "@choice: #{@choice.inspect}"
-
       @response.correct = @choice.correct
-    elsif !params[:short_answer].blank?
+    elsif @question.kind == Question::SHORTANSWER
       @response.choice = @question.choices.first
       @response.name = params[:short_answer]
       @response.correct = (Choice.simplify(params[:short_answer]) == @question.choices.first.simple_name) ? true : false
     end
+    @response.save!
 
-    @take.questions_answered = @take.questions_answered+1
-    @take.questions_correct = @take.questions_correct+1 if @response.correct?
+    @take.questions_answered = @take.questions_answered + 1
+    @take.questions_correct = @take.questions_correct + 1 if @response.correct?
+    @take.save!
 
-    logger.debug "RESPONSE: #{@response.inspect}"
-    if user_signed_in?
-      @response.user = current_user
-      @response.take = @take
-      @response.save
-      @question.responses << @response
-      @response_count = @question.responses.size
-      @correct_response_count = @question.number_correct
-    else
-      @response.save
-      @take.responses << @response
-      session[:take] = @take.sessionize
-      @response_count = @question.responses.size + 1
-      @correct_response_count = (@response.correct?) ? @question.number_correct+1 : @question.number_correct
-    end
+    @response_count = @question.responses.size
+    @correct_response_count = @question.number_correct
+
     @percentage_correct = (@response_count > 0) ? (((@correct_response_count.to_f/@response_count.to_f)*100)+0.5).to_i : 0
 
-    if @test.questions.length == params[:question_number].to_i
-      @more = false
-      @take.finished_at = Time.now if params[:take_id]
+    if @question.last?
+      @take.finished_at = Time.now
       if user_signed_in?
         record_activity(current_user, Activity::TAKE, @test)
-      else
-        session[:take] = @take.sessionize
       end
     else
-      @more = true
+      # @more = true
       @question_ids = @take.question_ids
-      @next_question = Question.find(@question_ids[params[:question_number].to_i])
-      @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @next_question_number, :take_id => @take.id)
+      # @next_question = Question.friendly.find(@question_ids[params[:question_number].to_i])
+      # @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => @next_question_number, :take_id => @take.id)
     end
-    @take.save if user_signed_in?
+
+    @take.save!
+
     render partial: 'questions/answer'
   end
 
@@ -101,7 +104,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    @question = Question.find(params[:id])
+    @question = Question.friendly.find(params[:id])
     @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
@@ -153,7 +156,7 @@ class QuestionsController < ApplicationController
 
     if @saved
       if @test
-        flash[:notice] = 'Session cleared.'
+        flash[:notice] = 'Question added'
         redirect_to(test_path(@test, :a => 'a'))
       else
         redirect_to(@question, :notice => 'Question was successfully created.')
@@ -164,11 +167,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question = Question.find(params[:id])
+    @question = Question.friendly.find(params[:id])
     @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
     redirect_to root_path and return unless user_signed_in? && @test.user == current_user
 
-    if @question.update_attributes(params[:question])
+    if @question.update(question_params)
 
       # handle short answer
       if @question.kind == Question::SHORTANSWER
@@ -189,7 +192,7 @@ class QuestionsController < ApplicationController
       end
 
       if @test
-        redirect_to(@test, :notice => 'Question was successfully updated.')
+        redirect_to(edit_test_path(@test), :notice => 'Question was successfully updated.')
       else
         redirect_to(@question, :notice => 'Question was successfully updated.')
       end
@@ -198,12 +201,30 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update_positions
+    question_ids = params[:item_ids].map(&:to_i)
+    question_ids_positions = Hash[question_ids.map.with_index.to_a]
+    questions = current_user.questions.where(id: question_ids)
+    questions.each do |question|
+      question.position = question_ids_positions[question.id]
+      question.save!
+    end
+    head :no_content
+  end
+
   def destroy
-    @question = Question.find(params[:id])
+    @question = Question.friendly.find(params[:id])
     redirect_to root_path and return unless user_signed_in? && @question.user == current_user
 
-    @question.destroy
-    redirect_to(test_path(params[:test_id]), :notice => 'Question was permanently deleted.')
+    @test = Tst.friendly.find(params[:test_id]) if params[:test_id]
+
+    if @question.destroy
+      if @test
+        redirect_to(edit_test_path(@test), :notice => 'Question was deleted.')
+      else
+        redirect_to(root_path, :notice => 'Question was deleted.')
+      end
+    end
   end
 
   private
@@ -213,23 +234,5 @@ class QuestionsController < ApplicationController
       # params.require(:tst).permit(:name, :description, :status, :contributors)
       params.require(:question).permit(:name, :description, :status, :hint, :image_url, :explanation, :kind, :correct_response, :pause_at)
     end
-
-    # t.integer "tst_id"
-    # t.integer "user_id"
-    # t.string "name"
-    # t.string "description"
-    # t.string "hint"
-    # t.integer "status", limit: 2
-    # t.string "image_url"
-    # t.string "explanation"
-    # t.integer "kind"
-    # t.integer "correct_response"
-    # t.integer "pause_at"
-    # t.datetime "created_at", null: false
-    # t.datetime "updated_at", null: false
-    # t.string "slug"
-    # t.index ["slug"], name: "index_questions_on_slug", unique: true
-    # t.index ["tst_id"], name: "index_questions_on_tst_id"
-    # t.index ["user_id"], name: "index_questions_on_user_id"
 
 end

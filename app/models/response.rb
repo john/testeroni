@@ -3,7 +3,7 @@ class Response < ApplicationRecord
   belongs_to :user
   belongs_to :tst
   belongs_to :question
-  belongs_to :choice
+  belongs_to :choice, optional: true
   belongs_to :take
 
   # attr_accessible :id, :tst_id, :question_id, :choice_id, :answer, :correct, :name

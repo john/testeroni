@@ -35,10 +35,10 @@ class ApplicationController < ActionController::Base
   # application_controller before_filter
   def set_return_to
     unless request.referrer.present? && (request.referrer.include?('auth') || request.path.include?('questions') || request.path.include?('users'))
-      logger.debug "set_return_to request.path: #{request.path}"
+      # logger.debug "set_return_to request.path: #{request.path}"
       session[:return_to] = request.path
     else
-      logger.debug "DID NOT set_return_to request.path: #{request.path}"
+      # logger.debug "DID NOT set_return_to request.path: #{request.path}"
     end
   end
 

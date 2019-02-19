@@ -1,25 +1,29 @@
 %h1
-  =@test.name
+  - if @test_page
+    = @test.name
+  - else
+    = link_to @test.name, test_path(@test)
 
 %div
   Created #{time_ago_in_words(@test.created_at)} ago by #{profile_link(@test.user)}
 
 %div{:style => 'padding:0 0 10px 0;'}
-  =pluralize(@test.questions.size, 'question')
+  = pluralize(@test.questions.size, 'question')
   · taken
-  =pluralize(@test.takes.size, 'time')
+  = pluralize(@test.takes.size, 'time')
 
   -if @test.takes.size > 0
     ·
     average score #{@test.percent_correct}
 
   -# =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
-  ·
+
   -if @test.published?
     -if @test.active?
-      = link_to 'share', "#", onclick: "$('#share_tools').toggle()"
-      ·
-      = link_to 'embed', "#", onclick: "$('#embed_header').toggle()"
+      / ·
+      / = link_to 'share', "#", onclick: "$('#share_tools').toggle()"
+      / ·
+      / = link_to 'embed', "#", onclick: "$('#embed_header').toggle()"
       -if @owner
         ·
         =link_to('disable', disable_test_path(@test))
@@ -50,4 +54,6 @@
     /     %div{:style => 'padding:5px 0 0 0; float:right;'}
     /       = link_to '[x] close', "#", onclick: "$('#embed_header').toggle()"
 
-%div{:style => 'padding:0; margin:0px 0 0 0'}= @test.description
+- if @test.description.present?
+  %div
+    = @test.description

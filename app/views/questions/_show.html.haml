@@ -1,92 +1,68 @@
-%div Question #{question_number} of #{@test.questions.length}:
-%h2{:style => 'font-size:2em; padding:0 0 5px 0; margin: 0'}= @question.name
+- add_class = '' if local_assigns[:add_class].nil?
 
--if @question.description
-  %p= @question.description
--if @question.image_url && !@question.image_url.blank?
-  %div
-    %img{:src => @question.image_url}
+.card.replace-me{class: @question.slug}
+  - if @already_taken
+    = render partial: "questions/answer"
+  - else
+    .card-body
 
-%div{:style => "padding:0;"}
-  %form#theForm
-    %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
-    %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
-    %input{:type => 'hidden', :name => 'question_number', :value => question_number}
-    %input{:type => 'hidden', :name => 'authenticity_token', :id => 'authenticity_token', :value => ''}
+      -# %div
+        / Question #{question_number} of #{@test.questions.length}:
 
-    -if @take
-      %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
+      %h2.question-name
+        = @question.name
 
-    -# PARTIALS for all this shit?
-    -if @question.kind == Question::TRUEFALSE
-      %div{:style => 'padding:10px 0 5px 0;'}
-        %input#answer_true{:type => "radio", :name => "answer", :value => "true"}
-        %label{:for => "answer_true", :style => "display:inline;"} true
-      %div{:style => 'padding:5px 0 5px 0;'}
-        %input#answer_false{:type => "radio", :name => "answer", :value => "false"}
-        %label{:for => "answer_false", :style => "display:inline;"} false
-    -elsif @question.kind == Question::SHORTANSWER
-      %div{:style => 'padding:10px 0;'}
-        %input{:type => 'text', :name => 'short_answer', :id => 'short_answer'}
-      :javascript
-        $(document).ready(function(){
-          $('#short_answer').focus();
-        });
-    -else
-      %ul#choices
-        -@question.choices.each_with_index do |choice,i|
-          %li>
-            %input{:type => "radio", :name => "choice_id", :id => "choice_#{i}", :value => choice.id}
-            %label{:for => "choice_#{i}", :style => "display:inline;"}= choice.name
+      -if @question.description.present?
+        %p
+          = @question.description
 
-    -if question_number == 1 || (@take && @take.questions_answered > 0)
-      #submit_wrap
-        =submit_tag('Submit answer', id: 'submit_button', class: "btn btn-primary" )
+      -if @question.image_url && !@question.image_url.blank?
+        %div
+          %img{:src => @question.image_url}
 
-        -#-if question_number < @test.questions.length
-          (<a href="#" id="skip">skip</a>)
-    -else
-      %div{:style => 'padding-top:20px;'}
-        Want to take this test? Then
-        %a{:href => '', :style => 'font-weight:bold;'}Go to the first question
+      %div{style: "padding:0;", id: "answer-box"}
+        = form_with url: answer_test_question_path(@question.tst, @question), id: "answer-form" do |f|
+          / %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
+          / %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
+          / %input{:type => 'hidden', :name => 'question_number', :value => question_number}
+          / %input{:type => 'hidden', :name => 'authenticity_token', :id => 'authenticity_token', :value => ''}
 
-    -# %div{:style => 'border: 1px solid red;'}
-      =link_to('comments', test_comments_path(@test.id, @test.to_param))
+          -#-if @take
+            / %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
 
--if question_number <= @test.questions.length
+          -# PARTIALS for all this shit?
+          -if @question.kind == Question::TRUEFALSE
+            = f.label :answer_true do
+              = f.radio_button :answer, true, checked: false
+              True
 
-  :javascript
-    $(document).ready(function(){
+            = f.label :answer_false, {style: "display: block;"} do
+              = f.radio_button :answer, false, checked: false
+              False
 
-      var state = $.bbq.getState();
-      state['question'] = '#{@question.to_param}';
-      $.bbq.pushState(state);
+          -elsif @question.kind == Question::SHORTANSWER
+            %div{style: 'padding:10px 0;'}
+              %input{type: 'text', name: 'short_answer', id: 'short_answer', autofocus: true}
 
-      $('#question_comment_link').attr( "href", '#{comments_test_path(@test.id, @test.to_param)}?question=#{@question.to_param}');
+          -else
+            %div{style: 'padding:10px 0;'}
+              -@question.choices.each_with_index do |choice, i|
+                .form-check
+                  %input.form-check-input{type: "radio", name: "choice_id", id: "choice_#{i}", value: choice.id}
+                  %label.form-check-label{for: "choice_#{i}"}
+                    = choice.name
 
-      $('#submit_button').click(function() {
-        // validate. if valid...
+          -if true #question_number == 1 || (@take && @take.questions_answered > 0)
+            #submit_wrap
+              =submit_tag('Submit answer', id: 'submit_button', class: "btn btn-primary" )
 
-        // Fetch the CSRF meta tag data
-        var csrf_token = $('meta[name=csrf-token]').attr('content');
-        //var csrf_param = $('meta[name=csrf-param]').attr('content');
+              -#-if question_number < @test.questions.length
+                / (<a href="#" id="skip">skip</a>)
+          -else
+            %div{:style => 'padding-top:20px;'}
+              Want to take this test? Then
+              %a{:href => '', :style => 'font-weight:bold;'}
+                Go to the first question
 
-        // add the CSRF vars above to the form data. Need to do this because Rails 3.0.4 requires
-        // an authenticity token for all non-GET requests. TODO: there's probably a better way to do it.
-        $('#authenticity_token').val(csrf_token);
-
-        $.ajax({
-          type: 'POST',
-          url: '#{answer_path}',
-          data: $('#theForm').serialize(),
-          success: function(data) {
-            $('#submit_wrap').html(data);
-          },
-          error: function(data) {
-            alert('fail! fail! FAIL!');
-          }
-        });
-        return false;
-      });
-
-    });
+          -# %div{:style => 'border: 1px solid red;'}
+            / =link_to('comments', test_comments_path(@test.id, @test.to_param))

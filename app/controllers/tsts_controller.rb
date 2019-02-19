@@ -11,35 +11,38 @@ class TstsController < ApplicationController
   end
 
   def show
+    @test_page = true
     @test = Tst.friendly.find(params[:id])
     @owner = true if user_signed_in? && @test.owned_by?(current_user)
     @title = "#{@test.name} - Testeroni"
     @description = "'#{@test.name}' a test on Testeroni.com"
+    @show_start_button = (@test.published? && @test.active?)
+    session[:take_id] = nil
     # @comment = Comment.new(:commentable_type => @test.class, :commentable_id => @test.id)
 
-    if @test.questions.present?
-      @question_ids = @test.questions.collect{|q| q.id}.shuffle
-      @question = Question.find(@question_ids[0])
-      @take = Take.new( :tst_id => @test.id,
-                        :user_id => (user_signed_in?) ? current_user.id : nil,
-                        :started_at => Time.now,
-                        :questions_answered => 0,
-                        :questions_correct => 0,
-                        :question_order => @question_ids.join(',') )
-    end
+    # if @test.questions.present?
+    #   # @question = @test.questions.first
+    #   @take = Take.new( :tst_id => @test.id,
+    #                     :user_id => (user_signed_in?) ? current_user.id : nil,
+    #                     :started_at => Time.now,
+    #                     :questions_answered => 0,
+    #                     :questions_correct => 0,
+    #                     :question_order => @test.questions.pluck(:id) )
+    #
+    # end
 
-    if @take.present?
-      if user_signed_in?
-        @take.save
-      else
-        session[:take] = @take.sessionize
-      end
-    end
+    # if @take.present?
+    #   if user_signed_in?
+    #     @take.save
+    #   else
+    #     session[:take] = @take.sessionize
+    #   end
+    # end
 
-    if @test.questions.present? && @question_ids.size > 1
-      @next_question = Question.find(@question_ids[1])
-      @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => 2)
-    end
+    # if @test.questions.present? && @question_ids.size > 1
+    #   @next_question = Question.find(@question_ids[1])
+    #   @next_question_url = question_path(@next_question, :test_id => @test.to_param, :question_number => 2)
+    # end
 
     # render :layout => 'embed' if request.path =~ /embed/
   end

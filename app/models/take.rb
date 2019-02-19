@@ -17,17 +17,24 @@ class Take < ApplicationRecord
     {:ta => id, :u => user_id, :te => tst_id, :s => started_at.to_i, :f => finished_at.to_i, :a => questions_answered, :c => questions_correct, :r => responses_hash, :qo => question_order}
   end
 
+  # def self.load_or_instantiate
+  #
+  # end
+
+  # I think now unused
   def self.desessionize(session)
+
     logger.debug "IN DE-SESSIONIZE"
     tk = session[:take]
-    logger.debug "------------> tk is: #{tk.inspect}"
 
+    logger.debug "------------> tk is: #{tk.inspect}"
     logger.debug "------------> tk[:u] is: #{tk["u"]}"
     logger.debug "------------> tk[:te] is: #{tk["te"]}"
     logger.debug "------------> tk[:s] is: #{tk["s"]}"
     logger.debug "------------> tk[:a] is: #{tk["a"]}"
     logger.debug "------------> tk[:c] is: #{tk["c"]}"
     logger.debug "------------> tk[:qo] is: #{tk["qo"]}"
+
     take = Take.new(  :user_id => tk["u"],
                       :tst_id => tk["te"],
                       :started_at => Time.at(tk["s"]/1000.0),
@@ -35,9 +42,13 @@ class Take < ApplicationRecord
                       :questions_correct => tk["c"],
                       :question_order => tk["qo"])
 
-                      logger.debug "--------------> take is:"
-                      logger.debug take.inspect
+    logger.debug "--------------> take is:"
+    logger.debug take.inspect
+
     take.id = tk["ta"] if tk.has_key?("ta") && tk["ta"] != nil
+
+    take
+
     responses = tk["r"].map {|r| Response.new(:id => r[:id], :tst_id => tk[:te], :question_id => r[:q], :choice_id => r[:c], :answer => r[:a], :correct => r[:cr], :name => r[:n]) }
     take.responses = responses
     take
@@ -67,8 +78,6 @@ class Take < ApplicationRecord
     #logger.debug "immediately desessionaized take: #{@take.inspect}"
 
     @take.user_id = user.id
-    @take.created_at = Time.now
-    @take.updated_at = Time.now
     @take.finished_at = Time.now
 
     logger.debug "INSIDE save_from_session_for_user, @take is: #{@take.inspect}"

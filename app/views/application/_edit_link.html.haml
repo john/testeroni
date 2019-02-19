@@ -1,4 +1,4 @@
 - size = 'xs' if local_assigns[:size].nil?
 = link_to path do
-  %button.btn.btn-outline-secondary.border{type: "button", 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Edit', class: "btn-#{size}"}
+  %button.btn.btn-outline-secondary.border.inline{type: "button", 'data-toggle': 'tooltip', 'data-placement': 'top', title: 'Edit', class: "btn-#{size}"}
     %i.fas.fa-pencil-alt.fa-xs

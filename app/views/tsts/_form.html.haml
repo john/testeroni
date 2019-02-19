@@ -43,5 +43,8 @@
         %ul
           -@test.videos.each do |video|
             %li="video: #{video.class}; #{video.name}"
+
   .actions
-    = f.submit (@test.id.blank? ? "Create test" : "Edit test"), class: 'btn btn-outline-dark'
+    = f.submit (@test.id.blank? ? "Create test" : "Edit test"), class: 'btn btn-outline-dark mr-10'
+
+    = link_to 'cancel', test_path(@test)

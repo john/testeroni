@@ -8,9 +8,10 @@ ruby "2.6.0"
 gem 'rails', '6.0.0.beta1'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
+gem 'devise_invitable'
 gem 'friendly_id'
 gem 'haml-rails', git: 'https://github.com/indirect/haml-rails'
-# gem 'jquery-rails'
+gem 'jquery-rails'
 gem 'jbuilder', '~> 2.5'
 gem 'pg'
 gem 'puma', '~> 3.11'
@@ -36,6 +37,7 @@ group :development do
   gem 'better_errors'
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'rb-readline'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'

@@ -13,9 +13,13 @@
   %script{:type => "text/javascript"} try{Typekit.load();}catch(e){}
   =javascript_include_tag('https://www.google.com/jsapi?key=ABQIAAAAnohM6sqTs6drjmtNvnIyhBQX4KEUxjBL_ZDpzqYIgEd3Cy73NxTBwcj0akdZnV23u8exfLERTanWEw')
 
-  %link{crossorigin: "anonymous", href: "https://use.fontawesome.com/releases/v5.7.1/css/all.css", integrity: "sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr", rel: "stylesheet"}
+  %link{href: "https://use.fontawesome.com/releases/v5.7.1/css/all.css", crossorigin: "anonymous", integrity: "sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr", rel: "stylesheet"}
 
-  %script{:crossorigin => "anonymous", :integrity => "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", :src => "https://code.jquery.com/jquery-3.3.1.min.js"}
+  %script{:src => "https://code.jquery.com/jquery-3.3.1.min.js", :crossorigin => "anonymous", :integrity => "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="}
+
+  %script{:src => "https://code.jquery.com/ui/1.12.1/jquery-ui.min.js", :crossorigin => "anonymous", :integrity => "sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="}
+
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
 
   %script{src: "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js", integrity: "sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k", crossorigin: "anonymous"}
 

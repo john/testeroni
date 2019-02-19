@@ -8,15 +8,20 @@ class PeopleController < ApplicationController
     #   redirect_to person_with_name_path(current_user.id, current_user.name) and return
     # end
 
+    # @person = User.find(params[:id])
+    # @title = "#{@person.name} - Testeroni"
+    # @description = "#{@person.name}'s homepage on Testeroni."
+    # @owner = true if user_signed_in? && @person.id == current_user.id
+
     @person = User.find(params[:id])
-    @title = "#{@person.name} - Testeroni"
-    @description = "#{@person.name}'s homepage on Testeroni."
-    @owner = true if user_signed_in? && @person.id == current_user.id
+    @tests_created = @person.tsts
+    @tests_taken = @person.unique_tests_taken
   end
 
   def tests
     @person = User.find(params[:id])
-    @tests = @person.tsts
+    @tests_created = @person.tsts
+    @tests_taken = @person.unique_tests_taken
   end
 
   # match 'people/:id/follow/:object_type/:object_id', :to => 'people#follow', :as 'follow'

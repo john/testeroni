@@ -1,75 +1,108 @@
-%h1
-  -if @owner
-    Hi,
-  = @person.name
-  -if user_signed_in? && !@owner
-    %span{:id => 'follow'}
-      -if current_user.is_following?(@person)
-        =render :partial => 'follow'
-      -else
-        =render :partial => 'unfollow'
+.row.mt-50.ml-10
+  .col-sm
+    %h2
+      #{@person.name} has created:
 
+    - if @tests_created.present?
+      %ul
+        - @tests_created.each do |test|
+          %li
+            = link_to test.name, test_path(test)
 
-%div{:style => 'float:left; width:550px; padding:10px 0 0 0; border:0px solid red;'}
-  Activity from the people and tests you follow will eventually appear here
+    - else
+      %i
+        Nothing whatsoever!
 
-%div{:style => 'float:left; width:420px; padding:10px 0 0 0; border:0px solid green;'}
+  -# .col-6.col-md-10.col-lg-8
+  .col-sm
+    %h2
+      #{@person.name} has taken:
 
-  -if user_signed_in? && @person.id == current_user.id
-    %h3{:style => 'margin-bottom:20px;'}= link_to('Create a test!', new_test_path, :class => 'green button')
+    - if @tests_taken.present?
+      %ul
+        - @tests_taken.each do |test|
+          %li
+            = link_to test.name, test_path(test)
 
-  %p{:style => 'padding:20px 0 0 0; font-style:italic;'}tests created by #{@person.name}:
+    - else
+      %i
+        Nothing whatsoever!
 
-  -if @person.tsts.blank?
-    %p
-      None, yet.
-      -if user_signed_in? && @person.id == current_user.id
-        Why don't you #{link_to 'create one', new_test_path}?
-
-  -else
-    %ul.bulletless
-      -@person.tsts.each do |t|
-        %li{:style => 'padding:5px 0; margin:5px 0'}
-          =link_to(t.name, test_path(t.id, t.to_param))
-          -if t.user == current_user
-            %span
-              -unless t.published?
-                %em<
-                  (unpublished)
-              &nbsp;
-              [
-              -unless t.published?
-                =link_to('publish', publish_test_path(t))
-                |
-              =link_to('results', test_results_path(t.id, t.to_param))
-              |
-              =link_to('edit', edit_test_path(t))
-              |
-              =link_to('delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.')
-              ]
-
-  %p{:style => 'padding:20px 0 0 0; font-style:italic;'}
-    tests taken by #{@person.name}:
-
-  -if @person.takes.blank?
-    %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
-  -else
-    %ul.bulletless
-      -@person.takes.each do |t|
-        -@test = Tst.find(t.tst_id)
-        %li{:style => 'padding:5px 0; margin:5px 0'}
-          =link_to @test.name, test_path(@test.id, @test.to_param)
-          -if t.user == current_user
-            &nbsp;
-            %span
-              [
-              -#=link_to('your results', individual_test_results_url(@test.id, @test.to_param, current_user.username, t.id))
-              =link_to('your results')
-              |
-              =link_to('overall results', test_results_url(@test.id, @test.to_param))
-              ]
-
-.clearfix
--#%p{:style => 'font-style:italic;'}tests created by #{@person.name}'s friends:
-
--#%p{:style => 'font-style:italic;'}tests taken by #{@person.name}'s friends:
+-#
+  / %h1
+  /   -if @owner
+  /     Hi,
+  /   = @person.name
+  /   -if user_signed_in? && !@owner
+  /     %span{:id => 'follow'}
+  /       -#
+  /         follow/unfollow here
+  /         / -if current_user.is_following?(@person)
+  /         /   =render :partial => 'follow'
+  /         / -else
+  /         /   =render :partial => 'unfollow'
+  /
+  /
+  / %div{:style => 'float:left; width:550px; padding:10px 0 0 0; border:0px solid red;'}
+  /   Activity from the people and tests you follow will eventually appear here
+  /
+  / %div{:style => 'float:left; width:420px; padding:10px 0 0 0; border:0px solid green;'}
+  /
+  /   -if user_signed_in? && @person.id == current_user.id
+  /     %h3{:style => 'margin-bottom:20px;'}= link_to('Create a test!', new_test_path, :class => 'green button')
+  /
+  /   %p{:style => 'padding:20px 0 0 0; font-style:italic;'}tests created by #{@person.name}:
+  /
+  /   -if @person.tsts.blank?
+  /     %p
+  /       None, yet.
+  /       -if user_signed_in? && @person.id == current_user.id
+  /         Why don't you #{link_to 'create one', new_test_path}?
+  /
+  /   -else
+  /     %ul.bulletless
+  /       -@person.tsts.each do |t|
+  /         %li{:style => 'padding:5px 0; margin:5px 0'}
+  /           =link_to(t.name, test_path(t.id, t.to_param))
+  /           -if t.user == current_user
+  /             %span
+  /               -unless t.published?
+  /                 %em<
+  /                   (unpublished)
+  /               &nbsp;
+  /               [
+  /               -unless t.published?
+  /                 =link_to('publish', publish_test_path(t))
+  /                 |
+  /               =link_to('results', results_test_path(t))
+  /               |
+  /               =link_to('edit', edit_test_path(t))
+  /               |
+  /               =link_to('delete', test_path(t.id, t.to_param), :method => :delete, :confirm => 'For real? This can never, ever be undone.')
+  /               ]
+  /
+  /   %p{:style => 'padding:20px 0 0 0; font-style:italic;'}
+  /     tests taken by #{@person.name}:
+  /
+  /   -if @person.takes.blank?
+  /     %p None, yet, but there are lots of great tests waiting for you on the #{link_to('home page', root_path)}.
+  /   -else
+  /     %ul.bulletless
+  /       -@person.takes.each do |t|
+  /         -@test = Tst.find(t.tst_id)
+  /         %li{:style => 'padding:5px 0; margin:5px 0'}
+  /           =link_to @test.name, test_path(@test.id, @test.to_param)
+  /           -if t.user == current_user
+  /             &nbsp;
+  /             %span
+  /               [
+  /               -#=link_to('your results', individual_test_results_url(@test.id, @test.to_param, current_user.username, t.id))
+  /               =link_to('your results')
+  /               |
+  /               =link_to('overall results', results_test_path(@test))
+  /               ]
+  /
+  / .clearfix
+  / -#%p{:style => 'font-style:italic;'}tests created by #{@person.name}'s friends:
+  /
+  / -#%p{:style => 'font-style:italic;'}tests taken by #{@person.name}'s friends:

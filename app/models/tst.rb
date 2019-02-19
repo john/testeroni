@@ -18,7 +18,7 @@ class Tst < ApplicationRecord
 
   belongs_to :user
   has_many :videos
-  has_many :questions
+  has_many :questions, -> { order('position, id') }
   has_many :responses
   has_many :takes
 
@@ -41,7 +41,6 @@ class Tst < ApplicationRecord
   def self.load_active_by_id(id)
     Tst.find_by_sql(['SELECT * FROM tsts WHERE id=? AND STATUS=? LIMIT 1', id, Tst::ACTIVE])[0]
   end
-
 
   def pause_points
     # pausePoints array is hashes of form {second => question_id}
@@ -70,6 +69,8 @@ class Tst < ApplicationRecord
     (questions.size > 0)
   end
 
+  # UPDATE: What even is this doing? its being used in the header for 'average score,' and it's
+  # either misnamed, or doing the wrong thing.
   # TODO: This is horribly inefficient. Might eventually want to store a running total of correct answers
   # with each test, and update it as people take it. Would be better still if that update was batched:
   # keep the number needing to be updated in memory, write to the db every time it hits 10, or whatever.
@@ -87,6 +88,10 @@ class Tst < ApplicationRecord
         (((@correct_responses.to_f/@responses.size.to_f)*100)+0.5).to_i
       end
     # end
+  end
+
+  # get the percent_correct of every completed take of the test, average them
+  def average_score
   end
 
   def grade

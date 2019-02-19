@@ -1,11 +1,14 @@
 .row.mt-50.ml-10
-  .col-12.col-md-10.col-lg-8
+  .col-sm
     %h2
-      #{current_user.name} has created:
+      - if @person == current_user
+        Tests you created
+      - else
+        #{@person.name} has created:
 
-    - if @tests.present?
+    - if @tests_created.present?
       %ul
-        - @tests.each do |test|
+        - @tests_created.each do |test|
           %li
             = link_to test.name, test_path(test)
 
