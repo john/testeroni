@@ -10,22 +10,24 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registration: 'registrations', session: 'sessions' }
 
-  # match 'tests/:id/:slug/start', :to => 'tsts#show', :as => 'start_test', :via => :get
   resources :tsts, path: :tests, as: :tests do
     member do
       get :publish
       get :enable
       get :disable
       get :comments
+      get :results
     end
-    resources :questions
+    resources :questions do
+      collection do
+        post :update_positions
+      end
+      member do
+        post :answer
+      end
+    end
   end
-  # match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
-
-
-
-
-  # match 'tests/:id/:permalink/comments', :to => 'tsts#comments', :as => 'test_comments', :via => :get
+  match 'tests/:id/:permalink/results/:user_id/:take', :to => 'tsts#individual_results', :as => 'individual_test_results', :via => :get
 
   match 'people/:id/tests', :to => 'people#tests', :as => 'person_tests', :via => :get
   match 'people/:id/:slug', :to => 'people#show', :as => 'person', :via => :get
@@ -53,11 +55,11 @@ Rails.application.routes.draw do
   # # match 'tests/:id/:permalink/questions', :to => 'tsts#questions', :as => 'test_questions', :via => :get
   # # match 'tests/:id/:permalink/questions/:question_id/:qpermalink', :to => 'tsts#show', :as => 'test_question', :via => :get
   # # match 'tests/:id/:permalink/questions/:question_id', :to => 'tsts#show', :via => :get
-  # match 'tests/:id/:permalink/results/:user_id/:take', :to => 'tsts#individual_results', :as => 'individual_test_results', :via => :get
-  # match 'tests/:id/:permalink/results', :to => 'tsts#results', :as => 'test_results', :via => :get
 
-  match 'questions/answer', :to => 'questions#answer', :as => 'answer', :via => :post
-  resources :questions
+
+
+  # match 'questions/answer', :to => 'questions#answer', :as => 'answer', :via => :post
+  # resources :questions
 
   resources :results
   # resources :comments
