@@ -3,8 +3,8 @@
     For the test
     %strong= link_to @test.name, test_path(@test.id, @test.to_param)
 
-=form_for new_test_question_path(@test, @question) do |f|
-
+-#=form_for test_questions_path(@test) do |f|
+= form_with model: @question, url: test_questions_path(@test) do |f|
   =render(:partial => 'application/errors', :locals => {:errors => @question.errors})
   -if params[:test_id]
     %input{:type => "hidden", :name => "test_id", :value => params[:test_id]}
@@ -79,13 +79,14 @@
     .field.mt-20
       =f.label :explanation, 'Explanation (shown after the question is answered)'
       =f.text_area :explanation, style: 'height:60px;display:block;', class: 'form-control'
+
       -#-unless @test.videos.blank?
         Ask this question
         =f.text_field :pause_at, :style => 'width:20px;'
         seconds into the video.
 
       .actions
-        =f.submit style: 'clear:both;margin-top:5px;', class: 'btn btn-outline-dark'
+        =f.submit "Save question", class: 'btn btn-outline-dark'
 
 :javascript
   $(document).ready(function(){

@@ -28,10 +28,10 @@
       /   =f.label :tag_list, 'Tags (comma separated)'
       /   =f.text_field :tag_list
 
-    -if @test.id.blank?
-      .field.mt-20
-        =f.label :video_url, 'Video (add an optional YouTube URL)'
-        =f.text_field :video_url, class: 'form-control'
+    -#if @test.id.blank?
+      / .field.mt-20
+      /   =f.label :video_url, 'Video (add an optional YouTube URL)'
+      /   =f.text_field :video_url, class: 'form-control'
 
     -unless @test.id.blank?
       %p
@@ -47,4 +47,4 @@
   .actions
     = f.submit (@test.id.blank? ? "Create test" : "Edit test"), class: 'btn btn-outline-dark mr-10'
 
-    = link_to 'cancel', test_path(@test)
+    =# link_to 'cancel', test_path(@test)

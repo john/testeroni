@@ -9,7 +9,7 @@ Devise.setup do |config|
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'ec8f6bfcdc0a12646e7b8ceb610595b532326e87a60e7158d3d945e1529b625f136d63815b6582e346ecf27efe2defbd11ec0d508782ed05824c399a2d9a833a'
-  
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
@@ -126,7 +126,7 @@ Devise.setup do |config|
   # The period the generated invitation token is valid, after
   # this period, the invited resource won't be able to accept the invitation.
   # When invite_for is 0 (the default), the invitation won't expire.
-  # config.invite_for = 2.weeks
+  config.invite_for = 2.weeks
 
   # Number of invitations users can send.
   # - If invitation_limit is nil, there is no limit for invitations, users can
@@ -140,7 +140,7 @@ Devise.setup do |config|
 
   # The key to be used to check existing users when sending an invitation
   # and the regexp used to test it when validate_on_invite is not set.
-  # config.invite_key = {:email => /\A[^@]+@[^@]+\z/}
+  config.invite_key = {:email => /\A[^@]+@[^@]+\z/}
   # config.invite_key = {:email => /\A[^@]+@[^@]+\z/, :username => nil}
 
   # Flag that force a record to be valid before being actually invited

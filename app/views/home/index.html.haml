@@ -1,19 +1,25 @@
-.row.mt-20
-  .col-12.col-md-10.col-lg-8
-    %h3.mb-0
-      Testeroni is for social tests.
-    %div
-      Take them, make them, invite friends, see how you stack up.
+.row
+  .col-md-10.col-lg-8.homepage-hero
+    .card.homepage-card
+      .card-body.homepage-card-body
+        %h4.inline
+          Tests of all kinds for you and your friends.
+          %b.text-muted.fs-2
+            Perform feats of mental agility!
+        %span.home3
+          Make them, take them, invite friends, see how you stack up.
+      .mt-10
+        = image_tag "/strong-woman.png", class: "card-img-top", style: "margin-bottom: 0;"
 
-    %h5.mt-30
-      -# #{link_to 'Create a test now', new_user_registration_path}
-      Yours for the taking:
+    %h4.mt-25
+      Yours for the taking
 
-
-    -if @tests.size > 0
-      %ul.list-group.mt-30
+    -if @tests.present? && @tests.size > 0
+      %ul.list-group.mt-20
         -@tests.each do |test|
           %li.list-group-item.list-group-item-action
-            =render(:partial => 'application/test_listing', :locals => {:test => test})
+            = link_to test_path(test) do
+              = render partial: 'application/test_listing', locals: {test: test}
     - else
-      %div{:style => 'font-style:italic;'} No tests created yet.
+      .mt-20.italic
+        No tests created yet.

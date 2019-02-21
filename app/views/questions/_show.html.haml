@@ -21,16 +21,8 @@
           %img{:src => @question.image_url}
 
       %div{style: "padding:0;", id: "answer-box"}
-        = form_with url: answer_test_question_path(@question.tst, @question), id: "answer-form" do |f|
-          / %input{:type => 'hidden', :name => 'test_id', :value => "#{@test.id if @test}"}
-          / %input{:type => 'hidden', :name => 'question_id', :value => "#{@question.id if @question}"}
-          / %input{:type => 'hidden', :name => 'question_number', :value => question_number}
-          / %input{:type => 'hidden', :name => 'authenticity_token', :id => 'authenticity_token', :value => ''}
+        = form_with model: @question, method: :post, url: answer_test_question_path(@question.tst, @question), id: "answer-form" do |f|
 
-          -#-if @take
-            / %input{:type => 'hidden', :name => 'take_id', :value => @take.id}
-
-          -# PARTIALS for all this shit?
           -if @question.kind == Question::TRUEFALSE
             = f.label :answer_true do
               = f.radio_button :answer, true, checked: false
@@ -52,17 +44,7 @@
                   %label.form-check-label{for: "choice_#{i}"}
                     = choice.name
 
-          -if true #question_number == 1 || (@take && @take.questions_answered > 0)
-            #submit_wrap
-              =submit_tag('Submit answer', id: 'submit_button', class: "btn btn-primary" )
-
-              -#-if question_number < @test.questions.length
-                / (<a href="#" id="skip">skip</a>)
-          -else
-            %div{:style => 'padding-top:20px;'}
-              Want to take this test? Then
-              %a{:href => '', :style => 'font-weight:bold;'}
-                Go to the first question
+          = submit_tag('Submit answer', id: 'submit_button', class: "btn btn-primary mt-20" )
 
           -# %div{:style => 'border: 1px solid red;'}
             / =link_to('comments', test_comments_path(@test.id, @test.to_param))

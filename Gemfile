@@ -46,7 +46,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
-  gem 'factory_girl_rails', require: false
+  gem 'factory_bot_rails', require: false
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'

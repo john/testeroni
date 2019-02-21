@@ -82,7 +82,8 @@ class TstsController < ApplicationController
 
     if @test.save
       record_activity(current_user, Activity::CREATE, @test)
-      redirect_to( new_question_path(:test_id => @test.id), :notice => 'Test was successfully created.')
+      # redirect_to( new_question_path(:test_id => @test.id), :notice => 'Test was successfully created.')
+      redirect_to new_test_question_path(@test), notice: "Test was successfully created, now add some questions!"
     else
       render :action => "new"
     end
@@ -112,9 +113,10 @@ class TstsController < ApplicationController
           end
         end
       end
-      @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
+      # @next_question_url = question_path(@test.questions[(@question_number-1)], :test_id => @test.to_param, :question_number => @question_number)
       flash[:notice] = 'Congratulations, your test has been published and can now be taken.'
-      redirect_to test_path @test
+      # redirect_to test_path @test
+      redirect_to new_user_invitation_path
 
     else
       flash[:alert] = 'There was a problem publishing.'

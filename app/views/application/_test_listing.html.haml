@@ -1,21 +1,21 @@
-%h5
-  =link_to test.name, test_path(test)
+%h4.test-listing-hed
+  = test.name
 
-%div
+.test-listing-info
   ="Has #{pluralize(test.questions.size, 'question')} and has been taken #{pluralize(test.takes.size, 'time')}"
   -unless test.takes.blank?
     with an average score of #{test.percent_correct}%
 
 -# unless test.tags.empty?
-  %div{:style => 'padding-top:5px;'}
-    tags:
-    !=test.tag_list.collect{|tag| "<span class='tag'>#{link_to(tag, tag_path(url_escape(tag)), :rel => 'tag')}</span>"}.join('&nbsp; ')
-
-  -#
-    =link_to('View questions', test_questions_path(test.id, test.to_param))
-    |
-    =link_to('View results', test_results_path(test.id, test.to_param))
-    -if user_signed_in?
-      -if test.user == current_user || test.contributors == Tst::ANYONE
-        |
-        =link_to('Edit this test', edit_test_url(test.id))
+  /   %div{:style => 'padding-top:5px;'}
+  /     tags:
+  /     !=test.tag_list.collect{|tag| "<span class='tag'>#{link_to(tag, tag_path(url_escape(tag)), :rel => 'tag')}</span>"}.join('&nbsp; ')
+  /
+  /   -#
+  /     =link_to('View questions', test_questions_path(test.id, test.to_param))
+  /     |
+  /     =link_to('View results', test_results_path(test.id, test.to_param))
+  /     -if user_signed_in?
+  /       -if test.user == current_user || test.contributors == Tst::ANYONE
+  /         |
+  /         =link_to('Edit this test', edit_test_url(test.id))

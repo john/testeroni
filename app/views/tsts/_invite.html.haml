@@ -1,0 +1,13 @@
+.mt-20
+
+  Invite friends to take this test!
+
+  = form_for :user, :as => "User", :url => invitation_path(:user), :html => {:method => :post} do |f|
+    -# = devise_error_messages!
+    - User.invite_key_fields.each do |field|
+
+      .field.mt-20
+        -# =f.text_field :name, autofocus: true, class: 'form-control'
+        = f.text_field field, class: 'form-control', placeholder: "Emails, comma separated."
+
+    = f.submit t("devise.invitations.new.submit_button"), class: 'btn btn-outline-dark mt-20 mb-30'

@@ -1,12 +1,11 @@
-.row.mt-20.ml-10
-  .col-12.col-md-10.col-lg-8
-
+.row.mt-10
+  .col-12.col-md-10.offset-md-1
     =render partial: 'tsts/header'
 
-    -unless @test.videos.blank?
-      %div{style: 'float:left; border: 0px solid red; padding-right:20px;'}
-        -@test.videos.each_with_index do |v,i|
-          %div{id: "ytplayer_#{i}"}
+    -#unless @test.videos.blank?
+      / %div{style: 'float:left; border: 0px solid red; padding-right:20px;'}
+      /   -@test.videos.each_with_index do |v,i|
+      /     %div{id: "ytplayer_#{i}"}
 
           -#%div
             / =link_to_function('play', "Tstrni.play('ytplayer_#{i}')")
@@ -18,39 +17,39 @@
             / =link_to_function('stop', "Tstrni.stop('ytplayer_#{i}')")
             / &#183;
 
-          :javascript
-            $(document).ready(function(){
-
-              // get stop points from test (tst#stop_points), put in an object in the Tstrni object
-              // data structure: {'testId':3, 'pausePoints':[{stopAtSecond: displayQuestionId}]}
-              // Tstrni.pausePointsForTest = #{@test.pause_points.to_json}
-
-              var params = { allowScriptAccess: "always" };
-              swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
-            });
+          // :javascript
+          //   $(document).ready(function(){
+          //
+          //     // get stop points from test (tst#stop_points), put in an object in the Tstrni object
+          //     // data structure: {'testId':3, 'pausePoints':[{stopAtSecond: displayQuestionId}]}
+          //     // Tstrni.pausePointsForTest = #{@test.pause_points.to_json}
+          //
+          //     var params = { allowScriptAccess: "always" };
+          //     swfobject.embedSWF("http://www.youtube.com/v/#{v.provider_id}&enablejsapi=1&playerapiid=ytplayer_#{i}", "ytplayer_#{i}", "480", "385", "8", null, null, params);
+          //   });
 
     -if @show_start_button
-      .mt-10
+      .mt-30
         - if user_signed_in?
-          = link_to 'Take the test!', test_question_path(@test, @test.questions.first), class: "btn btn-secondary btn-lg mb-10"
+          = link_to 'Take the test!', test_question_path(@test, @test.questions.first), class: "btn btn-secondary btn-lg mb-10 mr-10"
+          or #{link_to "invite friends", new_user_invitation_path}.
         -else
           = link_to 'Take the test!', new_user_registration_path, class: "btn btn-secondary btn-lg mb-10"
-
 
     .questions
       -if @owner
         -if !@test.has_questions?
-          %h2
-            = link_to 'Add the first question', new_question_path(:test_id => @test.to_param)
+          = link_to 'Add the first question', new_test_question_path(@test), class: "btn btn-secondary btn-lg mb-10 mt-30"
 
       -if @test.has_questions? && @test.published? && @test.active?
         - @test.questions.each_with_index do |q, i|
           - if @question == q
             = render partial: 'questions/show', locals: {add_class: 'active'}
-          - else
-            .card
-              .card-body
-                #{q.name}
+          -#
+            / - else
+            /   .card
+            /     .card-body
+            /       #{q.name}
 
         -#=render :partial => 'shared/comments', :locals => {:commentable => @test, :comment => @comment, :comments => @test.root_comments}
 

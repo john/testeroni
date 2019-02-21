@@ -6,13 +6,15 @@
   %button.navbar-toggler{"aria-controls": "navbar-dropdown", "aria-expanded": "false", "aria-label": "Toggle navigation", "data-target": "#navbar-dropdown", "data-toggle": "collapse", type: "button"}
     %span.navbar-toggler-icon
 
-  #navbar-dropdown.collapse.navbar-collapse
+  #navbar-dropdown.collapse.navbar-collapse.mb-0
     %ul.navbar-nav.ml-auto
 
       - if user_signed_in?
         %li.nav-item.mr-20
           = link_to 'Create a test', new_test_url, class: "btn btn-primary"
 
+        %li.nav-item
+          = link_to 'Home', root_path, class: "nav-link"
         %li.nav-item
           = link_to 'My tests', person_tests_path(current_user.id), class: "nav-link"
 

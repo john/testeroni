@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   root to: "home#index"
 
-  devise_for :users, controllers: { registration: 'registrations', session: 'sessions' }
+  devise_for :users, controllers: { registration: 'registrations', session: 'sessions', invitations: 'users/invitations' }
 
   resources :tsts, path: :tests, as: :tests do
     member do
@@ -27,11 +27,12 @@ Rails.application.routes.draw do
       end
     end
   end
+  match 'tests/:test_id/invite', :to => 'devise/invitations#new', :as => 'test_invite', :via => :get
   match 'tests/:id/:permalink/results/:user_id/:take', :to => 'tsts#individual_results', :as => 'individual_test_results', :via => :get
 
   match 'people/:id/tests', :to => 'people#tests', :as => 'person_tests', :via => :get
   match 'people/:id/:slug', :to => 'people#show', :as => 'person', :via => :get
-  # match 'people/:id/:name', :to => 'people#show', :as => 'person_with_name', :via => :get #, :constraints => {:username => /[^\/]+/}
+
   match 'people/:id/follow/:object_type/:object_id', :to => 'people#follow', :as => 'follow', :via => :get
   match 'people/:id/unfollow/:object_type/:object_id', :to => 'people#unfollow', :as => 'unfollow', :via => :get
 
@@ -55,11 +56,6 @@ Rails.application.routes.draw do
   # # match 'tests/:id/:permalink/questions', :to => 'tsts#questions', :as => 'test_questions', :via => :get
   # # match 'tests/:id/:permalink/questions/:question_id/:qpermalink', :to => 'tsts#show', :as => 'test_question', :via => :get
   # # match 'tests/:id/:permalink/questions/:question_id', :to => 'tsts#show', :via => :get
-
-
-
-  # match 'questions/answer', :to => 'questions#answer', :as => 'answer', :via => :post
-  # resources :questions
 
   resources :results
   # resources :comments

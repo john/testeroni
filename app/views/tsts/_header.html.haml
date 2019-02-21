@@ -1,4 +1,4 @@
-%h1
+%h1.test-hed.mt-0.pt-0
   - if @test_page
     = @test.name
   - else
@@ -7,7 +7,7 @@
 %div
   Created #{time_ago_in_words(@test.created_at)} ago by #{profile_link(@test.user)}
 
-%div{:style => 'padding:0 0 10px 0;'}
+.mb-10
   = pluralize(@test.questions.size, 'question')
   · taken
   = pluralize(@test.takes.size, 'time')
@@ -18,25 +18,28 @@
 
   -# =link_to(pluralize(@test.root_comments.size, 'comment'), test_comments_path(@test.id, @test.to_param), :id => 'question_comment_link')
 
-  -if @test.published?
-    -if @test.active?
-      / ·
-      / = link_to 'share', "#", onclick: "$('#share_tools').toggle()"
-      / ·
-      / = link_to 'embed', "#", onclick: "$('#embed_header').toggle()"
-      -if @owner
-        ·
-        =link_to('disable', disable_test_path(@test))
-    -elsif @owner
-      =link_to('enable', enable_test_path(@test))
-  -else
-    %em
-      this test is not yet published
-      = link_to 'publish', "#", class: "btn btn-xs btn-secondary ml-20"
+  - if @test_page
+    %div
+      -if @test.published?
+        -if @test.active?
+          / ·
+          / = link_to 'share', "#", onclick: "$('#share_tools').toggle()"
+          / ·
+          / = link_to 'embed', "#", onclick: "$('#embed_header').toggle()"
+          -if @owner
+            =link_to('Disable', disable_test_path(@test))
+        -elsif @owner
+          =link_to('Enable', enable_test_path(@test))
+      -else
+        -if @owner
+          ·
+          %em
+            This test is not yet published, only you can see it.
+            = link_to 'publish', publish_test_path(@test), class: "btn btn-xs btn-secondary ml-20"
 
-  -if @owner
-    = edit_link(edit_test_path(@test))
-    = trash_link(test_path(@test), "Are you sure you want to delete the test #{@test.name}?")
+      -if @owner
+        = edit_link(edit_test_path(@test))
+        = trash_link(test_path(@test), "Are you sure you want to delete the test #{@test.name}?")
 
   -#
     / %div{:id => 'share_tools', :style => 'display:none; width:520px;'}
